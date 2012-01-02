@@ -1,0 +1,133 @@
+/*
+
+Orongo CSS
+*********************************
+
+Author: Jaco Ruit 
+
+
+Last edit: 15-12-2011 by Jaco Ruit
+*/
+
+.menu {
+    padding: 0;
+    background: url(images/interface/menu.jpg) repeat-x;
+    height: 38px;
+    display:block;
+    margin:auto;
+    width: 100%;
+    overflow: hidden;
+}
+
+.menu_text {
+    font-family:arial, sans-serif;
+    font-size: 12px;
+    padding-top: 10px;
+    color: white;
+    padding-left: 4px;
+    padding-right: 20px;
+}
+
+.menu_text a {
+    color: white;
+    text-decoration: none;
+}
+
+.seperator {
+    background: url(images/interface/menu_seperator.jpg);
+    background-repeat: no-repeat;
+    height: 36px;
+    width: 2px;
+    padding-left: 2px;
+    padding-right: 5px;
+}
+
+.icon_messages {
+    background: url(images/interface/icon_messages.png);
+    background-repeat: no-repeat;
+    height: 36px;
+    width: 37px;
+    float: right;
+    padding-left: 2px;
+    margin-top: 9px;
+}
+
+.icon_messages_small {
+    background: url(images/interface/icon_messages_small.png);
+    background-repeat: no-repeat;
+    height: 9px;
+    width: 13px;
+    padding-right: 2px;
+    padding-left: 2px;
+    margin-top: 1px;
+    margin-top: 13px;
+}
+
+.icon_account_small {
+    background: url(images/interface/icon_account_small.png);
+    background-repeat: no-repeat;
+    height: 13px;
+    width: 13px;
+    padding-right: 2px;
+    padding-left: 2px;
+    margin-top: 1px;
+}
+
+.icon_settings {
+    background: url(images/interface/icon_settings.png);;
+    background-repeat: no-repeat;
+    height: 36px;
+    width: 20px;
+    float: right;
+    padding-left: 2px;
+    padding-right: 5px;
+    margin-top: 8px;
+}
+
+.icon_settings_small {
+    background: url(images/interface/icon_settings_small.png);
+    background-repeat: no-repeat;
+    height: 10px;
+    width: 10px;
+    padding-right: 2px;
+    padding-left: 2px;
+    margin-top: 1px;
+    margin-top: 12px;
+}
+
+.icon_pages {
+    background: url(images/interface/icon_pages.png);
+    background-repeat: no-repeat;
+    height: 36px;
+    width: 20px;
+    float: right;
+    padding-left: 2px;
+    padding-right: 14px;
+    margin-top: 3px;
+}
+
+.icon_pages_small {
+    background: url(images/interface/icon_pages_small.png);
+    background-repeat: no-repeat;
+    height: 17px;
+    width: 13px;
+    padding-right: 2px;
+    padding-left: 2px;
+    margin-top: 9px;
+}
+
+.left{
+    float: left;
+}
+
+.right{
+    float: right;
+}
+
+.hide {
+    display:none;
+}
+
+.fixed{
+    position: fixed;   
+}
