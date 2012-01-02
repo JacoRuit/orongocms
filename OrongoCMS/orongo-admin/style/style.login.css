@@ -1,0 +1,112 @@
+/*
+
+Orongo CSS
+*********************************
+
+Author: Sjors Snoeren 
+
+
+Last edit: 12-12-2011 by Jaco Ruit
+*/
+
+
+.top {
+	width:100%;
+	height:30px;
+}
+
+.logowrap {
+	width:250px;
+	margin:0 auto;
+        display:none;
+}
+.logo {
+	margin-top:70px;
+	float:left;
+	margin-bottom:30px;
+}
+
+
+.register {
+        background: url('images/register_content.png') no-repeat;
+        -moz-border-radius: 10px;
+        border-radius: 10px;
+        color: white;
+	width:325px;
+	height:450px;
+	margin:0 auto;
+	clear:both;
+        display:none;
+}
+.register p {
+	font-size:18px;
+	text-align:center;
+	padding-top:30px;
+	padding-bottom:20px;
+}
+
+.nomargin {
+        font-size:12px;
+	text-align:center;
+        padding-top: 2px;
+        padding-bottom : 2px;
+        margin: 0 auto;
+}
+
+
+.login {
+        background: url('images/login_content.png') no-repeat;
+        -moz-border-radius: 10px;
+        border-radius: 10px;
+        color:#2f271c;
+        /*#2f271c*/
+	width:325px;
+	height:260px;
+	margin:0 auto;
+	clear:both;
+        display:none;
+        
+}
+.login p {
+	font-size:18px;
+	text-align:center;
+	padding-top:30px;
+	padding-bottom:20px;
+}
+.login_input {
+	background:url(images/login_input.png);
+	width:205px;
+	height:40px;
+	padding-left:10px;
+	padding-right:10px;
+	font-family:Arial, sans-serif;
+	font-size:12px;
+	margin-left:50px;
+	margin-top:10px;
+}
+.login_submit {
+	background:url(images/login_button.png);
+	width:100px;
+	height:30px;
+	font-size:0px;
+	margin-left:180px;
+	margin-top:20px;
+}
+.info {
+        padding:20px;
+	text-align:center;
+	font-size:12px;
+	margin-top:20px;
+}
+.info a, .info a:visited {
+	color:#000;
+}
+
+.login_register {
+	background:url(images/register_button.png);
+	width:100px;
+	height:30px;
+	font-size:0px;
+	margin-left:180px;
+	margin-top:20px;
+}

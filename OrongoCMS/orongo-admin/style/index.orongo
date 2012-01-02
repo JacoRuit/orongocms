@@ -1,0 +1,62 @@
+    <script src="{$website_url}js/widget.prettyAlert.js" type="text/javascript" charset="utf-8"></script>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            {$document_ready}
+        });
+    </script>
+    <script src="{$website_url}js/interface.menu_effects.js" type="text/javascript" charset="utf-8"></script>
+    <div class="menu fixed hide">
+        <div class="seperator right hide" style="padding-right: 100px"></div>
+        <div class="menu_text right hide">
+            Settings
+        </div>
+        <div class="icon_settings_small right hide"></div>
+        <div class="seperator right hide"></div>
+        <div class="menu_text right hide">
+            Notifications
+        </div>
+        <div class="icon_messages_small right hide"></div>
+        <div class="seperator right hide"></div>
+        <div class="menu_text right hide">
+            Pages
+        </div>
+        <div class="icon_pages_small right hide"></div>
+        <div class="seperator right hide"></div>
+        <div class="menu_text left hide" style="padding-left: 200px">
+            <div class="icon_account_small left"></div> Logged in as {$username} | <a href="{$website_url}orongo-logout.php">Logout</a>
+        </div>
+    </div>
+    <div id="container" class="hidden">
+    <div class="content_block  left hidden" style="padding-top:100px; padding-left:150px">{$content_block_1}</div>
+    <div class="content_block  hidden right" style="padding-top:100px; padding-right:150px">
+        <h2>OrongoCMS News</h2>
+        <script src="http://widgets.twimg.com/j/2/widget.js"></script>
+        <script>
+            new TWTR.Widget({
+            version: 2,
+            type: 'profile',
+            rpp: 6,
+            interval: 30000,
+            width: 250,
+            height: 300,
+            theme: {
+                shell: {
+                    background: '#ffffff',
+                    color: '#000000'
+                },
+                tweets: {
+                    background: '#ffffff',
+                    color: '#000000',
+                    links: '#ff8400'
+                }
+            },
+            features: {
+                scrollbar: true,
+                loop: false,
+                live: false,
+                behavior: 'all'
+            }
+            }).render().setUser('OrongoCMS').start();
+        </script>
+    </div>
+    </div>

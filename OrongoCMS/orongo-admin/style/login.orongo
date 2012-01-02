@@ -1,0 +1,30 @@
+    <script src="{$website_url}js/widget.prettyAlert.js" type="text/javascript" charset="utf-8"></script>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $(".login").fadeIn(700);
+            $(".logowrap").fadeIn(2000);
+            {$document_ready}
+        });
+    </script>
+    <script src="{$website_url}js/interface.menu_effects.js" type="text/javascript" charset="utf-8"></script>
+    <script src="{$website_url}js/login.document_ready.js" type="text/javascript" charset="utf-8"></script>
+    <div class="menu hide fixed">
+        <div class="menu_text left hide" style="padding-left: 200px">
+            <div class="icon_account_small left"></div> Not logged in | <a href="{$website_url}">Back to {$website_name}</a>
+        </div>
+    </div>
+    <div class="logowrap">
+	<a href="{$website_url}orongo-login.php"><img class="logo" src="{$website_url}/orongo-admin/style/images/logo.png" alt="orongo"/></a>
+    </div>
+    {$login_msg}
+    <div class="login">
+	<p>{$website_name} - Login</p>
+	<form  method="post" action="{$website_url}actions/action_Login.php" >
+		<input class="login_input" type="text" name="username" value="Username"/>
+		<input class="login_input" type="password" name="password" />
+		<input class="login_submit" type="submit"/>
+	</form>
+    </div>
+    <div class="info">
+        <p><a href="#">Forgot Password?</a> | <a href="{$website_url}orongo-register.php">Register</a></p>
+    </div>

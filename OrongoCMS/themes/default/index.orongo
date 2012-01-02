@@ -1,0 +1,18 @@
+    <script src="{$website_url}js/widget.prettyAlert.js" type="text/javascript" charset="utf-8"></script>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            {$document_ready}
+            {$plugin_document_ready}
+        });
+    </script>
+    {$menu_bar}
+    {$plugin_body}
+    <div id="header">    
+        <div id="menu">
+            {$menu}
+        </div>
+    </div>
+    <div id="blog_posts">
+        {$articles}
+    </div>
+        
