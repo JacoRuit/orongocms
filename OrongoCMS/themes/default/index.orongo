@@ -7,6 +7,7 @@
     </script>
     {$menu_bar}
     {$plugin_body}
+    {$errors}
     <div id="header">    
         <div id="menu">
             {$menu}

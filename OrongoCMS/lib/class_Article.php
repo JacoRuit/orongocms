@@ -34,7 +34,9 @@ class Article implements IHTMLConvertable {
         $this->title = $row['title'];
         $this->content = $row['content'];
         $this->authorID = $row['authorID'];
-        $this->author = new User($this->authorID);
+        try{
+            $this->author = new User($this->authorID);
+        }catch(Exception $e){ $this->author = null; }
         mysql_free_result($result);
     }
     
@@ -120,7 +122,8 @@ class Article implements IHTMLConvertable {
         $generatedHTML = "<div class=\"article\">";
         $generatedHTML .= " <div class=\"article-header\">";
         $generatedHTML .= "     <p id=\"title\">" . $this->title . "</p>";
-        $generatedHTML .= "     <p id=\"author\">" . $this->author->getName()  . "</p>";
+        if($this->author == null){ $author_name = "Unknown"; }else{ $author_name = $this->author->getName(); }
+        $generatedHTML .= "     <p id=\"author\">" . $author_name  . "</p>";
         $generatedHTML .= "</div>";
         return $generatedHTML;
     }
@@ -129,7 +132,8 @@ class Article implements IHTMLConvertable {
         $generatedHTML = "<div class=\"article\">";
         $generatedHTML .= " <div class=\"article-header\">";
         $generatedHTML .= "     <p id=\"title\">" . $this->title . "</p>";
-        $generatedHTML .= "     <p id=\"author\">" . $this->author->getName() . "</p>";       
+        if($this->author == null){ $author_name = "Unknown"; }else{ $author_name = $this->author->getName(); }
+        $generatedHTML .= "     <p id=\"author\">" . $author_name . "</p>";       
         $generatedHTML .= "     <p id=\"content\">" . substr($this->content, 0, 100) . "</p>";
         $generatedHTML .= " </div>";
         $generatedHTML .= "</div>";
@@ -152,11 +156,14 @@ class Article implements IHTMLConvertable {
     /**
      * Creates an article
      * @param String $paramArticle name of the article
+     * @param String $paramAuthor User object
      * @return Article new article object
      */
-    public static function createArticle($paramName){
+    public static function createArticle($paramName, $paramUser = null){
         $newID = self::getLastArticleID() + 1;
-        $q = "INSERT INTO `articles` (`id`,`title`) VALUES ('" . $newID . "', '" . $paramName . "')";
+        if($paramUser != null && ($paramUser instanceof User) == false) throw new IllegalArgumentException("User object expected."); 
+        if($paramUser == null ) $author_id = 00; else $author_id = $paramUser->getID(); 
+        $q = "INSERT INTO `articles` (`id`,`title`,`authorID`) VALUES ('" . $newID . "', '" . $paramName . "', '" . $author_id . " ')";
         @mysql_query($q);
         return new Article($newID);
     }
