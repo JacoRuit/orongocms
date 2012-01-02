@@ -12,7 +12,6 @@ class DefaultStylePHP implements IOrongoStyle{
     }
     
     public function run(&$smarty){
-        $smarty->assign("menu", "hacked LOLOL!");
     }
     
     public function getArticlesHTML($paramArticles){ return null; }

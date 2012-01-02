@@ -9,11 +9,13 @@ class Plugin {
     private static $currentPage = 0;
     /**
      * Installs database for the plugin
-     * @param String $paramPrefix Prefix for the folder, sub-folders use this
+     * @param String $paramPrefix Prefix for the folder, sub-folders use this (starts from plugins/)
      * @param String $paramPluginFolder folder where plugin is located
      */
     public static function install($paramPrefix, $paramPluginFolder){
-        $xml = @simplexml_load_file($paramPrefix . 'plugins/'. $paramPluginFolder . '/info.xml');
+        $filePath = $paramPrefix . 'plugins/'. $paramPluginFolder . '/info.xml';
+        if(file_exists($filePath) == false) throw new Exception("The plugin's info.xml doesn't exist!");
+        $xml = @simplexml_load_file($filePath);
         $json = @json_encode($xml);
         $info = @json_decode($json, true);
         $setting = '';
@@ -81,7 +83,7 @@ class Plugin {
         $paramValue =  mysql_escape_string($paramValue);
         $q1 = "SELECT `setting_value` FROM `plugins` WHERE `plugin_main_class` = '" . $backtrace[1]['class'] . "' AND `setting` = '" . $paramSetting . "'";
         $result = @mysql_query($q1);
-        if(mysql_num_rows($result)  < 1) throw new IllegalMemoryAccessException("This settings doesn't exist or you are accessing the setting illegal.");
+        if(mysql_num_rows($result)  < 1 && $backtrace[1]['class'] != __CLASS__) throw new IllegalMemoryAccessException("This settings doesn't exist or you are accessing the setting illegal.");
         $q2 = "UPDATE `plugins` SET `setting_value` = '" . $paramValue . "' WHERE `plugin_main_class` = '" . $backtrace[1]['class'] . "' AND `setting` = '" . $paramSetting . "'";
         @mysql_query($q);
     }
@@ -157,10 +159,10 @@ class Plugin {
                if($plugin instanceof IOrongoPlugin) $plugins[$count] = $plugin; 
                $count++;
             }catch(IllegalMemoryAccessException $ie){
-                throw new ClassLoadException("Plugin tried to access illegal memory. Unable to load plugin: " . $pluginFolder);
+                throw new ClassLoadException("Plugin tried to access illegal memory. Unable to load plugin: <br /> " . $pluginFolder);
                 continue;
             }catch(Exception $e){
-                throw new ClassLoadException("Unable to load plugin: " . $pluginFolder);
+                throw new ClassLoadException("Unable to load plugin: <br /> " . $pluginFolder);
                 continue;
             }
         }

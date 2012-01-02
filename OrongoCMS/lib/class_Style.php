@@ -7,7 +7,7 @@
  */
 class Style {
     
-    #   variables
+
     private $styleFolder;
     private $styleName;
     private $styleCopyright;
@@ -18,7 +18,8 @@ class Style {
     private $mainClass;
     private $doHTMLArticle;
     private $doHTMLPage;
-    #   constructor
+    private $stylePath;
+    
     /**
      * Style Object
      * @param String $paramPrefix Prefix for the folder, sub-folders use this
@@ -27,7 +28,10 @@ class Style {
      */
     public function __construct($paramPrefix, $paramStyleFolder){
         $this->styleFolder = $paramStyleFolder;
-        $xml = @simplexml_load_file($paramPrefix . 'themes/'. $this->styleFolder . '/info.xml');
+        $filePath = $paramPrefix . 'themes/'. $this->styleFolder . '/info.xml';
+        if(file_exists($filePath) == false) throw new Exception("Unable to load the style. <br /> The info.xml file of the style doesn't exist!");
+        $xml = @simplexml_load_file($filePath);
+        $this->stylePath = 'themes/'. $this->styleFolder . "/";
         $json = @json_encode($xml);
         $info = @json_decode($json, true);
         $this->styleName = $info['style']['name'];
@@ -132,13 +136,24 @@ class Style {
     
     #phpFile
     /**
-     * Returns the PHP file.
+     * Returns the PHP file name.
      * Always check if its not null before using this, because then it's not using php.
      * @return String PHP file name.
      */
     public function getPHPFile(){
         return $this->phpFile . '.php';
     }
+    
+    #stylePath
+    /**
+     * Returns the path of the style
+     * @return String Path of style
+     */
+    public function getStylePath(){
+        return $this->stylePath;
+    }
+    
+    
     
     #mainClass
     /**

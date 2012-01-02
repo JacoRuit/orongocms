@@ -10,12 +10,23 @@ $user = handleSessions();
 
 
 $head = "";
+$errors = "";
 $website_name = Settings::getWebsiteName();
 $website_url = Settings::getWebsiteURL();
 $document_ready = "";
 $pages = Page::getPages();
 $menu = HTMLFactory::getMenuCode($pages);
-$plugins = Plugin::getActivatedPlugins('orongo-admin/');
+$pluginHTML = null;
+
+try{
+    $plugins = Plugin::getActivatedPlugins('orongo-admin/');
+    $pluginHTML = handlePlugins($plugins);
+}catch(Exception $e){
+    $msgbox = new MessageBox();
+    $msgbox->bindException($e);
+    $errors.= $msgbox->toHTML();
+}
+
 Plugin::setCurrentPage(PAGE_INDEX);
 
 $menu_bar = "";
@@ -25,18 +36,20 @@ if($user != null){
     $menu_bar .= '<div class="menu fixed hide"><div class="seperator right hide" style="padding-right: 100px"></div><div class="menu_text right hide">Settings</div><div class="icon_settings_small right hide"></div><div class="seperator right hide"></div><div class="menu_text right hide">Notifications</div><div class="icon_messages_small right hide"></div><div class="seperator right hide"></div><div class="menu_text right hide">Pages</div><div class="icon_pages_small right hide"></div><div class="seperator right hide"></div><div class="menu_text left hide" style="padding-left: 200px"><div class="icon_account_small left"></div> Logged in as ' . $user->getName() . ' | <a href="'. $website_url . 'orongo-logout.php">Logout</a></div></div>';
 }
 
+
 #   Generate HTML of the last 5 articles
 $articles = array();
 $lastID = Article::getLastArticleID();
 $c = 0;
 if($lastID > 0){
-    for($i = 0; $i <= $lastID; $i++){
+    for($i = $lastID; $i >= 0; $i--){
         try{
-            //if 5 articles are put in the array, exit loop
             if($c >= 5) break;
             $articles[$i] = new Article($i);
             $c++;
-        }catch(Exception $e){}
+        }catch(Exception $e){
+            continue;
+        }
     }
 }else{
    try{
@@ -51,6 +64,9 @@ if($style->doArticleHTML()){
     try{
         $articleHTML = $style->getArticlesHTML($articles);
     }catch(Exception $e){
+        $msgbox = new MessageBox("The style didn't generate the HTML code for the articles, therefore the default generator was used. <br /><br />To hide this message open <br />" . $style->getStylePath() . "info.xml<br /> and set <strong>own_article_html</strong> to <strong>false</strong>.");
+        $msgbox->bindException($e);
+        $errors .= $msgbox->toHTML();
         foreach($articles as $article){
             $articleHTML .= $article->toShortHTML();
         }
@@ -64,10 +80,6 @@ if($style->doArticleHTML()){
 #   Template
     
 
-    
-#       Handle Plugins
-$pluginHTML = handlePlugins($plugins);
-
 #       Assigns
    
     #General
@@ -79,6 +91,7 @@ $pluginHTML = handlePlugins($plugins);
     $smarty->assign("document_ready", $document_ready);
     $smarty->assign("menu_bar", $menu_bar);
     $smarty->assign("menu", $menu);
+    $smarty->assign("errors", $errors);
     
     $smarty->assign("articles", $articleHTML);
     
