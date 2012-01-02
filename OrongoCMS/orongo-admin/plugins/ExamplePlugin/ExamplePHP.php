@@ -69,6 +69,7 @@ class ExampleClass implements IOrongoPlugin{
     }
     
     public function getSettings(){
+        //TODO make this work
         return array('show_menubar' => false);
     }
     
