@@ -1,4 +1,4 @@
-<?php /* Smarty version Smarty 3.1.4, created on 2011-12-28 14:41:00
+<?php /* Smarty version Smarty 3.1.4, created on 2012-01-03 12:45:14
          compiled from "themes/default\index.orongo" */ ?>
 <?php /*%%SmartyHeaderCode:107574eea0dd17bb473-72456378%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_valid = $_smarty_tpl->decodeProperties(array (
@@ -7,7 +7,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     '2e25738525639221d751355c1b6319b31f4a3853' => 
     array (
       0 => 'themes/default\\index.orongo',
-      1 => 1325079651,
+      1 => 1325591112,
       2 => 'file',
     ),
   ),
@@ -24,6 +24,8 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     'plugin_document_ready' => 0,
     'menu_bar' => 0,
     'plugin_body' => 0,
+    'errors' => 0,
+    'website_name' => 0,
     'menu' => 0,
     'articles' => 0,
   ),
@@ -43,10 +45,16 @@ js/widget.prettyAlert.js" type="text/javascript" charset="utf-8"></script>
 
     <?php echo $_smarty_tpl->tpl_vars['plugin_body']->value;?>
 
-    <div id="header">    
-        <div id="menu">
-            <?php echo $_smarty_tpl->tpl_vars['menu']->value;?>
+    <?php echo $_smarty_tpl->tpl_vars['errors']->value;?>
 
+    <div id="header">
+        <h1><?php echo $_smarty_tpl->tpl_vars['website_name']->value;?>
+</h1>
+        <div id="menuwrap">
+            <div id="menu">
+                <?php echo $_smarty_tpl->tpl_vars['menu']->value;?>
+
+            </div>
         </div>
     </div>
     <div id="blog_posts">

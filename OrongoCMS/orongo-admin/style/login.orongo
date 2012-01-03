@@ -8,7 +8,7 @@
     </script>
     <script src="{$website_url}js/interface.menu_effects.js" type="text/javascript" charset="utf-8"></script>
     <script src="{$website_url}js/login.document_ready.js" type="text/javascript" charset="utf-8"></script>
-    <div class="menu hide fixed">
+    <div class="orongo_menu hide fixed">
         <div class="menu_text left hide" style="padding-left: 200px">
             <div class="icon_account_small left"></div> Not logged in | <a href="{$website_url}">Back to {$website_name}</a>
         </div>

@@ -16,5 +16,52 @@
             <name>Maki Myers</name>
             <website>http://www.makimyers.co.uk/</website>
         </author>
+        <settings>
+            <logo_url>
+                <description>The URL to the logo to show on your website.</description>
+                <type>string</type>
+                <default>{$website_url}themes/monk/images/logo.png</default>
+            </logo_url>
+            <footer_1_title>
+                <description>The 1st footer title</description>
+                <type>string</type>
+                <default>Footer 1</default>
+            </footer_1_title>
+            <footer_1_text>
+                <description>The 1st footer text</description>
+                <type>string</type>
+                <default>You can change this in your admin panel!</default>
+            </footer_1_text>
+            <footer_2_title>
+                <description>The 2nd footer title</description>
+                <type>string</type>
+                <default>Footer 2</default>
+            </footer_2_title>
+            <footer_2_text>
+                <description>The 2nd footer text</description>
+                <type>string</type>
+                <default>You can change this in your admin panel!</default>
+            </footer_2_text>
+            <footer_3_title>
+                <description>The 3rd footer title</description>
+                <type>string</type>
+                <default>Footer 3</default>
+            </footer_3_title>
+            <footer_3_text>
+                <description>The 3rd footer text</description>
+                <type>string</type>
+                <default>You can change this in your admin panel!</default>
+            </footer_3_text>
+            <footer_4_title>
+                <description>The 4th footer title</description>
+                <type>string</type>
+                <default>Footer 4</default>
+            </footer_4_title>
+            <footer_4_text>
+                <description>The 4th footer text</description>
+                <type>string</type>
+                <default>You can change this in your admin panel!</default>
+            </footer_4_text>
+        </settings>
     </style>
 </root>

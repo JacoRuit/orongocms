@@ -10,7 +10,12 @@ class MonkStyle implements IOrongoStyle{
     
     public function __construct(){}
     
-    public function run(&$smarty){}
+    public function run(&$smarty){
+        $settings = Style::getSettings();
+        foreach($settings as $setting=>$value){
+            $smarty->assign($settings,$value);
+        }
+    }
     
     public function getArticlesHTML($paramArticles){ 
         $generatedHTML = "";

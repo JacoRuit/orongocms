@@ -250,6 +250,90 @@ class Style {
             throw new Exception("Style doesn't generate the HTML for articles. Please call default function.");
         }
     }
+    
+    /**
+     * Installs database for the style
+     * @param String $paramPrefix Prefix for the folder, sub-folders use this (starts from themes/)
+     * @param String $paramStyleFolder folder where style is located
+     */
+    public static function install($paramPrefix, $paramStyleFolder){
+        $filePath = $paramPrefix . 'themes/'. $paramStyleFolder . '/info.xml';
+        if(file_exists($filePath) == false) throw new Exception("The style's info.xml doesn't exist!");
+        $xml = @simplexml_load_file($filePath);
+        $json = @json_encode($xml);
+        $info = @json_decode($json, true);
+        $setting = '';
+        $typeSetting= '';
+        if($info['style']['use_php'] != 'true') throw new Exception("Cannot install settings because the style is not using PHP.");
+        foreach($info['style']['settings'] as $key=>$value){
+            $setting = $key;
+            foreach($info['style']['settings'][$key] as $key=>$value){
+                if($key == 'type'){
+                    $typeSetting = $value;
+                    self::installSetting($info['style']['main_class'] , $setting, $typeSetting);
+                }else if($key == 'default'){
+                    $default = str_replace('{$website_url}', Settings::getWebsiteURL(), $value);
+                    $q2 = "UPDATE `styles` SET `setting_value` = '" . $default . "' WHERE `style_main_class` = '" . $info['style']['main_class'] . "' AND `setting` = '" . $setting . "'";
+                    @mysql_query($q2);
+                }
+            }
+        }  
+    }
+    
+    /**
+     * Installs a setting
+     * @param String $paramStyleMainClass Style main class
+     * @param String $paramSetting     Setting name
+     * @param String $paramSettingType Setting type
+     */
+    private static function installSetting($paramStyleMainClass, $paramSetting, $paramSettingType){
+        $q = "INSERT INTO `styles` (`style_main_class`, `setting`, `setting_type`, `setting_value`) VALUES ('" . $paramStyleMainClass . "', '" .$paramSetting . "', '" . $paramSettingType . "', '')";
+        @mysql_query($q);  
+    }
+    
+    /**
+     * Gets the style settings
+     * @return array Settings of style
+     */
+    public static function getSettings(){
+        $backtrace = debug_backtrace();
+        if(!is_array($backtrace)) throw new Exception ("Couldn't get array from debug_backtrace function.");
+        if(!isset($backtrace[1]['class'])) throw new IllegalMemoryAccessException("You can only call this function inside a class.");
+        $q = "SELECT `setting_value`, `setting`, `setting_type` FROM `styles` WHERE `style_main_class` = '" . $backtrace[1]['class'] . "'";
+        $result = @mysql_query($q);
+        $settings = array();
+        while($row = mysql_fetch_assoc($result)){
+            if($row['setting_type'] == 'boolean'){
+                if($row['setting_value'] == 'true'){
+                    $settings[$row['setting']] = true;
+                }else{
+                    $settings[$row['setting']] = false;
+                }
+            }else{
+                $settings[$row['setting']] = $row['setting_value'];
+            }
+        }
+        mysql_free_result($result);
+        return $settings;
+    }
+    
+    /**
+     * Sets a style setting
+     * @param String $paramSetting      The setting to edit
+     * @param String $paramValue        New value of settings
+     */
+    public static function setSetting($paramSetting, $paramValue){
+        $backtrace = debug_backtrace();
+        if(!is_array($backtrace)) throw new Exception ("Couldn't get array from debug_backtrace function.");
+        if(!isset($backtrace[1]['class'])) throw new IllegalMemoryAccessException("You can only call this function inside a class.");
+        $paramSetting =  mysql_escape_string($paramSetting);
+        $paramValue =  mysql_escape_string($paramValue);
+        $q1 = "SELECT `setting_value` FROM `styles` WHERE `style_main_class` = '" . $backtrace[1]['class'] . "' AND `setting` = '" . $paramSetting . "'";
+        $result = @mysql_query($q1);
+        if(mysql_num_rows($result)  < 1 && $backtrace[1]['class'] != __CLASS__) throw new IllegalMemoryAccessException("This settings doesn't exist or you are accessing the setting illegal.");
+        $q2 = "UPDATE `styles` SET `setting_value` = '" . $paramValue . "' WHERE `style_main_class` = '" . $backtrace[1]['class'] . "' AND `setting` = '" . $paramSetting . "'";
+        @mysql_query($q);
+    }
 }
 
 ?>

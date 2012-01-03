@@ -1,0 +1,38 @@
+	<div id="footer-main"><!--start footer-main-->
+		<div class="one_fourth">
+			<h3>{$footer_1_title}</h3>
+			<p>{$footer_1_text}</p>
+		</div>
+		<div class="one_fourth">
+			<h3>{$footer_2_title}</h3>
+			<p>{$footer_2_text}</p>
+		</div>
+		<div class="one_fourth">
+			<h3>{$footer_3_title}</h3>
+			<p>{$footer_3_text}</p>
+		</div>    
+		<div class="one_fourth column-last">
+			<h3>{$footer_4_title}</h3>
+			<p>{$footer_4_text}</p>
+		</div>
+	</div><!--end footer-main-->
+
+	<div id="footer">
+		<p id="footer-text">&copy; Copyright 2011 <a href="http://www.makimyers.co.uk/">Monk</a> by
+		<a href="http://www.makimyers.co.uk">Maki Myers</a> - Orongo'd by Jaco Ruit ~ Proudly powered by <a href="http://www.orongocms.eu/">OrongoCMS</a></p>
+	</div>
+
+</div><!--end-body wrapper-->
+
+    <!--Nivo Slider-->
+    <script type="text/javascript" src="{$website_url}themes/monk/js/slide/jquery.nivo.slider.pack.js"></script>
+    <script type="text/javascript">
+    $(window).load(function() {
+        $('#slider').nivoSlider();
+    });
+    </script>
+	<!--Nivo Slider-->
+	
+</body>
+</html>
+        
