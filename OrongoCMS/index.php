@@ -37,7 +37,7 @@ $menu_bar = "";
 if($user != null){
     $menu_bar = '<script src="'. $website_url . 'js/interface.menu_effects.js"  type="text/javascript" charset="utf-8"></script>';
     $menu_bar .= '<link rel="stylesheet" href="'. $website_url . 'orongo-admin/style/style.menu.css" type="text/css"/>';
-    $menu_bar .= '<div class="menu fixed hide"><div class="seperator right hide" style="padding-right: 100px"></div><div class="menu_text right hide">Settings</div><div class="icon_settings_small right hide"></div><div class="seperator right hide"></div><div class="menu_text right hide">Notifications</div><div class="icon_messages_small right hide"></div><div class="seperator right hide"></div><div class="menu_text right hide">Pages</div><div class="icon_pages_small right hide"></div><div class="seperator right hide"></div><div class="menu_text left hide" style="padding-left: 200px"><div class="icon_account_small left"></div> Logged in as ' . $user->getName() . ' | <a href="'. $website_url . 'orongo-logout.php">Logout</a></div></div>';
+    $menu_bar .= '<div class="orongo_menu fixed hide"><div class="seperator right hide" style="padding-right: 100px"></div><div class="menu_text right hide">Settings</div><div class="icon_settings_small right hide"></div><div class="seperator right hide"></div><div class="menu_text right hide">Notifications</div><div class="icon_messages_small right hide"></div><div class="seperator right hide"></div><div class="menu_text right hide">Pages</div><div class="icon_pages_small right hide"></div><div class="seperator right hide"></div><div class="menu_text left hide" style="padding-left: 200px"><div class="icon_account_small left"></div> Logged in as ' . $user->getName() . ' | <a href="'. $website_url . 'orongo-logout.php">Logout</a></div></div>';
 }
 
 
@@ -111,7 +111,7 @@ $style->run($smarty);
 #       Show
 $smarty->display("header.orongo");
 $smarty->display("index.orongo");
-
+$smarty->display("footer.orongo");
 
 //Debug lines
 // TODO remove on release

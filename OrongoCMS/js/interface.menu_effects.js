@@ -12,7 +12,7 @@
 
 $(document).ready(function(){
     
-    $(".menu").slideDown(500, function(){
+    $(".orongo_menu").slideDown(500, function(){
         $(".seperator").show();
         $(".icon_messages_small").show();
         $(".icon_settings_small").show();
@@ -21,17 +21,17 @@ $(document).ready(function(){
         $(".menu_text").show();
                 
         var shown = true;
-        $(".menu").dblclick(function() {
+        $(".orongo_menu").dblclick(function() {
             if(shown){
-                $(".menu").animate({
+                $(".orongo_menu").animate({
                     opacity: 0.25,
-                    height: '-=30',
+                    height: '-=30'
                 });
                 shown = false;
             }else{
-                $(".menu").animate({
+                $(".orongo_menu").animate({
                     opacity: 100,
-                    height: '+=30',
+                    height: '+=30'
                 });
                shown = true;
             }

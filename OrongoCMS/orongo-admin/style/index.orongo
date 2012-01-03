@@ -5,7 +5,7 @@
         });
     </script>
     <script src="{$website_url}js/interface.menu_effects.js" type="text/javascript" charset="utf-8"></script>
-    <div class="menu fixed hide">
+    <div class="orongo_menu fixed hide">
         <div class="seperator right hide" style="padding-right: 100px"></div>
         <div class="menu_text right hide">
             Settings

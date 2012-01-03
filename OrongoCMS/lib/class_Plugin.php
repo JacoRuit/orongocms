@@ -28,7 +28,8 @@ class Plugin {
                     self::installSetting($info['plugin']['main_class'] , $setting, $typeSetting);
                 }else if($key == 'default'){
                     $default = $value;
-                    self::setSetting($info['plugin']['main_class'], $setting, $default);
+                    $q2 = "UPDATE `plugins` SET `setting_value` = '" . $default . "' WHERE `plugin_main_class` = '" . $info['plugin']['main_class'] . "' AND `setting` = '" . $setting . "'";
+                    @mysql_query($q2);
                 }
             }
         }  

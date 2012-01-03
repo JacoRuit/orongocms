@@ -46,7 +46,7 @@ class Settings {
     
     /**
      * Returns the default style as a Style object -> class_Style.php
-     * @param String $paramPrefix prefix for folder
+     * @param String $paramPrefix prefix for folder (starting from themes/)
      * @return Style Style Object
      */
     public static function getStyle($paramPrefix){
@@ -56,6 +56,21 @@ class Settings {
         $styleFolder = $row['value'];
         mysql_free_result($result);
         return new Style($paramPrefix, $styleFolder);
+    }
+    
+    /**
+     * Sets the style 
+     * @param String $paramPrefix prefix for folder (starting from themes/)
+     * @param String $paramStyle  name of the style folder
+     */
+    public static function setStyle($paramPrefix, $paramStyle){
+        try{
+            $q = 'TRUNCATE TABLE `styles`'; 
+            @mysql_query($q);
+            Style::install($paramPrefix, $paramStyle);
+        }catch(Exception $e){ throw $e; }
+        $q = "UPDATE `settings` SET `value`='" . $paramStyle . "' WHERE `setting` = 'style'";
+        @mysql_query($q);
     }
     
     /**
