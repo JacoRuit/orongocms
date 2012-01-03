@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>{$head_title}</title>
+        <link rel="stylesheet" href="{$website_url}themes/monk/style.css" type="text/css" media="screen"/>
+
+<!--Nivo Slider-->
+        <link rel="stylesheet" href="{$website_url}themes/monk/js/slide/default.css" type="text/css" media="screen" />
+        <link rel="stylesheet" href="{$website_url}themes/monk/js/slide/nivo-slider.css" type="text/css" media="screen" />
+<!--Nivo Slider-->
+
+<!--FANCY BOX-->
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js"></script>
+	<script>
+		!window.jQuery && document.write('<script src="{$website_url}themes/monk/js/jquery-1.4.3.min.js"><\/script>');
+	</script>
+	<script type="text/javascript" src="{$website_url}themes/monk/js/fancybox/jquery.fancybox-1.3.4.pack.js"></script>
+	<link rel="stylesheet" type="text/css" href="{$website_url}themes/monk/js/fancybox/jquery.fancybox-1.3.4.css" media="screen" />
+	<script type="text/javascript">
+		$(document).ready(function() {
+			$("a#fancybox").fancybox();	 
+		});
+	</script>
+	<style>
+	.fancy a img {
+	border: 1px solid #BBB;
+	padding: 2px;
+	margin: 10px 20px 10px 0;
+	vertical-align: top;
+	}
+	.fancy a img.last {
+	margin-right: 0;	
+	}
+	</style>
+<!--FANCY BOX-->
+        <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js" type="text/javascript"></script>     
+        <link rel="stylesheet" href="{$website_url}orongo-admin/style/smoothness/jquery-ui-1.8.16.custom.css" type="text/css"/>
+        {$head}
+        {$plugin_head}
+</head>
+
