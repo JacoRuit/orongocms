@@ -3,6 +3,8 @@
  * @author Jaco Ruit
  */
 
+
+
 session_start();
 
 require 'lib/class_Database.php';
@@ -17,6 +19,7 @@ include 'lib/E/ClassLoadException.php';
 require 'lib/class_MessageBox.php';
 require 'lib/class_Settings.php';
 require 'lib/class_Storage.php';
+require 'lib/class_Cache.php';
 require 'lib/class_Style.php';
 require 'lib/class_Image.php';
 require 'lib/class_Session.php';

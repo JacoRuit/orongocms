@@ -6,7 +6,7 @@
         <use_php>true</use_php>
         <php_file>ExamplePHP</php_file>
         <main_class>DefaultStylePHP</main_class>
-        <own_article_html>true</own_article_html>
+        <own_article_html>false</own_article_html>
         <own_page_html>false</own_page_html>
         <author>
             <name>Jaco Ruit</name>

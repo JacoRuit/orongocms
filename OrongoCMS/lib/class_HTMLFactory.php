@@ -24,6 +24,7 @@ class HTMLFactory {
             }else continue;
         }
         $generatedHTML .= "</ul>";
+        
         return $generatedHTML;
     }
 }

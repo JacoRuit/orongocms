@@ -50,7 +50,7 @@ class Plugin {
      */
     public static function getSettings(){
         $backtrace = debug_backtrace();
-        if(!is_array($backtrace)) throw new IllegalMemoryAccessException("Debug backtrace didn't provide information.");
+        if(!is_array($backtrace)) throw new Exception ("Couldn't get array from debug_backtrace function.");
         if(!isset($backtrace[1]['class'])) throw new IllegalMemoryAccessException("You can only call this function inside a class.");
         $q = "SELECT `setting_value`, `setting`, `setting_type` FROM `plugins` WHERE `plugin_main_class` = '" . $backtrace[1]['class'] . "'";
         $result = @mysql_query($q);
@@ -77,7 +77,7 @@ class Plugin {
      */
     public static function setSetting($paramSetting, $paramValue){
         $backtrace = debug_backtrace();
-        if(!is_array($backtrace)) throw new IllegalMemoryAccessException("Debug backtrace didn't provide information.");
+        if(!is_array($backtrace)) throw new Exception ("Couldn't get array from debug_backtrace function.");
         if(!isset($backtrace[1]['class'])) throw new IllegalMemoryAccessException("You can only call this function inside a class.");
         $paramSetting =  mysql_escape_string($paramSetting);
         $paramValue =  mysql_escape_string($paramValue);

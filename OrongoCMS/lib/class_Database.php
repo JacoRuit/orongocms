@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Handles Database Connections
+ * Database Object
  *
  * @author Jaco Ruit
  */

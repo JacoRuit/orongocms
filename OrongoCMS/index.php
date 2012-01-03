@@ -78,12 +78,13 @@ if($style->doArticleHTML()){
 }
 
 #   Template
-    
+
 
 #       Assigns
    
     #General
     $smarty->assign("website_url", $website_url);
+    $smarty->assign("website_name", $website_name);
     
     $smarty->assign("head", $head);
     $smarty->assign("head_title", $website_name .= " - Home");
