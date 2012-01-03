@@ -12,6 +12,7 @@ class Article implements IHTMLConvertable {
     private $content;
     private $authorID;
     private $author;
+    private $date;
     
     #   constructors
     /**
@@ -22,7 +23,7 @@ class Article implements IHTMLConvertable {
      */
     public function __construct($paramID){
         $this->id = $paramID;
-        $q = "SELECT `title`,`content`,`authorID` FROM `articles` WHERE `id` = '" . $this->id . "'";
+        $q = "SELECT `title`,`content`,`authorID`,`date` FROM `articles` WHERE `id` = '" . $this->id . "'";
         $result = @mysql_query($q);
         $row = mysql_fetch_assoc($result);
         $count = mysql_num_rows($result);
@@ -34,6 +35,7 @@ class Article implements IHTMLConvertable {
         $this->title = $row['title'];
         $this->content = $row['content'];
         $this->authorID = $row['authorID'];
+        $this->date = $row['date'];
         try{
             $this->author = new User($this->authorID);
         }catch(Exception $e){ $this->author = null; }
@@ -103,6 +105,14 @@ class Article implements IHTMLConvertable {
         return $this->author;
     }
     
+    #   date
+    /**
+     * @return String Date when article was written
+     */
+    public function getDate(){
+        return $this->date;
+    }
+    
     /**
      * Deletes the article from database.
      */
@@ -119,6 +129,7 @@ class Article implements IHTMLConvertable {
     }
     
     public function toHTML(){
+        //TODO make it work 
         $generatedHTML = "<div class=\"article\">";
         $generatedHTML .= " <div class=\"article-header\">";
         $generatedHTML .= "     <p id=\"title\">" . $this->title . "</p>";
@@ -163,7 +174,7 @@ class Article implements IHTMLConvertable {
         $newID = self::getLastArticleID() + 1;
         if($paramUser != null && ($paramUser instanceof User) == false) throw new IllegalArgumentException("User object expected."); 
         if($paramUser == null ) $author_id = 00; else $author_id = $paramUser->getID(); 
-        $q = "INSERT INTO `articles` (`id`,`title`,`authorID`) VALUES ('" . $newID . "', '" . $paramName . "', '" . $author_id . " ')";
+        $q = "INSERT INTO `articles` (`id`,`title`,`authorID`,`date`) VALUES ('" . $newID . "', '" . $paramName . "', '" . $author_id . " ', CURDATE())";
         @mysql_query($q);
         return new Article($newID);
     }

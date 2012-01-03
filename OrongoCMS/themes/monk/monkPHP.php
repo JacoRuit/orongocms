@@ -11,6 +11,14 @@ class MonkStyle implements IOrongoStyle{
     public function __construct(){}
     
     public function run(&$smarty){
+        try{
+            $vars = $smarty->getTemplateVars();
+            $menu = $vars['menu'];
+            //$count = Utils::stringTimesContains($menu, '<li>');
+            //if($count > 5){
+            //    $smarty->assign('menu',str_replace('<li>', '<li style="font-size:1px;">', $menu));
+            //}
+        }catch(Exception $e){ }
         $settings = Style::getSettings();
         foreach($settings as $setting=>$value){
             $smarty->assign($settings,$value);
@@ -33,7 +41,7 @@ class MonkStyle implements IOrongoStyle{
             $generatedHTML .= '<div class="one_fourth ';
             if($last) $generatedHTML .= 'column-last';
             $generatedHTML .= ' ">';
-            $generatedHTML .= '<h3>' . $article->getTitle() . '</h3>';
+            $generatedHTML .= '<a href="'. Settings::getWebsiteURL() . 'article.php?id=' . $article->getID() . '"><h3>' . $article->getTitle() . '</h3></a>';
             $generatedHTML .= '<p>' . substr($article->getContent(), 0 ,500) . '</p>';
             $generatedHTML .= '</div>';
         }
@@ -42,7 +50,15 @@ class MonkStyle implements IOrongoStyle{
     }
     
 
-    public function getArticleHTML($paramArticle){ return null; }
+    public function getArticleHTML($paramArticle){ 
+        if(($paramArticle instanceof Article) == false) return null;
+        $author = $paramArticle->getAuthor();
+        if($author == null && ($author instanceof User) == false) $author_name = "Unknown"; else $author_name = $author->getName();
+        $generatedHTML = "<div class=\"box\"><h1>" . $paramArticle->getTitle() . "</h1><p>Written by " . $author_name . "  on  " . $paramArticle->getDate() ."</p></div>";
+        $generatedHTML .= $paramArticle->getContent();
+        $generatedHTML .= "<br /><br /><br />";
+        return $generatedHTML;
+    }
     
 
     public function getPageHTML($paramPage){ return null; }
