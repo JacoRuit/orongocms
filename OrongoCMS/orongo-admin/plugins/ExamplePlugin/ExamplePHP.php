@@ -41,21 +41,24 @@ class ExampleClass implements IOrongoPlugin{
     
     
     public function getHTML(){
-        $ex = "";
+        $p = "not supported";
         $htmlArray = array();
-        if(Plugin::getCurrentPage() == PAGE_INDEX) $ex = "Yay index!";
-        $stored = Plugin::getSettings();
+        $curPage = Plugin::getCurrentPage();
+        if($curPage == PAGE_INDEX) $p = "the landing page";
+        else if($curPage == PAGE_ARTICLE) $p = "an article";
+        else if($curPage == PAGE_PAGE) $p = "a page";
         $htmlArray['javascript']['document_ready']="";
-        $msgbox = new MessageBox("The example plugin loads fine! :D", "ExamplePlugin :)");
+        $msgbox = new MessageBox("The example plugin detected that you're viewing " . $p . "." , "ExamplePlugin getHTML() function");
         $htmlArray['html']['body'] = $msgbox->toHTML();
         $c=0;
-        //debug lines:
+        //debug lines:       
+        // $stored = Plugin::getSettings();
        /** foreach($stored as $value){
             $htmlArray['javascript']['document_ready'] .= "prettyAlert('#msgbox" . $c . "', '" . $value . "! :D','Plugin');          ";
             $htmlArray['html']['body'] .= "<div id='msgbox" . $c . "'></div>";
             $c++;
         } **/
-        $htmlArray['html']['footer'] = $ex . "<br />" . Settings::getWebsiteName() . " is using example plugin!";
+        $htmlArray['html']['footer'] = "<br />" . Settings::getWebsiteName() . " is using example plugin. This text was added by the Example Plugin.";
         return $htmlArray;
     }
     

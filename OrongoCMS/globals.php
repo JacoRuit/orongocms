@@ -8,6 +8,7 @@
 session_start();
 
 require 'lib/class_Database.php';
+require 'lib/class_Utils.php';
 require 'lib/Smarty/Smarty.class.php';
 include 'lib/I/IOrongoPlugin.php';
 include 'lib/I/IOrongoStyle.php';
@@ -51,10 +52,11 @@ $smarty->compile_dir = "smarty/compile";
 $smarty->cache_dir = "smarty/cache"; 
 $smarty->config_dir = "smarty/config"; 
 
+define('REVISION', 10);
+
 define('RANK_ADMIN', 3);
 define('RANK_WRITER', 2);
 define('RANK_USER', 1);
-define('VERSION_NUMBER', 0.1);
 
 define('ARTICLE_NOT_EXIST', 200);
 define('PAGE_NOT_EXIST', 300);

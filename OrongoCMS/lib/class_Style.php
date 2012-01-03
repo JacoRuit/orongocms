@@ -210,8 +210,7 @@ class Style {
                 $genHTML = $this->mainClass->getPageHTML($paramPage);
                 if($genHTML != null && is_string($genHTML) && $genHTML != "") return $genHTML;
                 else throw new Exception();
-            }else
-                throw new Exception();
+            }else throw new Exception();
         }catch(Exception $e){
             throw new Exception("Style doesn't generate the page HTML. Please call default function.");
         }
@@ -227,8 +226,7 @@ class Style {
                 $genHTML = $this->mainClass->getArticleHTML($paramArticle);
                 if($genHTML != null && is_string($genHTML) && $genHTML != "") return $genHTML;
                 else throw new Exception();
-            }else
-                throw new Exception();
+            }else throw new Exception(); 
         }catch(Exception $e){
             throw new Exception("Style doesn't generate the article HTML. Please call default function.");
         }
@@ -244,8 +242,7 @@ class Style {
                 $genHTML = $this->mainClass->getArticlesHTML($paramArticles);
                 if($genHTML != null && is_string($genHTML) && $genHTML != "") return $genHTML;
                 else throw new Exception();
-            }else
-                throw new Exception();
+            }else throw new Exception();
         }catch(Exception $e){
             throw new Exception("Style doesn't generate the HTML for articles. Please call default function.");
         }
