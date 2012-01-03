@@ -15,7 +15,7 @@ class Storage {
      * @param boolean $paramOverwrite If true and the key already exists it will overwrite it
      * @return boolean Indicates if the storage was succesful
      */
-    public static function store($paramKey, $paramVar, $paramOverwrite){
+    public static function store($paramKey, $paramVar, $paramOverwrite = true){
         $paramKey = mysql_escape_string($paramKey);
         $q="SELECT `var` FROM `storage` WHERE `key`='" . $paramKey . "'";
         $result = @mysql_query($q);
@@ -73,7 +73,7 @@ class Storage {
     
     /**
      * Gets the value of the key
-     * @param String $parmaKey Storage key
+     * @param String $paramKey Storage key
      */
     public static function get($paramKey){
         $paramKey =  mysql_escape_string($paramKey);
@@ -90,13 +90,10 @@ class Storage {
                    $obj = new $className($stSyntax);
                    return $obj;
                }else{
-                   //TODO optional throw error??
                    return $row['var'];
                }
             }catch(Exception $e){
-                throw $e;
-                return null;
-                //TODO throw error
+                throw new Exception("Couldn't return the object: " . $e->getMessage());     
             }
         }
     }

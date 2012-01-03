@@ -12,6 +12,7 @@ class Settings {
      * @return String Website URL
      */
     public static function getWebsiteURL(){
+        if(Cache::isStored('website_url'))return Cache::get('website_url'); 
         $q = "SELECT `value` FROM `settings` WHERE `setting` = 'url'";
         $result = @mysql_query($q);
         $row = mysql_fetch_assoc($result);
@@ -24,6 +25,7 @@ class Settings {
         if(substr($url, -1) != '/'){
             $url .= '/';
         }
+        Cache::store('website_url', $url);
         return $url;
     }
     
@@ -32,11 +34,13 @@ class Settings {
      * @return String Website name
      */
     public static function getWebsiteName(){
+        if(Cache::isStored('website_name'))return Cache::get('website_name'); 
         $q = "SELECT `value` FROM `settings` WHERE `setting` = 'name'";
         $result = @mysql_query($q);
         $row = mysql_fetch_assoc($result);
         $name = $row['value'];
         mysql_free_result($result);
+        Cache::store('website_name', $name);
         return $name;
     }
     
@@ -59,11 +63,13 @@ class Settings {
      * @return String Email Address
      */
     public static function getEmail(){
+        if(Cache::isStored('website_email')) return Cache::get('website_email'); 
         $q = "SELECT `value` FROM `settings` WHERE `setting` = 'email'";
         $result = @mysql_query($q);
         $row = mysql_fetch_assoc($result);
         $address = $row['value'];
         mysql_free_result($result);
+        Cache::store('website_email', $address);
         return $address;
     }
     
