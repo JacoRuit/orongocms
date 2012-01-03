@@ -44,6 +44,7 @@ class Plugin {
         $q = "INSERT INTO `plugins` (`plugin_main_class`, `setting`, `setting_type`, `setting_value`) VALUES ('" . $paramPluginMainClass . "', '" .$paramSetting . "', '" . $paramSettingType . "', '')";
         @mysql_query($q);  
     }
+    
     /**
      * Gets the plugin settings
      * @return array Settings of plugin

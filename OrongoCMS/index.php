@@ -3,6 +3,10 @@
  * @author Jaco Ruit
  */
 
+//Debug line
+//TODO remove on release
+$time_start = microtime(true);
+
 require 'globals.php';
 
 #handle orongo-id, orongo-session-id
@@ -107,5 +111,12 @@ $style->run($smarty);
 #       Show
 $smarty->display("header.orongo");
 $smarty->display("index.orongo");
+
+
+//Debug lines
+// TODO remove on release
+$time_end = microtime(true);
+$time = $time_end - $time_start;
+echo "<br /><br />Execution time: " . $time;
 
 ?>
