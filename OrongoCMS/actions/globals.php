@@ -9,6 +9,7 @@ session_start();
 
 require '../lib/class_Database.php';
 require '../lib/class_Settings.php';
+require '../lib/class_Cache.php';
 require '../lib/class_Session.php';
 require '../lib/class_User.php';
 include '../lib/class_Plugin.php';

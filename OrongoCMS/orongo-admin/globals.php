@@ -21,6 +21,7 @@ require '../lib/class_Storage.php';
 require '../lib/class_Style.php';
 require '../lib/class_Image.php';
 require '../lib/class_Session.php';
+require '../lib/class_Cache.php';
 require '../lib/function_HandleSessions.php';
 require '../lib/class_User.php';
 require '../lib/class_HTMLFactory.php';
