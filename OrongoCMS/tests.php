@@ -12,7 +12,8 @@ and open the template in the editor.
         <?php
         require 'globals.php';
         try{
-            OrongoQueryHandler::exec(new OrongoQuery('action=fetch&object=page&max=10&order=title,asc'));
+            $result = OrongoQueryHandler::exec(new OrongoQuery('action=fetch&object=article&max=1&order=title,asc&where=author.name:jaco'));
+            var_dump($result);
         }catch(Exception $e){
             echo get_class($e) . " (" . $e->getMessage() . ")";
         }
