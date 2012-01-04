@@ -3,41 +3,9 @@
  * @author Jaco Ruit
  */
 
-
-
 session_start();
-
-require 'lib/class_Database.php';
-require 'lib/class_Utils.php';
-require 'lib/Smarty/Smarty.class.php';
-include 'lib/I/IOrongoPlugin.php';
-include 'lib/I/IOrongoStyle.php';
-include 'lib/I/IStorable.php';
-include 'lib/I/IHTMLConvertable.php';
-include 'lib/E/IllegalArgumentException.php';
-include 'lib/E/IllegalMemoryAccessException.php';
-include 'lib/E/ClassLoadException.php';
-include 'lib/E/QueryException.php';
-require 'lib/class_MessageBox.php';
-require 'lib/class_Settings.php';
-require 'lib/class_OrongoQuery.php';
-require 'lib/class_OrongoQueryHandler.php';
-require 'lib/class_Storage.php';
-require 'lib/class_Cache.php';
-require 'lib/class_Style.php';
-require 'lib/class_Image.php';
-require 'lib/class_Session.php';
-require 'lib/function_HandleSessions.php';
-require 'lib/class_User.php';
-require 'lib/class_HTMLFactory.php';
-include 'lib/class_Plugin.php';
-include 'lib/class_Article.php';
-include 'lib/class_Page.php';
-include 'lib/class_Security.php';
-include 'lib/class_MailFactory.php';
-include 'lib/class_Mail.php';
-include 'lib/function_HandlePlugins.php';
-
+require 'lib/function_load.php';
+try{ load('lib'); }catch(Exception $e){ die($e->getMessage()); }
 
 $db = new Database('config.php');
 $smarty = new Smarty();

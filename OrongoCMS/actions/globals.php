@@ -6,20 +6,8 @@
 
 session_start();
 
-
-require '../lib/class_Database.php';
-require '../lib/class_Settings.php';
-require '../lib/class_Cache.php';
-require '../lib/class_Session.php';
-require '../lib/class_User.php';
-include '../lib/class_Plugin.php';
-include '../lib/class_Security.php';
-include '../lib/class_MailFactory.php';
-include '../lib/class_Mail.php';
-include '../lib/I/IOrongoPlugin.php';
-include '../lib/I/IOrongoStyle.php';
-include '../lib/I/IStorable.php';
-include '../lib/E/IllegalArgumentException.php';
+require '../lib/function_load.php';
+try{ load('../lib'); }catch(Exception $e){ die($e->getMessage()); }
 
 $db = new Database('../config.php');
 

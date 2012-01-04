@@ -6,10 +6,8 @@
 
 session_start();
 
-
-require '../lib/class_Database.php';
-require '../lib/class_User.php';
-include '../lib/E/IllegalArgumentException.php';
+require '../lib/function_load.php';
+try{ load('../lib'); }catch(Exception $e){ die($e->getMessage()); }
 
 $db = new Database('../config.php');
 
