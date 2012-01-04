@@ -12,8 +12,12 @@ and open the template in the editor.
         <?php
         require 'globals.php';
         try{
-            $result = OrongoQueryHandler::exec(new OrongoQuery('action=fetch&object=article&max=1&order=title,asc&where=author.name:jaco'));
-            var_dump($result);
+            $result = OrongoQueryHandler::exec(new OrongoQuery('action=fetch&object=article&max=1000&offset=0&order=article.id,desc&where=article.title:test article 0'));
+            echo '<br />';
+            foreach($result as $article){
+                echo 'id: ' . $article->getID() . ' title: ' . $article->getTitle() . ' date: ' . $article->getDate() . ' author id: ' . $article->getAuthorID();
+                echo '<br />';
+            }
         }catch(Exception $e){
             echo get_class($e) . " (" . $e->getMessage() . ")";
         }
