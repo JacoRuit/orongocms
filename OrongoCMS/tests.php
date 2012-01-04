@@ -11,6 +11,11 @@ and open the template in the editor.
     <body>
         <?php
         require 'globals.php';
+        try{
+            OrongoQueryHandler::exec(new OrongoQuery('action=fetch&object=page&max=10&order=title,asc'));
+        }catch(Exception $e){
+            echo get_class($e) . " (" . $e->getMessage() . ")";
+        }
         ?>
     </body>
 </html>

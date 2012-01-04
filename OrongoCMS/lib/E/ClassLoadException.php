@@ -10,7 +10,7 @@ class ClassLoadException extends Exception{
         parent::__construct($message, $code, $previous);
     }
     
-    public function toString(){
+    public function __toString(){
         return "OrongoCMS Internal Error. " . __CLASS__ . ": [{$this->code}]: {$this->message}\n";
     }
 }
