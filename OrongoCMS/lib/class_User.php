@@ -282,6 +282,7 @@ class User {
         $q = "DELETE FROM `activations` WHERE `code`='" . $paramCode ."'";
         @mysql_query($q);
     }
+    
     /**
      * Gets the user ID of the username
      * @param String $paramName username

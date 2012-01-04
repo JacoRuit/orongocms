@@ -20,7 +20,6 @@ class OrongoQuery {
     public function __construct($paramQuery){
        
         if(!is_string($paramQuery)) throw new IllegalArgumentException("Invalid parameter, string expected.");  
-        if(strstr($paramQuery, " ")) throw new QueryException("Invalid query string: string may not contain whitespaces.");
         $queryArray = explode("&", $paramQuery);
         $this->queryArray = $queryArray;
         $this->generateQueryArray();
@@ -40,8 +39,6 @@ class OrongoQuery {
            if($single[0] == "" || $single[1]== "") throw new QueryException("Invalid query string: parameters may not be blank.");
            $query[trim($single[0])] = trim($single[1]);
        }
-       if(!isset($query['action'])) throw new QueryException("Invalid query string: there is no action.");
-       if(!isset($query['object'])) throw new QueryException("Invalid query string: there is no object defined.");
        $this->queryArray = $query;
     }
     

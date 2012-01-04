@@ -131,6 +131,18 @@ class Page {
         return new Page($newID);
     }
     
+    /**
+     * Gets the page ID of the title
+     * @param String $paramTitle title
+     * @return int page ID
+     */
+    public static function getPageID($paramTitle){
+        $q = "SELECT `id` FROM `pages` WHERE `title` LIKE '" . addslashes($paramTitle) . "'";
+        $result = @mysql_query($q);
+        $row = mysql_fetch_assoc($result);
+        mysql_free_result($result);
+        return $row['id'];
+    }
 }
 
 ?>

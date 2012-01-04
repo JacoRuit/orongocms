@@ -178,6 +178,19 @@ class Article implements IHTMLConvertable {
         @mysql_query($q);
         return new Article($newID);
     }
+    
+    /**
+     * Gets the article ID of the title
+     * @param String $paramTitle title
+     * @return int article ID
+     */
+    public static function getArticleID($paramTitle){
+        $q = "SELECT `id` FROM `articles` WHERE `title` LIKE '" . addslashes($paramTitle) . "'";
+        $result = @mysql_query($q);
+        $row = mysql_fetch_assoc($result);
+        mysql_free_result($result);
+        return $row['id'];
+    }
 }
 
 ?>

@@ -9,7 +9,7 @@ class OrongoQueryHandler {
     
     private static $object = array ('user_activated', 'user', 'user_not_activated', 'page','article');   
     
-    private static $order = array ('user' => array('id','name'), 'article' => array('id','title','date'), 'page' => array('id','title'));
+    private static $order = array ('user' => array('user.id','user.name'), 'article' => array('article.id','article.title','article.date','author.id'), 'page' => array('page.id','page.title'));
     private static $orderc = array ('asc', 'desc');
         
     private static $where0 = array ('article' => array('author','article'), 'user' => array('user'), 'page' => array('page'));
@@ -27,17 +27,17 @@ class OrongoQueryHandler {
         
         
         #   Required
-        if($query['action'] != 'fetch') throw new QueryException("Invalid query string: please set action to fetch.");
-        if(!in_array($query['object'], self::$object)) throw new QueryException("Invalid query string: invalid object.");  
+        if(!isset($query['action']) || $query['action'] != 'fetch') throw new QueryException("Invalid query string: invalid action.");
+        if(!isset($query['object']) || !in_array($query['object'], self::$object)) throw new QueryException("Invalid query string: invalid object.");  
         $from = $query['object'];
-        if(!isset($query['max']) || !is_numeric($query['max'])) throw new QueryException("Invalid query string: please set max or change it to an int.");
+        if(!isset($query['max']) || !is_numeric($query['max'])) throw new QueryException("Invalid query string: invalid max.");
         $limit = " LIMIT " . $query['max'];
                 
         #   Optional
                 
         #       order
-        $order = "";
-        $oderc = "";
+        $order = " ORDER BY `id` ";
+        $oderc = " ASC ";
         
             #       FORMAT: order = {order}  _OR_   order = {order},{orderc}
         if(isset($query['order'])){ 
@@ -46,13 +46,25 @@ class OrongoQueryHandler {
                 if(count($orders) > 2 || count($orders) < 1) throw new QueryException ("Invalid query string: invalid order.");
                 if(!in_array($orders[0], self::$order[$query['object']])) throw new QueryException ("Invalid query string: invalid order.");
                 if(!in_array($orders[1], self::$orderc)) throw new QueryException ("Invalid query string: invalid orderc.");
-                $order = "ORDER BY `" . $orders[0]."`";
-                $orderc = $orders[1];
+                $orders[0] = str_replace("author.id", "authorID", $orders[0]);
+                $order = " ORDER BY `" . str_replace($from . '.', "", $orders[0])."` ";
+                $orderc = " " . strtoupper($orders[1]) . " ";
             }else{
                 if(!in_array($query['order'], self::$order[$query['object']])) throw new QueryException ("Invalid query string: invalid order.");
-                $order = "ORDER BY `" . $query['order'] . "`";
+                $order = " ORDER BY `" . $query['order'] . "` ";
             }   
         }
+        
+        
+        #       offset
+        $offset = "";
+        
+            #       FORMAT: offset = {number}
+        if(isset($query['offset'])){
+            if(!is_numeric($query['offset'])) throw new QueryException("Invalid query string: invalid offset.");
+            $offset = " OFFSET " . $query['offset'];
+        }
+        
         
         #       where
         $where = "";
@@ -75,8 +87,8 @@ class OrongoQueryHandler {
                         break;
                     case 'name':
                         $uid = User::getUserID($where1[1]);
-                        if($uid == "") throw new Exception("User doesn't exist!", USER_NOT_EXIST);
-                        $where = " WHERE `authorID` = '" . User::getUserID($where1[1]) . "' ";
+                        if($uid == "") throw new Exception("User doesnot exist!", USER_NOT_EXIST);
+                        $where = " WHERE `authorID` = '" . $uid . "' ";
                         break;
                     default:
                         break;
@@ -90,21 +102,48 @@ class OrongoQueryHandler {
                         break;
                     case 'name':
                         $uid = User::getUserID($where1[1]);
-                        if($uid == "") throw new Exception("User doesn't exist!", USER_NOT_EXIST);
-                        $where = " WHERE `id` = '" . User::getUserID($where1[1]) . "' ";
+                        if($uid == "") throw new Exception("User doesnot exist!", USER_NOT_EXIST);
+                        $where = " WHERE `id` = '" . $uid . "' ";
                         break;
                     default:
                         break;
                         
                 }
             }
-            //TODO article,page
-           // if($where[])
-            
+            if($where[0] == 'article'){
+                switch($where1[0]){
+                    case 'id':
+                        $where = " WHERE `id` = '" . $where1[1] . "' ";
+                        break;
+                    case 'title':
+                        $aid = Article::getArticleID($where1[1]);
+                        if($aid == "") throw new Exception("Article doesnot exist!", ARTICLE_NOT_EXIST);
+                        $where = " WHERE `id` = '" . $aid . "' ";
+                        break;
+                    default:
+                        break;
+                        
+                }
+            }
+           if($where[0] == 'page'){
+                switch($where1[0]){
+                    case 'id':
+                        $where = " WHERE `id` = '" . $where1[1] . "' ";
+                        break;
+                    case 'title':
+                        $pid = Page::getPageID($where1[1]);
+                        if($pid == "") throw new Exception("Page doesnot exist!", PAGE_NOT_EXIST);
+                        $where = " WHERE `id` = '" . $pid . "' ";
+                        break;
+                    default:
+                        break;
+                        
+                }
+            } 
         }
         
         $resultset = array();
-        $q  =  "SELECT `id` FROM " . $from . 's' . $where  . $limit;
+        $q  =  "SELECT `id` FROM `" . $from . 's`' . $where  . $order . $orderc . $limit . $offset;
         $result = @mysql_query($q);
         $c = 0;
         while($row = mysql_fetch_assoc($result)){
@@ -126,6 +165,7 @@ class OrongoQueryHandler {
             $resultset[$c] = $obj;
             $c++;
         }
+        echo $q;
         return $resultset;
     }
 }
