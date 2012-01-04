@@ -48,7 +48,7 @@ $lastID = Article::getLastArticleID();
 $c = 0;
 $q = "action=fetch&object=article&max=5&order=article.id,desc";
 $articles = OrongoQueryHandler::exec(new OrongoQuery($q));
-if((count($articles) > 0) == false){
+if((count($articles) < 1)){
    try{
        $article = Article::createArticle("Hello World!");
        $article->setContent("<p>Thank you for installing OrongoCMS!</p><p>To edit this simply delete it and create a new article or change this article.</p><br /><p>The OrongoCMS team</p>");

@@ -1,4 +1,4 @@
-<?php /* Smarty version Smarty 3.1.4, created on 2011-12-16 09:56:20
+<?php /* Smarty version Smarty 3.1.4, created on 2012-01-04 17:09:11
          compiled from "style\index.orongo" */ ?>
 <?php /*%%SmartyHeaderCode:82454ee91371cd7323-90342227%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_valid = $_smarty_tpl->decodeProperties(array (
@@ -7,7 +7,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     'd08225ce08f562c4396303445d5945ee33d35d6c' => 
     array (
       0 => 'style\\index.orongo',
-      1 => 1324025779,
+      1 => 1325604885,
       2 => 'file',
     ),
   ),
@@ -36,7 +36,7 @@ js/widget.prettyAlert.js" type="text/javascript" charset="utf-8"></script>
     </script>
     <script src="<?php echo $_smarty_tpl->tpl_vars['website_url']->value;?>
 js/interface.menu_effects.js" type="text/javascript" charset="utf-8"></script>
-    <div class="menu fixed hide">
+    <div class="orongo_menu fixed hide">
         <div class="seperator right hide" style="padding-right: 100px"></div>
         <div class="menu_text right hide">
             Settings
