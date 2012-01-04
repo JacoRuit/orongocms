@@ -13,7 +13,7 @@ class OrongoQueryHandler {
     private static $orderc = array ('asc', 'desc');
         
     private static $where0 = array ('article' => array('author','article'), 'user' => array('user'), 'page' => array('page'));
-    private static $where1 = array ('author' => array('id','name'), 'user' => array('id','name'), 'article' => array('id','title'), 'page' => array('id','title'));
+    private static $where1 = array ('author' => array('id','name'), 'user' => array('id','name'), 'article' => array('id','title','date'), 'page' => array('id','title'));
 
     /**
      * Executes an OrongoQuery
@@ -120,6 +120,11 @@ class OrongoQueryHandler {
                         if($aid == "") throw new Exception("Article doesnot exist!", ARTICLE_NOT_EXIST);
                         $where = " WHERE `id` = '" . $aid . "' ";
                         break;
+                    case 'date':
+                        if($where1[1] == 'now()') $where1[1] = "CURDATE()";
+                        else $where1[1] = "'".$where1[1]."'";
+                        $where = " WHERE `date` = " . $where1[1] . " ";
+                        break;
                     default:
                         break;
                         
@@ -165,7 +170,6 @@ class OrongoQueryHandler {
             $resultset[$c] = $obj;
             $c++;
         }
-        echo $q;
         return $resultset;
     }
 }

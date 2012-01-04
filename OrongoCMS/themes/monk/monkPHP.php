@@ -37,13 +37,14 @@ class MonkStyle implements IOrongoStyle{
             $last = false;
             if(($article instanceof Article) == false) continue;
             $generatedCount++;
-            if($generatedCount == $count) $last = true; 
+            if($generatedCount == '4') $last = true; 
             $generatedHTML .= '<div class="one_fourth ';
             if($last) $generatedHTML .= 'column-last';
             $generatedHTML .= ' ">';
             $generatedHTML .= '<a href="'. Settings::getWebsiteURL() . 'article.php?id=' . $article->getID() . '"><h3>' . $article->getTitle() . '</h3></a>';
             $generatedHTML .= '<p>' . substr($article->getContent(), 0 ,500) . '</p>';
             $generatedHTML .= '</div>';
+            if($last) break;
         }
         
         return $generatedHTML;
