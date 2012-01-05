@@ -47,7 +47,14 @@ $articles = array();
 $lastID = Article::getLastArticleID();
 $c = 0;
 $q = "action=fetch&object=article&max=5&order=article.id,desc";
-$articles = OrongoQueryHandler::exec(new OrongoQuery($q));
+try{
+    $articles = orongo_query($q);
+}catch(Exception $e){
+    $msgbox = new MessageBox();
+    $msgbox->bindException($e);
+    $errors .= $msgbox->toHTML();
+}
+
 if((count($articles) < 1)){
    try{
        $article = Article::createArticle("Hello World!");
