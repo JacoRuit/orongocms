@@ -11,7 +11,7 @@
 * @param String $paramQuery query string
 * @return array resultset
 */
-function orngo_query($paramQuery){
+function orongo_query($paramQuery){
     return OrongoQueryHandler::exec(new OrongoQuery($paramQuery));
 }
 ?>
