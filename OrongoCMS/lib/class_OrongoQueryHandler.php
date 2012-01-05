@@ -7,14 +7,16 @@
 
 class OrongoQueryHandler {
     
-    private static $object = array ('user_activated', 'user', 'user_not_activated', 'page','article');   
+    private static $object = array ('user', 'page', 'article');   
     
-    private static $order = array ('user' => array('user.id','user.name'), 'article' => array('article.id','article.title','article.date','author.id'), 'page' => array('page.id','page.title'));
+    private static $order = array ('user' => array('user.id','user.name','user.rank', 'user.activated'), 'article' => array('article.id','article.title','article.date','author.id'), 'page' => array('page.id','page.title'));
     private static $orderc = array ('asc', 'desc');
         
     private static $where0 = array ('article' => array('author','article'), 'user' => array('user'), 'page' => array('page'));
-    private static $where1 = array ('author' => array('id','name'), 'user' => array('id','name'), 'article' => array('id','title','date'), 'page' => array('id','title'));
-
+    private static $where1 = array ('author' => array('id','name'), 'user' => array('id','name','activated','rank'), 'article' => array('id','title','date'), 'page' => array('id','title'));
+    
+    private static $bool = array('true', 'false');
+    private static $ranks = array('admin', 'writer', 'user');
     /**
      * Executes an OrongoQuery
      * @param OrongoQuery $paramQuery OrongoQuery object
@@ -37,7 +39,7 @@ class OrongoQueryHandler {
                 
         #       order
         $order = " ORDER BY `id` ";
-        $oderc = " ASC ";
+        $orderc = " ASC ";
         
             #       FORMAT: order = {order}  _OR_   order = {order},{orderc}
         if(isset($query['order'])){ 
@@ -51,7 +53,8 @@ class OrongoQueryHandler {
                 $orderc = " " . strtoupper($orders[1]) . " ";
             }else{
                 if(!in_array($query['order'], self::$order[$query['object']])) throw new QueryException ("Invalid query string: invalid order.");
-                $order = " ORDER BY `" . $query['order'] . "` ";
+                $query['order'] = str_replace("author.id", "authorID", $query['order']);
+                $order = " ORDER BY `" . str_replace($from . '.', "", $query['order']) . "` ";
             }   
         }
         
@@ -78,8 +81,10 @@ class OrongoQueryHandler {
             $where1 = explode(":", $where[1]);
             if(!in_array($where[0], self::$where0[$query['object']])) throw new QueryException ("Invalid query string: invalid where.");
             if(!in_array($where1[0], self::$where1[$where[0]])) throw new QueryException ("Invalid query string: invalid where.");
-            if(!is_string($where1[1]) && ($where1[0] == 'title' || $where1[0] == 'name')) throw new QueryException ("Invalid query string: invalid where.");
+            if(!is_string($where1[1]) && ($where1[0] == 'title' || $where1[0] == 'name' || $where1[0] == 'activated')) throw new QueryException ("Invalid query string: invalid where.");
             if(!is_numeric($where1[1]) && $where1[0] == 'id')throw new QueryException ("Invalid query string: invalid where.");
+            if($where1[0] == 'activated' && !in_array($where1[1], self::$bool)) throw new QueryException ("Invalid query string: invalid where.");
+            if($where1[0] == 'rank' && !in_array($where1[1], self::$ranks)) throw new QueryException ("Invalid query string: invalid where.");
             if($where[0] == 'author'){
                 switch($where1[0]){
                     case 'id':
@@ -105,6 +110,16 @@ class OrongoQueryHandler {
                         if($uid == "") throw new Exception("User doesnot exist!", USER_NOT_EXIST);
                         $where = " WHERE `id` = '" . $uid . "' ";
                         break;
+                    case 'activated':
+                        $act = 0;
+                        if($where1[1] == 'true') $act = 1;
+                        $where = " WHERE `activated` = '" . $act ."' ";
+                    case 'rank':
+                        $rank = 0;
+                        if($where1[1] == "admin") $rank = RANK_ADMIN;
+                        if($where1[1] == "writer") $rank = RANK_WRITER;
+                        if($where1[1] == "user") $rank = RANK_USER;
+                        $where = " WHERE `rank` = '" . $rank . "' ";
                     default:
                         break;
                         
