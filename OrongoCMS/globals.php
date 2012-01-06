@@ -36,5 +36,7 @@ define('USER_NOT_EXIST', 400);
 define('PAGE_PAGE', 600);
 define('PAGE_INDEX', 700);
 define('PAGE_ARTICLE', 800);
+define('PAGE_ARCHIVE', 900);
+
 
 ?>

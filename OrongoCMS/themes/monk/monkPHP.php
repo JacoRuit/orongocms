@@ -11,40 +11,54 @@ class MonkStyle implements IOrongoStyle{
     public function __construct(){}
     
     public function run(&$smarty){
-        try{
-            $vars = $smarty->getTemplateVars();
-            $menu = $vars['menu'];
-            //$count = Utils::stringTimesContains($menu, '<li>');
-            //if($count > 5){
-            //    $smarty->assign('menu',str_replace('<li>', '<li style="font-size:1px;">', $menu));
-            //}
-        }catch(Exception $e){ }
         $settings = Style::getSettings();
+        try{
+           //reverse the menu because we have a righ float on menu
+           $pages = array_reverse(orongo_query('action=fetch&object=page&max=10000&order=page.id'));
+           $html="";
+           $websiteURL = Settings::getWebsiteURL();
+           if($settings['show_archive_in_menu']){ 
+               $html .= "<li><a href=\"" . $websiteURL . "archive.php\">Archive</a></li>";
+               $settings['show_archive_in_menu'] = null;
+           }
+           foreach($pages as $page){
+            if($page instanceof Page){
+                $html .= " <li><a href=\"". $websiteURL . "page.php?id=" . $page->getID() . "\">" . $page->getTitle() . "</a></li>";
+            }else continue;
+           }
+           
+           $html .= "<li><a href=\"" . $websiteURL . "index.php\">Home</a></li>";
+           $smarty->assign("menu", $html);           
+        }catch(Exception $e){}
+        
         foreach($settings as $setting=>$value){
-            $smarty->assign($settings,$value);
+            if($value != null)
+                $smarty->assign($settings,$value);
         }
     }
     
     public function getArticlesHTML($paramArticles){ 
         $generatedHTML = "";
-        
+        $curPage = getCurrentPage();
         if(is_array($paramArticles) == false) return null; //Sup, Orongo? U nooo pass me an array :(
         
         $count = count($paramArticles);
-        
+        if($count < 1) return "<p>No articles we're found</p>";
         $generatedCount = 0;
         foreach($paramArticles as $article){
             $last = false;
             if(($article instanceof Article) == false) continue;
             $generatedCount++;
-            if($generatedCount == '4') $last = true; 
+            if($generatedCount == 4 && $curPage == 'index') $last = true; 
+            if(is_int($generatedCount / 4) && $curPage == 'archive') $last = true;
+            if($curPage == 'archive' && $last == false && $generatedCount == count($paramArticles)) $last = true;
             $generatedHTML .= '<div class="one_fourth ';
             if($last) $generatedHTML .= 'column-last';
             $generatedHTML .= ' ">';
             $generatedHTML .= '<a href="'. Settings::getWebsiteURL() . 'article.php?id=' . $article->getID() . '"><h3>' . $article->getTitle() . '</h3></a>';
             $generatedHTML .= '<p>' . substr($article->getContent(), 0 ,500) . '</p>';
             $generatedHTML .= '</div>';
-            if($last) break;
+            if($last && $curPage == 'index' ) break;
         }
         
         return $generatedHTML;

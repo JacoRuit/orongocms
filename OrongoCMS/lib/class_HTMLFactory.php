@@ -13,9 +13,8 @@ class HTMLFactory {
      */
     public static function getMenuCode($paramPages){
         $websiteURL = Settings::getWebsiteURL();
-        $generatedHTML = "";
+        $generatedHTML = " <li><a href=\"". $websiteURL . "index.php\">Home</a></li>";
         if(is_array($paramPages) == false) throw new IllegalArgumentException("Invalid paramater, array expected.");
-        $paramPages = array_reverse($paramPages);
         foreach($paramPages as $page){
             if(!is_object($page)) continue;
             if($page instanceof Page){
@@ -23,7 +22,7 @@ class HTMLFactory {
                 $generatedHTML .= " <li><a href=\"". $websiteURL . "page.php?id=" . $page->getID() . "\">" . $page->getTitle() . "</a></li>";
             }else continue;
         }
-        $generatedHTML .= " <li><a href=\"". $websiteURL . "index.php\">Home</a></li>";
+        $generatedHTML .= " <li><a href=\"". $websiteURL . "archive.php\">Archive</a></li>";
         return $generatedHTML;
     }
 }

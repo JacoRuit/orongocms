@@ -6,7 +6,7 @@
  */
 class Plugin {
     
-    private static $currentPage = 0;
+
     /**
      * Installs database for the plugin
      * @param String $paramPrefix Prefix for the folder, sub-folders use this (starts from plugins/)
@@ -170,25 +170,6 @@ class Plugin {
         }
         mysql_free_result($result);
         return $plugins;
-    }
-    
-    /**
-     * Sets current page
-     * @param int $curPage current page
-     */
-    public static function setCurrentPage($curPage){
-        self::$currentPage = $curPage;
-    }
-    
-    /**
-     * Returns the page code
-     * PAGE_PAGE = 600
-     * PAGE_INDEX = 700
-     * PAGE_ARTICLE = 800
-     * @return int current page
-     */
-    public static function getCurrentPage(){
-        return self::$currentPage;
     }
     
     /**
