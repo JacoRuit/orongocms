@@ -109,10 +109,10 @@ class Issue {
         $xml .= "<entry xmlns='http://www.w3.org/2005/Atom' xmlns:issues='http://schemas.google.com/projecthosting/issues/2009'>";
         
         if(!is_string($this->title) || strlen($this->title) < 10) throw new Exception("Title too short.");
-        $xml .= " <title>" . htmlspecialchars($this->title) . "</title>";
+        $xml .= " <title>" . "r" . REVISION . ": " . htmlspecialchars($this->title) . "</title>";
         
         if(!is_string($this->content) || strlen($this->content) < 20) throw new Exception("Content too short.");
-        $xml .= " <content type='html'>" . htmlspecialchars($this->content) .  "</content>";
+        $xml .= " <content type='html'>" . htmlspecialchars($this->content . " - This issue was made using the built-in Issue system in OrongoCMS - Unix timestamp: " . time()) . "</content>";
         
         if(!is_string($this->author) || strlen($this->author) < 3) throw new Exception("Author too short.");
         $xml .= " <author><name>" . htmlspecialchars($this->content) .  "</name></author>";

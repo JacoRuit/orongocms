@@ -4,7 +4,7 @@
  */
 
 require 'globals.php';
-$smarty->template_dir = "style/"; 
+
 
 if(isset($_SESSION['orongo-id']) && isset($_SESSION['orongo-session-id'])){
    $externID = Security::escapeSQL($_SESSION['orongo-id']);

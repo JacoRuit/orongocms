@@ -11,6 +11,7 @@ and open the template in the editor.
     <body>
         <?php
         require 'globals.php';
+
         if(!isset($_GET['token']))
         echo '<a href="'. IssueTracker::getAuthSubRequestURL(Settings::getWebsiteURL() . 'tests.php') . '">open</a>';
         if(isset($_GET['token'])){
@@ -19,7 +20,8 @@ and open the template in the editor.
             $i->setAuthor("Jaco Ruit");
             $i->setContent("This is an test. Does this work? :)");
             $i->setLabels(array('testlabel', 'label2'));
-            $it->postIssue($i);
+            $r = $it->postIssue($i);
+            if($r) echo 'SUCCESSFUL!';
         }
         ?>
     </body>

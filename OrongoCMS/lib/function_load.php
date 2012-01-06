@@ -13,6 +13,7 @@
  * @param String $paramLibFolder path to lib folder
  */
 function load($paramLibFolder){
+    define('REVISION', 22);
     //REGISTER NEW FUNCTIONS, INTERFACES, CLASSES, EXCEPTIONS HERE! :D
     $orongo_functions = array('orongo_query', 'handleSessions', 'handlePlugins', 'setCurrentPage');
     $orongo_interfaces = array('IHTMLConvertable', 'IOrongoPlugin', 'IOrongoStyle', 'IStorable');
