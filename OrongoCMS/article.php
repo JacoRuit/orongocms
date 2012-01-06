@@ -9,7 +9,7 @@ $time_start = microtime(true);
 
 require 'globals.php';
 
-Plugin::setCurrentPage(PAGE_ARTICLE);
+setCurrentPage('article');
 
 $article = null;
 
@@ -39,7 +39,8 @@ $errors = "";
 $website_name = Settings::getWebsiteName();
 $website_url = Settings::getWebsiteURL();
 $document_ready = "";
-$pages = Page::getPages();
+$pages = array();
+$pages = @orongo_query('action=fetch&object=page&max=10000&order=page.id');
 $menu = HTMLFactory::getMenuCode($pages);
 $pluginHTML = null;
 

@@ -81,7 +81,7 @@ class OrongoQueryHandler {
             $where1 = explode(":", $where[1]);
             if(!in_array($where[0], self::$where0[$query['object']])) throw new QueryException ("Invalid query string: invalid where.");
             if(!in_array($where1[0], self::$where1[$where[0]])) throw new QueryException ("Invalid query string: invalid where.");
-            if(!is_string($where1[1]) && ($where1[0] == 'title' || $where1[0] == 'name' || $where1[0] == 'activated')) throw new QueryException ("Invalid query string: invalid where.");
+            if(!is_string($where1[1]) && ($where1[0] == 'title' || $where1[0] == 'name' || $where1[0] == 'activated' || $where1[0] == 'rank')) throw new QueryException ("Invalid query string: invalid where.");
             if(!is_numeric($where1[1]) && $where1[0] == 'id')throw new QueryException ("Invalid query string: invalid where.");
             if($where1[0] == 'activated' && !in_array($where1[1], self::$bool)) throw new QueryException ("Invalid query string: invalid where.");
             if($where1[0] == 'rank' && !in_array($where1[1], self::$ranks)) throw new QueryException ("Invalid query string: invalid where.");
@@ -185,6 +185,7 @@ class OrongoQueryHandler {
             $resultset[$c] = $obj;
             $c++;
         }
+ 
         return $resultset;
     }
 }

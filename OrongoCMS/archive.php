@@ -9,19 +9,41 @@ $time_start = microtime(true);
 
 require 'globals.php';
 
-setCurrentPage('index');
+setCurrentPage('archive');
 
 #handle orongo-id, orongo-session-id
 $user = handleSessions();
 
+$errors = "";
+$date = false;
+$username = false;
+$userid = false;
+if(isset($_GET['date'])){
+    if(preg_match('/^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/', $_GET['date']))           
+            $date = $_GET['date'];
+    else{
+        $msgbox = new MessageBox("Invalid date.");
+        $errors .= $msgbox->toHTML();
+    }
+}
+else if(isset($_GET['user']))
+    $username = mysql_escape_string($_GET['user']);
+else if(isset($_GET['userid']))
+    $userid = mysql_escape_string($_GET['userid']);
 
 $head = "<meta name=\"generator\" content=\"OrongoCMS r" . REVISION . "\" />";
-$errors = "";
 $website_name = Settings::getWebsiteName();
 $website_url = Settings::getWebsiteURL();
 $document_ready = "";
 $pages = array();
-$pages = @orongo_query('action=fetch&object=page&max=10000&order=page.id');
+try{
+    $pages = orongo_query('action=fetch&object=page&max=10000&order=page.id');
+}catch(Exception $e){
+    $msgbox = new MessageBox();
+    $msgbox->bindException($e);
+    $errors .= $msgbox->toHTML();
+}
+
 $menu = HTMLFactory::getMenuCode($pages);
 $pluginHTML = null;
 
@@ -43,25 +65,21 @@ if($user != null){
 }
 
 
-#   Generate HTML of the last 5 articles
+
 $articles = array();
 $c = 0;
-$q = "action=fetch&object=article&max=5&order=article.id,desc";
+$q = "action=fetch&object=article&max=1000000&order=article.id,desc";
+if($date != false) $q .= "&where=article.date:" . $date;
+if($username != false && is_string($username)) $q .= "&where=author.name:" . $username;
+if($userid != false && is_numeric($userid)) $q .= "&where=author.id:" . $userid;
 try{
     $articles = orongo_query($q);
 }catch(Exception $e){
-    $msgbox = new MessageBox();
+    $msgbox = new MessageBox("An error occured while fetching articles.");
     $msgbox->bindException($e);
     $errors .= $msgbox->toHTML();
 }
 
-if((count($articles) < 1)){
-   try{
-       $article = Article::createArticle("Hello World!");
-       $article->setContent("<p>Thank you for installing OrongoCMS!</p><p>To edit this simply delete it and create a new article or change this article.</p><br /><p>The OrongoCMS team</p>");
-       $articles[0] = $article;
-   }catch(Exception $e){ }
-}
 
 $articleHTML = "";
 if($style->doArticleHTML()){
@@ -91,7 +109,7 @@ if($style->doArticleHTML()){
     $smarty->assign("website_name", $website_name);
     
     $smarty->assign("head", $head);
-    $smarty->assign("head_title", $website_name .= " - Home");
+    $smarty->assign("head_title", $website_name .= " - Archive");
     
     $smarty->assign("document_ready", $document_ready);
     $smarty->assign("menu_bar", $menu_bar);
@@ -111,7 +129,7 @@ $style->run($smarty);
 
 #       Show
 $smarty->display("header.orongo");
-$smarty->display("index.orongo");
+$smarty->display("archive.orongo");
 $smarty->display("footer.orongo");
 
 //Debug lines

@@ -102,22 +102,6 @@ class Page {
         return $lastID;
     }
     
-    /**
-     * Gets all the published pages 
-     * @return array page array
-     */
-    public static function getPages(){
-        $pagearray = array();
-        $count = 0;
-        $q = 'SELECT `id` FROM `pages`';
-        $result = @mysql_query($q);
-        while($row = mysql_fetch_assoc($result)){
-            $pagearray[$count] = new Page($row['id']);
-            $count++;
-        }
-        mysql_free_result($result);
-        return $pagearray;
-    }
     
     /**
      * Creates a page

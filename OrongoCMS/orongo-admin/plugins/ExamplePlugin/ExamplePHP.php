@@ -43,10 +43,10 @@ class ExampleClass implements IOrongoPlugin{
     public function getHTML(){
         $p = "not supported";
         $htmlArray = array();
-        $curPage = Plugin::getCurrentPage();
-        if($curPage == PAGE_INDEX) $p = "the landing page";
-        else if($curPage == PAGE_ARTICLE) $p = "an article";
-        else if($curPage == PAGE_PAGE) $p = "a page";
+        if(getCurrentPage() == 'index') $p = "the landing page";
+        else if(getCurrentPage() == 'article') $p = "an article";
+        else if(getCurrentPage() == 'page') $p = "a page";
+        else if(getCurrentPage() == 'archive') $p = "archive";
         $htmlArray['javascript']['document_ready']="";
         $msgbox = new MessageBox("The example plugin detected that you're viewing " . $p . "." , "ExamplePlugin getHTML() function");
         $htmlArray['html']['body'] = $msgbox->toHTML();
