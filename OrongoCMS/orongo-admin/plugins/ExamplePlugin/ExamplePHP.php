@@ -41,19 +41,19 @@ class ExampleClass implements IOrongoPlugin{
     
     
     public function getHTML(){
-        $p = "not supported";
+        //$p = "not supported";
         $htmlArray = array();
-        if(getCurrentPage() == 'index') $p = "the landing page";
+        /**if(getCurrentPage() == 'index') $p = "the landing page";
         else if(getCurrentPage() == 'article') $p = "an article";
         else if(getCurrentPage() == 'page') $p = "a page";
-        else if(getCurrentPage() == 'archive') $p = "archive";
+        else if(getCurrentPage() == 'archive') $p = "archive"; 
         $htmlArray['javascript']['document_ready']="";
         $msgbox = new MessageBox("The example plugin detected that you're viewing " . $p . "." , "ExamplePlugin getHTML() function");
         $htmlArray['html']['body'] = $msgbox->toHTML();
         $c=0;
-        //debug lines:       
-        // $stored = Plugin::getSettings();
-       /** foreach($stored as $value){
+        debug lines:       
+        $stored = Plugin::getSettings();
+        foreach($stored as $value){
             $htmlArray['javascript']['document_ready'] .= "prettyAlert('#msgbox" . $c . "', '" . $value . "! :D','Plugin');          ";
             $htmlArray['html']['body'] .= "<div id='msgbox" . $c . "'></div>";
             $c++;

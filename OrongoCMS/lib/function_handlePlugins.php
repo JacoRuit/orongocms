@@ -23,7 +23,7 @@ function handlePlugins($paramPlugins){
         if($injectHTMLOnWebPage){
             $htmlArr = $plugin->getHTML();
             if(is_array($htmlArr)){
-                if(is_array($htmlArr['javascript'])){
+                if(isset($htmlArr['javascript']) && is_array($htmlArr['javascript'])){
                     foreach($htmlArr['javascript'] as $key=>$value){
                         switch($key){
                             case 'document_ready':
@@ -34,7 +34,7 @@ function handlePlugins($paramPlugins){
                         }
                     }
                 }
-                if(is_array($htmlArr['html'])){
+                if(isset($htmlArr['html']) && is_array($htmlArr['html'])){
                     foreach($htmlArr['html'] as $key=>$value){
                         switch($key){
                             case 'head':
