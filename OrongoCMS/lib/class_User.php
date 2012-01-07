@@ -1,7 +1,7 @@
 <?php
 
 /**
- * User Object
+ * User Class
  *
  * @author Jaco Ruit
  */

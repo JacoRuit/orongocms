@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Database Object
+ * Database Class
  *
  * @author Jaco Ruit
  */

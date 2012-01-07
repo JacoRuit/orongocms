@@ -31,6 +31,6 @@ define('RANK_USER', 1);
 define('ARTICLE_NOT_EXIST', 200);
 define('PAGE_NOT_EXIST', 300);
 define('USER_NOT_EXIST', 400);
-
+define('COMMENT_NOT_EXIST', 500);
 
 ?>

@@ -1,6 +1,6 @@
 <?php
 /**
- * Page Object
+ * Page Class
  *
  * @author Jaco Ruit
  */
@@ -27,7 +27,6 @@ class Page {
         if($count < 1){
             mysql_free_result($result);
             throw new Exception('Page does not exist', PAGE_NOT_EXIST);
-            exit;
         }
         $this->title = stripslashes($row['title']);
         $this->content = stripslashes($row['content']);
