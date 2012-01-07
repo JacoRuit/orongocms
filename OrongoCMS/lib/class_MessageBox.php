@@ -1,8 +1,9 @@
 <?php
 
 /**
- * MessageBox Object
- * @author Ruit
+ * MessageBox Class
+ * 
+ * @author Jaco Ruit
  */
 class MessageBox implements IHTMLConvertable {
     

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Style Object
+ * Style Class
  *
  * @author Jaco Ruit
  */
@@ -18,6 +18,7 @@ class Style {
     private $mainClass;
     private $doHTMLArticle;
     private $doHTMLPage;
+    private $doHTMLComment;
     private $stylePath;
     
     /**
@@ -72,7 +73,11 @@ class Style {
         }else{
             $this->doHTMLArticle = false;
         }
-        
+        if($info['style']['own_comment_html'] == 'true'){
+            $this->doHTMLComment = true;
+        }else{
+            $this->doHTMLComment = false;
+        }
     }
     
     #   styleFolder
@@ -181,6 +186,13 @@ class Style {
         return $this->doHTMLPage;
     }
     
+    /**
+     * Checks if the style generates the HTML for comments
+     * @return boolean indicating if it does
+     */
+    public function doCommentHTML(){
+        return $this->doHTMLComment;
+    }
     
     /**
      * Runs the style's PHP file if it has one.
@@ -234,7 +246,7 @@ class Style {
     
     /**
      * Gets the HTML for an article array
-     * @param array $paramArticles array of arrticle objects
+     * @param array $paramArticles array with article objects
      */
     public function getArticlesHTML($paramArticles){
         try{
@@ -245,6 +257,22 @@ class Style {
             }else throw new Exception();
         }catch(Exception $e){
             throw new Exception("Style doesn't generate the HTML for articles. Please call default function.");
+        }
+    }
+    
+    /**
+     * Gets the HTML for a comment array
+     * @param array $paramComments array with  comment objects
+     */
+    public function getCommentsHTML($paramArticles){
+        try{
+            if($this->doHTMLComment && $this->usePHP &&($this->mainClass instanceof IOrongoStyle)){
+                $genHTML = $this->mainClass->getCommentsHTML($paramArticles);
+                if($genHTML != null && is_string($genHTML) && $genHTML != "") return $genHTML;
+                else throw new Exception();
+            }else throw new Exception();
+        }catch(Exception $e){
+            throw new Exception("Style doesn't generate the HTML for comments. Please call default function.");
         }
     }
     

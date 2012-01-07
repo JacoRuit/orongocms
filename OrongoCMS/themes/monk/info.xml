@@ -12,6 +12,7 @@
         <main_class>MonkStyle</main_class>
         <own_article_html>true</own_article_html>
         <own_page_html>false</own_page_html>
+        <own_comment_html>true</own_comment_html>
         <author>
             <name>Maki Myers and Jaco Ruit</name>
             <website>http://www.makimyers.co.uk/</website>

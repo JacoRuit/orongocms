@@ -1,6 +1,6 @@
 <?php
 /**
- * Issue Object
+ * Issue Class
  *
  * @author Jaco Ruit
  */

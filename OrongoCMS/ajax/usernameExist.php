@@ -1,10 +1,15 @@
 <?php
 
+/**
+ * usernameExist AJAX 
+ * 
+ * @author Jaco Ruit
+ */
+
 require 'globals.php';
 
 $validateValue=mysql_escape_string($_GET['fieldValue']);
 $validateId=$_GET['fieldId'];
-
 
 
 $arrayToJs = array();

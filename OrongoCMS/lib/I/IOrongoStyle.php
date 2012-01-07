@@ -16,19 +16,6 @@ interface IOrongoStyle {
      */
     public function run(&$paramSmarty);
     
-    /**
-    /*
-     * Checks if the style generates the HTML for page
-     * @return boolean indicating if the style generates page HTML
-     
-    public function doPageHTML();
-    
-    /**
-     * Checks if the style generates the HTML for article
-     * @return boolean indicating if the style generates article HTML
-     
-    public function doArticleHTML();
-    */
     
     /**
      * Generates the HTML for an article array shown in archive etc.
@@ -47,5 +34,11 @@ interface IOrongoStyle {
      * @param Page $paramPage Page object to generate HTML from
      */
     public function getPageHTML($paramPage);
+    
+    /**
+     * Generates the HTML for a comment array
+     * @param array $paramComments Array of comments
+     */
+    public function getCommentsHTML($paramComments);
 }
 ?>

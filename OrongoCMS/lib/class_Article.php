@@ -1,6 +1,6 @@
 <?php
 /**
- * Article Object
+ * Article Class
  *
  * @author Jaco Ruit
  */
@@ -14,7 +14,7 @@ class Article implements IHTMLConvertable {
     private $author;
     private $date;
     
-    #   constructors
+
     /**
      * Construct Article Object
      * 
@@ -30,7 +30,6 @@ class Article implements IHTMLConvertable {
         if($count < 1){
             mysql_free_result($result);
             throw new Exception('Article does not exist', ARTICLE_NOT_EXIST);
-            exit;
         }
         $this->title = $row['title'];
         $this->content = $row['content'];
@@ -97,7 +96,6 @@ class Article implements IHTMLConvertable {
         return $this->authorID;
     }
     
-    #   authorID
     /**
      * @return User Article Author 
      */
@@ -124,17 +122,19 @@ class Article implements IHTMLConvertable {
     /**
      * @return array Article Information in Array
      */
-    public function getArticleArray(){
+    public function toArray(){
         return array("id" => $this->id, "title" => $this->title, "contents" => $this->content, "authorID" => $this->authorID);
     }
     
     public function toHTML(){
-        //TODO make it work 
         $generatedHTML = "<div class=\"article\">";
         $generatedHTML .= " <div class=\"article-header\">";
         $generatedHTML .= "     <p id=\"title\">" . $this->title . "</p>";
         if($this->author == null){ $author_name = "Unknown"; }else{ $author_name = $this->author->getName(); }
         $generatedHTML .= "     <p id=\"author\">" . $author_name  . "</p>";
+        $generatedHTML .= "     <p id=\"date\"" . $this->date . "</p>";
+        $generatedHTML .= " </div>";
+        $generatedHTML .= " <p id=\"content\">" . $this->content . "</p>";
         $generatedHTML .= "</div>";
         return $generatedHTML;
     }
@@ -144,9 +144,10 @@ class Article implements IHTMLConvertable {
         $generatedHTML .= " <div class=\"article-header\">";
         $generatedHTML .= "     <p id=\"title\">" . $this->title . "</p>";
         if($this->author == null){ $author_name = "Unknown"; }else{ $author_name = $this->author->getName(); }
-        $generatedHTML .= "     <p id=\"author\">" . $author_name . "</p>";       
-        $generatedHTML .= "     <p id=\"content\">" . substr($this->content, 0, 100) . "</p>";
+        $generatedHTML .= "     <p id=\"author\">" . $author_name . "</p>"; 
+        $generatedHTML .= "     <p id=\"date\"" . $this->date . "</p>";
         $generatedHTML .= " </div>";
+        $generatedHTML .= " <p id=\"content\">" . substr($this->content, 0, 100) . "</p>";
         $generatedHTML .= "</div>";
         return $generatedHTML;
     }

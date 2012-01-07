@@ -1,7 +1,7 @@
 <?php
 
 /**
- * OrongoQuery object
+ * OrongoQuery Class
  *
  * @author Jaco Ruit
  */
