@@ -12,8 +12,8 @@ class Comment implements IHTMLConvertable {
     private $content;
     private $articleID;
     private $authorID;
-    private $author;
     private $timestamp;
+    private $articleID;
     
     /**
      * Construct Comment Object
@@ -35,9 +35,7 @@ class Comment implements IHTMLConvertable {
         $this->content = htmlspecialchars($row['content']);
         $this->authorID = $row['authorID'];
         $this->timestamp = $row['timestamp'];
-        try{
-            $this->author = new User($this->authorID);
-        }catch(Exception $e){ $this->author = null; }
+        $this->articleID = $row['articleID'];
         mysql_free_result($result);
     }
     
@@ -68,17 +66,18 @@ class Comment implements IHTMLConvertable {
     
     #   authorID
     /**
-     * @return String Comment Author ID
+     * @return int Comment Author ID
      */
     public function getAuthorID(){
         return $this->authorID;
     }
     
+    #   articleID
     /**
-     * @return User Comment Author 
+     * @return int Comment Article ID
      */
-    public function getAuthor(){
-        return $this->author;
+    public function getArticleID(){
+        return $this->articleID;
     }
     
     #   date
@@ -113,7 +112,7 @@ class Comment implements IHTMLConvertable {
     public function toHTML(){
         $generatedHTML = "<div class=\"comment\">";
         $generatedHTML .= " <div class=\"comment-header\">";
-        if($this->author == null){ $author_name = "Unknown"; }else{ $author_name = $this->author->getName(); }
+        if($this->authorID == '00'){ $author_name = "Unknown"; }else{ $author_name = User::getUserName($this->authorID); }
         $generatedHTML .= "     <p id=\"author\">" . $author_name  . "</p>";
         $generatedHTML .= "     <p id=\"date\"" . date("Y-m-d H:i:s", $this->timestamp ) . "</p>";
         $generatedHTML .= " </div>";

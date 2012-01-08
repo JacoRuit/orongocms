@@ -153,6 +153,24 @@ class Article implements IHTMLConvertable {
     }
     
     /**
+     * @return int comments count
+     */
+    public function getCommentCount(){
+        $count = 0;
+        $count = @orongo_query("action=count&object=comment&max=10000000&where=article.id:" . $this->id);
+        return $count;
+    }
+    
+    /**
+     * @return array comments
+     */
+    public function getComments(){
+        $comments = array();
+        $comments = @orongo_query("action=fetch&object=comment&max=10000000&where=article.id:" . $this->id);
+        return $comments;
+    }
+    
+    /**
      * Gets last article ID in database
      * @return int article ID
      */
