@@ -1,5 +1,5 @@
 <body>
-<script src="{$website_url}js/widget.prettyAlert.js" type="text/javascript" charset="utf-8"></script>
+{$body}
 <script type="text/javascript">
         $(document).ready(function(){
             {$document_ready}

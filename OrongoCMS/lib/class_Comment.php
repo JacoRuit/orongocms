@@ -13,7 +13,7 @@ class Comment implements IHTMLConvertable {
     private $articleID;
     private $authorID;
     private $timestamp;
-    private $articleID;
+
     
     /**
      * Construct Comment Object
@@ -23,7 +23,7 @@ class Comment implements IHTMLConvertable {
      */
     public function __construct($paramID){
         $this->id = $paramID;
-        $q = "SELECT `content`,`authorID`,`timestamp` FROM `comments` WHERE `id` = '" . $this->id . "'";
+        $q = "SELECT `content`,`authorID`,`articleID`,`timestamp` FROM `comments` WHERE `id` = '" . $this->id . "'";
         $result = @mysql_query($q);
         $row = mysql_fetch_assoc($result);
         $count = mysql_num_rows($result);
@@ -31,7 +31,6 @@ class Comment implements IHTMLConvertable {
             mysql_free_result($result);
             throw new Exception('Comment does not exist', COMMENT_NOT_EXIST);
         }
-        $this->title = $row['title'];
         $this->content = htmlspecialchars($row['content']);
         $this->authorID = $row['authorID'];
         $this->timestamp = $row['timestamp'];
@@ -123,14 +122,15 @@ class Comment implements IHTMLConvertable {
     
     /**
      * Creates a comment
+     * @param int   $paramArticleID Article  ID
      * @param String $paramAuthor User object
      * @return Comment new comment object
      */
-    public static function createComment($paramUser = null){
+    public static function createComment($paramArticleID, $paramUser = null){
         $newID = self::getLastCommentID() + 1;
         if($paramUser != null && ($paramUser instanceof User) == false) throw new IllegalArgumentException("User object expected."); 
         if($paramUser == null ) $author_id = 00; else $author_id = $paramUser->getID(); 
-        $q = "INSERT INTO `comments` (`id`,`content`,`authorID`,`timestamp`) VALUES ('" . $newID . "', 'not_set_error', '" . $author_id . " ', UNIX_TIMESTAMP())";
+        $q = "INSERT INTO `comments` (`id`,`content`,`authorID`,`articleID`, `timestamp`) VALUES ('" . $newID . "', 'not_set_error', '" . $author_id . " ','" .$paramArticleID .  "', UNIX_TIMESTAMP())";
         @mysql_query($q);
         return new Comment($newID);
     }

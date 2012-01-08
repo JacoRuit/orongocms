@@ -6,12 +6,27 @@ and open the template in the editor.
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.min.js"></script>
+
         <title></title>
     </head>
     <body>
         <?php
         require 'globals.php';
-        echo orongo_query("action=fetch&object=comment&max=10000&where=article.id:1");
+        ?>
+        <script type="text/javascript" src="<?php echo Settings::getWebsiteURL(); ?>js/ajax.postComment.js"></script>
+        <script type="text/javascript">
+            $(document).ready(function(){
+               postComment("<?php echo Settings::getWebsiteURL(); ?>ajax/postComment.php",1,"test xd"); 
+            });
+        </script>
+        <form method='post' action="<?php echo Settings::getWebsiteURL(); ?>ajax/postComment.php">
+            <input type="hidden" name="content" value=" test xdxd" />
+            <input type="hidden" name="article" value="1" />
+            <input type="submit"/>
+        </form>
+        <?php
+
         if(!isset($_GET['token']))
         echo '<a href="'. IssueTracker::getAuthSubRequestURL(Settings::getWebsiteURL() . 'tests.php') . '">open</a>';
         if(isset($_GET['token'])){

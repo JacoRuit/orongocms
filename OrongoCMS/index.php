@@ -19,6 +19,7 @@ $head = "<meta name=\"generator\" content=\"OrongoCMS r" . REVISION . "\" />";
 $errors = "";
 $website_name = Settings::getWebsiteName();
 $website_url = Settings::getWebsiteURL();
+$body = "<script src=\"" . $website_url . "js/widget.prettyAlert.js\" type=\"text/javascript\" charset=\"utf-8\"></script>";
 $document_ready = "";
 $pages = array();
 $pages = @orongo_query('action=fetch&object=page&max=10000&order=page.id');
@@ -92,6 +93,7 @@ if($style->doArticleHTML()){
     
     $smarty->assign("head", $head);
     $smarty->assign("head_title", $website_name .= " - Home");
+    $smarty->assign("body", $body);
     
     $smarty->assign("document_ready", $document_ready);
     $smarty->assign("menu_bar", $menu_bar);
