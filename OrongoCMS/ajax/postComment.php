@@ -8,6 +8,7 @@
 require 'globals.php';
 
 //TODO IP check or some kinda spam prevention thing
+define("NO_ARTICLE", 1);
 
 define("NO_CONTENT", 11);
 define("TOO_SHORT", 12);
@@ -21,6 +22,11 @@ function errorDie($paramError, $paramErrorCode){
     $arrayToJs["response"] = $paramError;
     $arrayToJs["response_code"] = $paramErrorCode; 
     die(json_encode($arrayToJs));
+}
+
+if(!isset($_POST['article']) || !is_numeric($_POST['article'])){
+    errorDie("No article!", NO_ARTICLE);
+    exit;
 }
 
 if(!isset($_POST['content'])){
@@ -40,8 +46,8 @@ if($user == null){
     exit;
 }
 
-$comment = Comment::createComment($user);
-$comment->setContent(Security::escape($_GET['content']));
+$comment = Comment::createComment(Security::escape($_POST['article']), $user);
+$comment->setContent(Security::escape($_POST['content']));
 
 $succesArray = array();
 $succesArray["response"] = "Comment posted!";
