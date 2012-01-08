@@ -77,5 +77,7 @@ class MonkStyle implements IOrongoStyle{
     
 
     public function getPageHTML($paramPage){ return null; }
+    
+    public function getCommentsHTML($paramComments) { return null; }
 }
 ?>

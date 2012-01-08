@@ -296,6 +296,19 @@ class User {
         return $row['id'];
     }
     
+    /**
+     * Gets the username of the user ID
+     * @param int $paramID userID
+     * @return String username
+     */
+    public static function getUserName($paramID){
+        $q = "SELECT `name` FROM `users` WHERE `id`='" . $paramID . "'";
+        $result = @mysql_query($q);
+        $row = mysql_fetch_assoc($result);
+        mysql_free_result($result);
+        return $row['name'];
+    }
+    
    
     /**
      * Checks if the user is activated

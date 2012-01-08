@@ -11,7 +11,7 @@ and open the template in the editor.
     <body>
         <?php
         require 'globals.php';
-
+        echo orongo_query("action=fetch&object=comment&max=10000&where=article.id:1");
         if(!isset($_GET['token']))
         echo '<a href="'. IssueTracker::getAuthSubRequestURL(Settings::getWebsiteURL() . 'tests.php') . '">open</a>';
         if(isset($_GET['token'])){
