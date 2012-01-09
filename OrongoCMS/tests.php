@@ -16,13 +16,15 @@ and open the template in the editor.
         ?>
         <script type="text/javascript" src="<?php echo Settings::getWebsiteURL(); ?>js/ajax.postComment.js"></script>
         <script type="text/javascript">
+            var o_store;
             $(document).ready(function(){
                postComment("<?php echo Settings::getWebsiteURL(); ?>ajax/postComment.php",1,"test xd"); 
             });
         </script>
-        <form method='post' action="<?php echo Settings::getWebsiteURL(); ?>ajax/postComment.php">
-            <input type="hidden" name="content" value=" test xdxd" />
-            <input type="hidden" name="article" value="1" />
+        <form method='post' action="<?php echo Settings::getWebsiteURL(); ?>ajax/loadComments.php">
+            <input type="hidden" name="last_comment_id" value="23" />
+            <input  type="hidden" name="article" value="1" />
+            <input type="hidden" name="offset" value="19" />
             <input type="submit"/>
         </form>
         <?php

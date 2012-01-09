@@ -69,7 +69,7 @@ class MonkStyle implements IOrongoStyle{
         if(($paramArticle instanceof Article) == false) return null;
         $author = $paramArticle->getAuthor();
         if($author == null && ($author instanceof User) == false) $author_name = "Unknown"; else $author_name = $author->getName();
-        $generatedHTML = "<div class=\"box\"><h1>" . $paramArticle->getTitle() . "</h1><p>Written by " . $author_name . "  on  " . $paramArticle->getDate() ."</p></div>";
+        $generatedHTML = "<div class=\"box\"><h1>" . $paramArticle->getTitle() . "</h1><p>Written by " . $author_name . "  on  " . $paramArticle->getDate() ."  //   " . $paramArticle->getCommentCount() . " comments</p></div>";
         $generatedHTML .= $paramArticle->getContent();
         $generatedHTML .= "<br /><br /><br />";
         return $generatedHTML;
@@ -78,6 +78,17 @@ class MonkStyle implements IOrongoStyle{
 
     public function getPageHTML($paramPage){ return null; }
     
-    public function getCommentsHTML($paramComments) { return null; }
+    public function getCommentsHTML($paramComments) {
+        if(count($paramComments) < 1) return "<p>No comments, be the first to comment!</p>";
+        $generatedHTML = "";
+        foreach($paramComments as $comment){
+            if(($comment instanceof Comment) == false) continue;
+            $generatedHTML .= '<div class="comment">';
+            $generatedHTML .= '<p>Comment by ' . $comment->getAuthorName() . ' - ' . date("Y-m-d H:i:s", $comment->getTimestamp() ) . '</p>';
+            $generatedHTML .= '<p>' . $comment->getContent() . '</p>';
+            $generatedHTML .= '</div>';
+        }
+        return $generatedHTML;
+    }
 }
 ?>

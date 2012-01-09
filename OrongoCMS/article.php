@@ -59,9 +59,8 @@ try{
 
 $menu_bar = "";
 if($user != null){
-    $menu_bar = '<script src="'. $website_url . 'js/interface.menu_effects.js"  type="text/javascript" charset="utf-8"></script>';
-    $menu_bar .= '<link rel="stylesheet" href="'. $website_url . 'orongo-admin/style/style.menu.css" type="text/css"/>';
-    $menu_bar .= '<div class="orongo_menu fixed hide"><div class="seperator right hide" style="padding-right: 100px"></div><div class="menu_text right hide">Settings</div><div class="icon_settings_small right hide"></div><div class="seperator right hide"></div><div class="menu_text right hide">Notifications</div><div class="icon_messages_small right hide"></div><div class="seperator right hide"></div><div class="menu_text right hide">Pages</div><div class="icon_pages_small right hide"></div><div class="seperator right hide"></div><div class="menu_text left hide" style="padding-left: 200px"><div class="icon_account_small left"></div> Logged in as ' . $user->getName() . ' | <a href="'. $website_url . 'orongo-logout.php">Logout</a></div></div>';
+    $mb = new MenuBar($user);
+    $menu_bar = $mb->toHTML();
 }
 
 #   Generate Article HTML
@@ -76,13 +75,38 @@ if($style->doArticleHTML()){
         $articleHTML = $article->toHTML();
     }
 }else{
-    foreach($articles as $article){
-        $articleHTML .= $article->toShortHTML();
-    }
+    $articleHTML = $article->toHTML();
 }
 
 
+#   Generate Comment HTML
+$comments = $article->getComments();
+$commentHTML = "";
+if($style->doCommentHTML()){
+    try{
+       $commentHTML = $style->getCommentsHTML($comments);
+    }catch(Exception $e){
+        $msgbox = new MessageBox("The style didn't generate the HTML code for the comments, therefore the default generator was used. <br /><br />To hide this message open <br />" . $style->getStylePath() . "info.xml<br /> and set <strong>own_article_html</strong> to <strong>false</strong>.");
+        $msgbox->bindException($e);
+        $errors .= $msgbox->toHTML();
+        foreach($comments as $comment){
+            $commentHTML .= $comment->toHTML();
+        }
+    }
+}else{
+    foreach($comments as $comment){
+        $commentHTML .= $comment->toHTML();
+    }
+}
 
+$LCID = 0;
+if(count($comments) != 0){
+    $LCID = $comments[0]->getID();
+}
+
+$ajaxLC = new AjaxLoadComments($article->getID(), $LCID, count($comments));
+$document_ready .= $ajaxLC->toJS();
+$body .= $ajaxLC->toHTML();
 #   Template
 
 
@@ -93,7 +117,7 @@ if($style->doArticleHTML()){
     $smarty->assign("website_name", $website_name);
     
     $smarty->assign("head", $head);
-    $smarty->assign("head_title", $website_name .= " - Home");
+    $smarty->assign("head_title", $website_name . " - " . $article->getTitle());
     $smarty->assign("body", $body);
     
     $smarty->assign("document_ready", $document_ready);
@@ -102,7 +126,7 @@ if($style->doArticleHTML()){
     $smarty->assign("errors", $errors);
     
     $smarty->assign("article", $articleHTML);
-   // $smarty->assign("articles", $articleHTML);
+    $smarty->assign("comments", $commentHTML);
     
     #Plugins
     $smarty->assign("plugin_document_ready", $pluginHTML['javascript']['document_ready']);

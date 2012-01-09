@@ -28,8 +28,15 @@
 
 	{$article}
 
-
-
+        <div class="comments">
+        <h3>Comments</h3>
+        <div id="_orongo_comments">
+            
+            
+                {$comments}
+            
+        </div>
+        </div>
 	
     
     <div class="clear"></div>

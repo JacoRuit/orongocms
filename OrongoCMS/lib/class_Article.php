@@ -166,7 +166,7 @@ class Article implements IHTMLConvertable {
      */
     public function getComments(){
         $comments = array();
-        $comments = @orongo_query("action=fetch&object=comment&max=10000000&where=article.id:" . $this->id);
+        $comments = @orongo_query("action=fetch&object=comment&max=10000000&order=comment.id,desc&where=article.id:" . $this->id);
         return $comments;
     }
     
