@@ -1,6 +1,6 @@
 <?php
 /**
- * postComment AJAX 
+ * loadComments AJAX 
  * 
  * @author Jaco Ruit
  */
