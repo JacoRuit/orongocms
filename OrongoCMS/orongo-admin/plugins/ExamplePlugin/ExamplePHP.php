@@ -11,7 +11,7 @@ class ExampleClass implements IOrongoPlugin{
     
     
     public function __construct(){
-
+        
         $stored = Plugin::getSettings();
         //Access the settings in the array.
         if($stored['example_setting_2']){

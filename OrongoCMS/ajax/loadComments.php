@@ -67,6 +67,8 @@ try{
     die("500");
 }
 
+$newComments = array_reverse($newComments);
+
 $html = "";
 $style = null;
 try{

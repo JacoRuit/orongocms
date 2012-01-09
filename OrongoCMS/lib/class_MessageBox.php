@@ -76,7 +76,10 @@ class MessageBox implements IHTMLConvertable {
     
     public function toHTML() {
         $generatedHTML = "<script type=\"text/javascript\">$(document).ready(function(){  "; 
-        $generatedHTML .= "$('#_orongocms_msgbox_" . self::$messageCount . "').dialog();  });</script>";
+        $generatedHTML .= " $('#_orongocms_msgbox_" . self::$messageCount . "').dialog({ ";
+        $generatedHTML .= "   buttons: { 'OK':function(){ $(this).dialog('close'); } }  ";
+        $generatedHTML .= " }); ";
+        $generatedHTML .= "});</script>";
         $generatedHTML .= "<div id=\"_orongocms_msgbox_" . self::$messageCount ."\" title=\"" . $this->title . "\">" . $this->message; 
         if($this->exception != null)
             $generatedHTML .= "<br /><br /><strong>" . get_class($this->exception) . ": </strong><br />" . $this->exception->getMessage();

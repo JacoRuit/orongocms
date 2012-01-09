@@ -25,7 +25,7 @@ function postComment(turl, articleID, comment, websitename){
            prettyAlert('#_orongo_ajax_response', data.response, websitename );
        },
        error: function(jqXHR, textStatus, errorThrown){
-           alert("An error occured while posting your comment. " );
+           alert("An error occured while posting your comment. ");
        }
     });
 };
