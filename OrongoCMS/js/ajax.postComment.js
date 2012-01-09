@@ -8,18 +8,18 @@
  *  You have to import the prettyAlert function
  *  You have to place a div in the document called '_orongo_ajax_response'
  * 
- * Last edit: 08-01-2012 by Jaco Ruit
+ * Last edit: 09-01-2012 by Jaco Ruit
  */
 
 
-function postComment(turl, articleid, comment, websitename){
+function postComment(turl, articleID, comment, websitename){
     $.ajax({
        type: 'POST',
        url: turl,
        dataType: 'json',
        data:{
            content: comment,
-           article: articleid
+           article: articleID
        },
        success: function(data, textStatus, jqXHR){
            prettyAlert('#_orongo_ajax_response', data.response, websitename );

@@ -177,7 +177,6 @@ class OrongoQueryHandler {
            }
         }
         
-        
         $q  =  "SELECT `id` FROM `" . $from . 's`' . $where  . $order . $orderc . $limit . $offset;
         $result = @mysql_query($q);
         if($query['action'] == 'fetch'){

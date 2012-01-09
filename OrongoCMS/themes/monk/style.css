@@ -206,3 +206,23 @@ color:white;
 #footer-text {
 padding-left:20px; 
 }
+
+/*
+Added by Jaco Ruit;
+*/
+
+.comments {
+    border-top: 1px double #CCC;
+    float: left;
+    margin: 10px 0 30px;
+    padding-top: 20px;
+    width: 100%;
+}
+
+.comment {
+    border-bottom: 1px dashed #CCC;
+    float: left;
+    margin: 10px 0 30px;
+    padding-top: 20px;
+    width: 100%;
+}

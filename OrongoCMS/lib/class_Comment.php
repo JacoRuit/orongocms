@@ -71,6 +71,14 @@ class Comment implements IHTMLConvertable {
         return $this->authorID;
     }
     
+    /**
+     * @return string Comment Author Name
+     */
+    public function getAuthorName(){
+        if($this->authorID == '00') $author_name = "Unknown"; else $author_name = User::getUserName($this->authorID); 
+        return $author_name;
+    }
+    
     #   articleID
     /**
      * @return int Comment Article ID
@@ -111,9 +119,8 @@ class Comment implements IHTMLConvertable {
     public function toHTML(){
         $generatedHTML = "<div class=\"comment\">";
         $generatedHTML .= " <div class=\"comment-header\">";
-        if($this->authorID == '00'){ $author_name = "Unknown"; }else{ $author_name = User::getUserName($this->authorID); }
-        $generatedHTML .= "     <p id=\"author\">" . $author_name  . "</p>";
-        $generatedHTML .= "     <p id=\"date\"" . date("Y-m-d H:i:s", $this->timestamp ) . "</p>";
+        $generatedHTML .= "     <p id=\"author\">" . $this->getAuthorName()  . "</p>";
+        $generatedHTML .= "     <p id=\"date\">" . date("Y-m-d H:i:s", $this->timestamp ) . "</p>";
         $generatedHTML .= " </div>";
         $generatedHTML .= " <p id=\"content\">" . $this->content . "</p>";
         $generatedHTML .= "</div>";

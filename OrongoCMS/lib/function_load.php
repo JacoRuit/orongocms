@@ -16,8 +16,8 @@ function load($paramLibFolder){
     define('REVISION', 22);
     //REGISTER NEW FUNCTIONS, INTERFACES, CLASSES, EXCEPTIONS HERE! :D
     $orongo_functions = array('orongo_query', 'handleSessions', 'handlePlugins', 'setCurrentPage');
-    $orongo_interfaces = array('IHTMLConvertable', 'IOrongoPlugin', 'IOrongoStyle', 'IStorable');
-    $orongo_classes = array('Article', 'Cache', 'Comment', 'Database', 'HTMLFactory', 'Image','Issue', 'IssueTracker', 'Mail', 'MailFactory', 'MessageBox', 'OrongoQuery', 'OrongoQueryHandler', 'Page', 'Plugin', 'Security', 'Session', 'Settings', 'Storage', 'Style', 'User', 'Utils');
+    $orongo_interfaces = array('IHTMLConvertable', 'IJSConvertable', 'IOrongoPlugin', 'IOrongoStyle', 'IStorable');
+    $orongo_classes = array('AjaxLoadComments', 'Article', 'Cache', 'Comment', 'Database', 'HTMLFactory', 'Image','Issue', 'IssueTracker', 'Mail', 'MailFactory', 'MenuBar', 'MessageBox', 'OrongoQuery', 'OrongoQueryHandler', 'Page', 'Plugin', 'Security', 'Session', 'Settings', 'Storage', 'Style', 'User', 'Utils');
     $orongo_exceptions = array('ClassLoadException', 'IllegalArgumentException', 'IllegalMemoryAccessException', 'QueryException');
     $smarty_path = $paramLibFolder . '/Smarty/Smarty.class.php';
     if(!file_exists($smarty_path)) throw new Exception("Couldn't load smarty (" . $smarty_path . " was missing!)");
