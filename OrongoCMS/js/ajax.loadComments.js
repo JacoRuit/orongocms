@@ -12,7 +12,7 @@
 
 
 var noff;
-var nclid;
+var nlcid;
 
 function loadComments(turl, articleID, lastCommentID, offset ){
 
@@ -33,12 +33,10 @@ function loadComments(turl, articleID, lastCommentID, offset ){
                $("#_orongo_comments").html(data.html + $("#_orongo_comments").html() );
                noff = noff + data.count;
                nlcid = data.newLastCommentID;
-               return false;
            }
        },
        error: function(jqXHR, textStatus, errorThrown){
            alert("An error occured while loading new comments. ");
-           return false;
        },
        async: false
     });

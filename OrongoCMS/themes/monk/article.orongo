@@ -26,18 +26,22 @@
 <div class="clear"></div>
 	
 
-	{$article}
+{$article}
 
-        <div class="comments">
-        <h3>Comments</h3>
-        <div id="_orongo_comments">
-            
-            
-                {$comments}
-            
-        </div>
-        </div>
+<div class="comments">
+    <h3>Comments</h3>
+    <div id="_orongo_comments">       
+        {$comments}         
+    </div>
+</div>
+
+<div class="newcomment">
+    <form id="_orongo_comment_form">
+         <input type="text" name="_orongo_new_comment" value="Comment" />
+         <input type="submit" value="Post!" />
+    </form>
+</div>
 	
     
-    <div class="clear"></div>
+<div class="clear"></div>
 

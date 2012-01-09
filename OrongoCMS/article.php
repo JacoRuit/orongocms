@@ -39,7 +39,7 @@ $head = "<meta name=\"generator\" content=\"OrongoCMS r" . REVISION . "\" />";
 $errors = "";
 $website_name = Settings::getWebsiteName();
 $website_url = Settings::getWebsiteURL();
-$body = "<script src=\"" . $website_url . "js/widget.prettyAlert.js\" type=\"text/javascript\" charset=\"utf-8\"></script><script src=\"" . $website_url . "js/ajax.postComment.js\" type=\"text/javascript\" charset=\"utf-8\"></script><div id=\"_orongo_ajax_response\"></div>";
+$body = "<script src=\"" . $website_url . "js/widget.prettyAlert.js\" type=\"text/javascript\" charset=\"utf-8\"></script>";
 $document_ready = "";
 $pages = array();
 $pages = @orongo_query('action=fetch&object=page&max=10000&order=page.id');
@@ -104,7 +104,11 @@ if(count($comments) != 0){
     $LCID = $comments[0]->getID();
 }
 
-$ajaxLC = new AjaxLoadComments($article->getID(), $LCID, count($comments));
+$ajaxPC = new AjaxPostCommentAction($article->getID());
+$document_ready .= $ajaxPC->toJS();
+$body .= $ajaxPC->toHTML();
+
+$ajaxLC = new AjaxLoadCommentsAction($article->getID(), $LCID, count($comments));
 $document_ready .= $ajaxLC->toJS();
 $body .= $ajaxLC->toHTML();
 #   Template

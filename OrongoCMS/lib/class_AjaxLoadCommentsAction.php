@@ -1,17 +1,24 @@
 <?php
 
 /**
- * AjaxLoadComments Class
+ * AjaxLoadCommentsAction Class
  *
  * @author Jaco Ruit
  */
-class AjaxLoadComments implements IHTMLConvertable, IJSConvertable{
+class AjaxLoadCommentsAction implements IHTMLConvertable, IJSConvertable{
 
     private $offset;
     private $lastCommentID;
     private $articleID;
     private $refreshInterval;
     
+    /**
+     * Construct the object
+     * @param int $paramArticleID Article ID
+     * @param int $paramLastCommentID Last fetched Comment ID
+     * @param int $paramOffset Offset (count of loaded comments)
+     * @param int $paramRefreshInterval refresh interval (default=10000)
+     */
     public function __construct($paramArticleID, $paramLastCommentID, $paramOffset, $paramRefreshInterval = 10000){
         $this->offset = $paramOffset;
         $this->lastCommentID  = $paramLastCommentID;
