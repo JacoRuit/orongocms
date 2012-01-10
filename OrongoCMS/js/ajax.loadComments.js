@@ -30,8 +30,13 @@ function loadComments(turl, articleID, lastCommentID, offset ){
        },
        success: function(data, textStatus, jqXHR){
            if(data.response_code == '31'){
-               $("#_orongo_comments").html(data.html + $("#_orongo_comments").html() );
+               if(noff == 0){
+                   $("#_orongo_ajax_comments").html(data.html);
+               }else{
+                   $("#_orongo_ajax_comments").html(data.html + $("#_orongo_ajax_comments").html() );
+               }
                noff = noff + data.count;
+               $("#_orongo_ajax_comment_count").html(noff);
                nlcid = data.newLastCommentID;
            }
        },

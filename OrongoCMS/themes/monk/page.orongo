@@ -1,0 +1,39 @@
+<body>
+{$body}
+
+<script type="text/javascript">
+        $(document).ready(function(){
+            {$document_ready}
+            {$plugin_document_ready}
+        });
+</script>
+{$menu_bar}
+{$plugin_body}
+{$errors}
+<div class="header">
+	<div id="logo">
+		<a href="{$website_url}">
+		<img alt="logo" src="{$logo_url}">
+		</a>
+	</div>
+
+	<ul id="menu" class="menu">
+		{$menu}
+	</ul>
+</div>
+
+<div id="body-wrapper" class="clearfix"><!--start body-wrapper-->
+<div class="clear"></div>
+	
+
+
+<div class="box">
+    <h1>{$page->getTitle()}</h1>
+</div>
+
+{$page->getContent()}
+
+<br /><br /><br />
+    
+<div class="clear"></div>
+

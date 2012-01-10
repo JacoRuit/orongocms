@@ -63,20 +63,7 @@ if($user != null){
     $menu_bar = $mb->toHTML();
 }
 
-#   Generate Article HTML
-$articleHTML = "";
-if($style->doArticleHTML()){
-    try{
-        $articleHTML = $style->getArticleHTML($article);
-    }catch(Exception $e){
-        $msgbox = new MessageBox("The style didn't generate the HTML code for the article, therefore the default generator was used. <br /><br />To hide this message open <br />" . $style->getStylePath() . "info.xml<br /> and set <strong>own_article_html</strong> to <strong>false</strong>.");
-        $msgbox->bindException($e);
-        $errors .= $msgbox->toHTML();
-        $articleHTML = $article->toHTML();
-    }
-}else{
-    $articleHTML = $article->toHTML();
-}
+
 
 
 #   Generate Comment HTML
@@ -129,7 +116,9 @@ $body .= $ajaxLC->toHTML();
     $smarty->assign("menu", $menu);
     $smarty->assign("errors", $errors);
     
-    $smarty->assign("article", $articleHTML);
+    if($user != null)
+        $smarty->assign("user", $user);
+    $smarty->assign("article", $article);
     $smarty->assign("comments", $commentHTML);
     
     #Plugins

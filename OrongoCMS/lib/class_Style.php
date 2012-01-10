@@ -17,7 +17,6 @@ class Style {
     private $phpFile;
     private $mainClass;
     private $doHTMLArticle;
-    private $doHTMLPage;
     private $doHTMLComment;
     private $stylePath;
     
@@ -62,11 +61,6 @@ class Style {
             }
         }else{
             $this->mainClass = null;
-        }
-        if($info['style']['own_page_html'] == 'true'){
-            $this->doHTMLPage = true;
-        }else{
-            $this->doHTMLPage = false;
         }
         if($info['style']['own_article_html'] == 'true'){
             $this->doHTMLArticle = true;
@@ -179,14 +173,6 @@ class Style {
     }
     
     /**
-     * Checks if the style generates the HTML for pages
-     * @return boolean indicating if it does
-     */
-    public function doPageHTML(){
-        return $this->doHTMLPage;
-    }
-    
-    /**
      * Checks if the style generates the HTML for comments
      * @return boolean indicating if it does
      */
@@ -212,37 +198,6 @@ class Style {
         }
     }
     
-    /**
-     * Gets the HTML for a page
-     * @param Page $paramPage Page object
-     */
-    public function getPageHTML($paramPage){
-        try{
-            if($this->doHTMLPage && $this->usePHP &&($this->mainClass instanceof IOrongoStyle)){
-                $genHTML = $this->mainClass->getPageHTML($paramPage);
-                if($genHTML != null && is_string($genHTML) && $genHTML != "") return $genHTML;
-                else throw new Exception();
-            }else throw new Exception();
-        }catch(Exception $e){
-            throw new Exception("Style doesn't generate the page HTML. Please call default function.");
-        }
-    }
-    
-    /**
-     * Gets the HTML for an article
-     * @param Article $paramArticle Article object
-     */
-    public function getArticleHTML($paramArticle){
-        try{
-            if($this->doHTMLArticle && $this->usePHP &&($this->mainClass instanceof IOrongoStyle)){
-                $genHTML = $this->mainClass->getArticleHTML($paramArticle);
-                if($genHTML != null && is_string($genHTML) && $genHTML != "") return $genHTML;
-                else throw new Exception();
-            }else throw new Exception(); 
-        }catch(Exception $e){
-            throw new Exception("Style doesn't generate the article HTML. Please call default function.");
-        }
-    }
     
     /**
      * Gets the HTML for an article array

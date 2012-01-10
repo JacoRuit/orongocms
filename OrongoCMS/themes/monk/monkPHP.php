@@ -64,20 +64,6 @@ class MonkStyle implements IOrongoStyle{
         return $generatedHTML;
     }
     
-
-    public function getArticleHTML($paramArticle){ 
-        if(($paramArticle instanceof Article) == false) return null;
-        $author = $paramArticle->getAuthor();
-        if($author == null && ($author instanceof User) == false) $author_name = "Unknown"; else $author_name = $author->getName();
-        $generatedHTML = "<div class=\"box\"><h1>" . $paramArticle->getTitle() . "</h1><p>Written by " . $author_name . "  on  " . $paramArticle->getDate() ."  //   " . $paramArticle->getCommentCount() . " comments</p></div>";
-        $generatedHTML .= $paramArticle->getContent();
-        $generatedHTML .= "<br /><br /><br />";
-        return $generatedHTML;
-    }
-    
-
-    public function getPageHTML($paramPage){ return null; }
-    
     public function getCommentsHTML($paramComments) {
         if(count($paramComments) < 1) return "<p>No comments, be the first to comment!</p>";
         $generatedHTML = "";
