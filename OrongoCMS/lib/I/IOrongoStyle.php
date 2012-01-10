@@ -23,17 +23,7 @@ interface IOrongoStyle {
      */
     public function getArticlesHTML($paramArticles);
     
-    /**
-     * Generates the HTML for an article 
-     * @param Article $paramArticle Article object to generate HTML from
-     */
-    public function getArticleHTML($paramArticle);
-    
-    /**
-     * Generates the HTML for a page
-     * @param Page $paramPage Page object to generate HTML from
-     */
-    public function getPageHTML($paramPage);
+        
     
     /**
      * Generates the HTML for a comment array

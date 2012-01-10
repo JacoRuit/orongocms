@@ -34,7 +34,7 @@ if(!isset($_POST['content'])){
     exit;
 }
 
-if(strlen($_POST['content']) < 5){
+if(strlen($_POST['content']) < 3){
    errorDie("Content is too short!", TOO_SHORT);
    exit;
 }

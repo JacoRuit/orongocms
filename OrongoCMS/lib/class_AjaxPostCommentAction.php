@@ -26,10 +26,10 @@ class AjaxPostCommentAction implements IHTMLConvertable, IJSConvertable{
     }
 
     public function toJS() {
-        $generatedJS = ' $("#_orongo_comment_form").submit(function(event) {';
+        $generatedJS = ' $("#_orongo_ajax_comment_form").submit(function(event) {';
         $generatedJS .= " event.preventDefault(); ";
-        $generatedJS .= " postComment('" . Settings::getWebsiteURL() . "ajax/postComment.php', " . $this->articleID . ", $('input[name=_orongo_new_comment]').val(),'" . Settings::getWebsiteName() . "');";
-        $generatedJS .= " $('input[name=_orongo_new_comment]').val('');";
+        $generatedJS .= " postComment('" . Settings::getWebsiteURL() . "ajax/postComment.php', " . $this->articleID . ", $('textarea[name=_orongo_ajax_new_comment]').val(),'" . Settings::getWebsiteName() . "');";
+        $generatedJS .= " $('textarea[name=_orongo_ajax_new_comment]').val('');";
         $generatedJS .= " return false; ";
         $generatedJS .= ' });';
         return $generatedJS;

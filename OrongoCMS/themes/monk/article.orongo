@@ -26,22 +26,41 @@
 <div class="clear"></div>
 	
 
-{$article}
 
+<div class="box">
+    <div id="comment_count">
+        <div id="_orongo_ajax_comment_count">{$article->getCommentCount()}</div> comments
+    </div>
+    <h1>{$article->getTitle()}</h1>  
+    <p>Written by <a href="{$website_url}archive.php?user={$article->getAuthor()->getName()}">{$article->getAuthor()->getName()}</a> on {$article->getDate()}</p>
+</div>
+
+{$article->getContent()}
+
+<br /><br /><br />
 <div class="comments">
     <h3>Comments</h3>
-    <div id="_orongo_comments">       
+    <div id="_orongo_ajax_comments">       
         {$comments}         
     </div>
 </div>
 
-<div class="newcomment">
-    <form id="_orongo_comment_form">
-         <input type="text" name="_orongo_new_comment" value="Comment" />
-         <input type="submit" value="Post!" />
+<div class="new_comment">
+    <h2>Post a new comment</h2>
+
+    {if isset($user)}
+    <form class="new_comment_form" id="_orongo_ajax_comment_form">
+         <textarea name="_orongo_ajax_new_comment" rows="5">Comment</textarea>
+         <input type="submit" value="Post" />
     </form>
+    {else}
+    <br />
+    <p>You need to be <a href="{$website_url}orongo-login.php">logged in</a> in order to post comments!</p>
+    {/if}
+
 </div>
-	
+
+<br /><br /><br />
     
 <div class="clear"></div>
 

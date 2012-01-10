@@ -37,7 +37,7 @@ margin:0 auto;
 padding:5px 0;
 }
 
-body,input,textarea {
+body {
 font:12px/20px "Helvetica Neue", Helvetica, Arial, sans-serif;
 background:#FFF;
 color:#000;
@@ -226,3 +226,30 @@ Added by Jaco Ruit;
     padding-top: 20px;
     width: 100%;
 }
+
+.new_comment_form textarea{
+    width:100%;
+    font:12px/20px "Helvetica Neue", Helvetica, Arial, sans-serif;
+    background-color: white;
+    resize:none;
+    border: 1px solid #000;
+}
+
+.new_comment_form input{
+    float:right;
+}
+
+#comment_count{
+    float:right;
+    text-align: center;
+    background-color: #717171;
+    color:white;
+    padding: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+}
+
+#comment_count:hover{
+    background-color: #CCC;
+}
+

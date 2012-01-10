@@ -99,6 +99,8 @@ if($style->doArticleHTML()){
     $smarty->assign("menu", $menu);
     $smarty->assign("errors", $errors);
     
+    if($user != null)
+        $smarty->assign("user", $user);
     $smarty->assign("articles", $articleHTML);
     
     #Plugins
