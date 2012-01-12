@@ -97,6 +97,14 @@ class Article implements IHTMLConvertable {
     }
     
     /**
+     * @return string Comment Author Name
+     */
+    public function getAuthorName(){
+        if($this->authorID == '00') $author_name = "Unknown"; else $author_name = User::getUserName($this->authorID); 
+        return $author_name;
+    }
+    
+    /**
      * @return User Article Author 
      */
     public function getAuthor(){

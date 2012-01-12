@@ -102,7 +102,13 @@ function extract_id() {
 }
 
 // ----------------------------------------------------------------------------
-function handle_json_rpc($object) {
+//its now $objects.... so we can handle more classes :: edit made by Jaco Ruit
+function handle_json_rpc($objects = array()) {
+    if(!is_array($objects)){
+        $msg = 'internal error: wrong argument passes to handle_json_rpc';
+        echo response(null, $id, array("code" =>-32601, "message" => $msg));
+        exit;
+    }
   /*
   if ($input == '') {
     $input = file_get_contents('php://input');
@@ -167,15 +173,17 @@ function handle_json_rpc($object) {
   }
   
   // call Service Method
+  foreach($objects as $object){
   try {
     $class = get_class($object);
     $methods = get_class_methods($class);
     if (strcmp($method, 'help') == 0) {
       if (count($params) > 0) {
         if (!in_array($params[0], $methods)) {
-          $no_method = 'There is no ' . $params[0] . ' method';
-          throw new Exception($no_method);
-        } else {
+          //$no_method = 'There is no ' . $params[0] . ' method';
+          //throw new Exception($no_method);
+            continue;
+        }/** else {
           $static = get_class_vars($class);
           $help_str_name = $params[0] . "_documentation";
           //throw new Exception(implode(", ", $static));
@@ -184,27 +192,35 @@ function handle_json_rpc($object) {
           } else {
             throw new Exception($method . " method has no documentation");
           }
-        }
+        }*/
       } else {
-        $url = "http://" . $_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"];
-        $msg = 'PHP JSON-RPC - in "' . $url . "\"\n";
-        $msg .= "class \"$class\" has methods: " . implode(", ", array_slice($methods, 0, -1)) . " and " .  $methods[count($methods)-1] . ".";
-        echo response($msg, $id, null);
+       // $url = "http://" . $_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"];
+       // $msg = 'PHP JSON-RPC - in "' . $url . "\"\n";
+       // $msg .= "class \"$class\" has methods: " . implode(", ", array_slice($methods, 0, -1)) . " and " .  $methods[count($methods)-1] . ".";
+        echo response("enter 'cmd' to view the commands", $id, null);
+        exit;
       }
     } else if (!in_array($method, $methods)) {
-      $msg = 'There is no ' . $method . ' method';
-      echo response(null, $id, array("code" =>-32601, "message" => $msg));
+      //$msg = 'There is no ' . $method . ' method';
+      //echo response(null, $id, array("code" =>-32601, "message" => $msg));
+        continue;
     } else {
       //throw new Exception('x -> ' . json_encode($params));
       $result = call_user_func_array(array($object, $method), $params);
       echo response($result, $id, null);
+      exit;
     }
-    exit;
   } catch (Exception $e) {
     //catch all exeption from user code
-    $msg = "Internal error: " . $e->getMessage();
-    echo response(null, $id, array("code"=>-32603, "message"=>$msg));
+    //$msg = "Internal error: " . $e->getMessage();
+    echo response(null, $id, array("code"=>-32603, "message"=>strtolower($e->getMessage())));
+    exit;
   }
+  }
+  
+  $msg = 'there is no ' . $method . ' command!';
+  echo response(null, $id, array("code" =>-32601, "message" => $msg));
+  exit;
 }
 
 

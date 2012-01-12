@@ -9,7 +9,7 @@
         <link href="{$website_url}orongo-admin/style/jquery.terminal.css" rel="stylesheet"/>
         <script>
             jQuery(document).ready(function($) {
-                $(document.documentElement).terminal("{$website_url}ajax/terminalRPC.php");
+                $(document.documentElement).terminal("{$website_url}ajax/terminalRPC.php", { greetings: "Welcome to the OrongoTerminal\n*****************************\n\nTo show commands enter 'cmd'\n\n"});
                 $('body').css('display', 'none');
             });
         </script>
