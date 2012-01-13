@@ -6,7 +6,8 @@
  */
 class Plugin {
     
-
+    private static $tPlugins = array();
+    
     /**
      * Installs database for the plugin
      * @param String $paramPrefix Prefix for the folder, sub-folders use this (starts from plugins/)
@@ -182,6 +183,33 @@ class Plugin {
         $rows = mysql_num_rows($result);
         mysql_free_result($result);
         return $rows;
+    }
+    
+    /**
+     * Hooks a terminal plugin
+     * @param $paramPlugin object class implementing IOrongoTerminalPlugin
+     * @return boolean indicating if it was hooked succesfully
+     */
+    public static function hookTerminalPlugin($paramPlugin){
+        if(($paramPlugin instanceof IOrongoTerminalPlugin) == false)
+            throw new IllegalMemoryAccessException("Invalid argument, class implementing IOrongoTerminalPlugin expected.");
+        $methods = array('about', 'version');
+        $methods = array_merge($methods, get_class_methods('OrongoTerminal'));
+        $pluginMethods = get_class_methods(get_class($paramPlugin));
+        foreach($pluginMethods as $pluginMethod){
+            if(in_array($pluginMethod, $methods))
+                    return false;
+        }
+        self::$tPlugins[count(self::$tPlugins)] = $paramPlugin;
+        return true;
+    }
+    
+    /**
+     * Returns the terminal plugins
+     * @return array classes implementing IOrongoTerminalPlugin
+     */
+    public static function getHookedTerminalPlugins(){
+        return self::$tPlugins;
     }
 }
 

@@ -6,6 +6,9 @@
  */
 interface IOrongoPlugin {
 
+    //no params
+    public function __construct();
+    
     /**
      * Does the actions it should do when installing
      */
