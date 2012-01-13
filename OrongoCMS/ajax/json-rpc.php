@@ -172,6 +172,12 @@ function handle_json_rpc($objects = array()) {
     }
   }
   
+  $ignoremethods = array('getVersionNumber');
+  if(in_array($method, $ignoremethods)){
+      $msg = 'there is no ' . $method . ' command!';
+    echo response(null, $id, array("code" =>-32601, "message" => $msg));
+    exit;
+  }
   // call Service Method
   foreach($objects as $object){
   try {

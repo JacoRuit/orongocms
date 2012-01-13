@@ -11,7 +11,8 @@ class ExampleClass implements IOrongoPlugin{
     
     
     public function __construct(){
-        
+        require 'TerminalPlugin.php';
+        Plugin::hookTerminalPlugin(new TerminalPlugin());
         $stored = Plugin::getSettings();
         //Access the settings in the array.
         if($stored['example_setting_2']){
