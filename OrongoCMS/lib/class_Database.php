@@ -7,6 +7,7 @@
  */
 class Database {
     private $conn;
+    private static $queryCount = 0;
     
     /**
      * Establish MySQL Connection
@@ -20,11 +21,39 @@ class Database {
     }   
     
     /**
-     * @return MySQL Connection
+     * @return resources MySQL Connection
      */
     public function getConnection(){
         return $this->conn;
     }
+    
+    /**
+     * @return int executed query count
+     */
+    public function getQueryCount(){
+        return self::$queryCount;
+    }
+    
+    /**
+     * @param String $paramQuery MySQL Query String
+     * @return resources Result from MySQL
+     */
+    public function execQuery($paramQuery){
+        self::$queryCount++;
+        $res = @mysql_query($paramQuery);
+        if(!$res)
+            throw new Exception("Couldn't execute a mysql query: " . mysql_error());
+        return $res;
+    }
+    
+    /**
+     * @param String $paramTable table name
+     * @param array $paramFields fields in database
+     */
+    public function createTable($paramTable, $paramFields){
+        //TODO make this.
+    }
+    
 }
 
 ?>

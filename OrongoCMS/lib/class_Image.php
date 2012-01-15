@@ -16,7 +16,7 @@ class Image {
      */
     public static function store($paramKey, $paramImg, $paramImgSize){
         $q = "INSERT INTO `images` (`key`,`img`,`size`) VALUES ('" . $paramKey . "', '" . $paramImg . "', '" . $paramImgSize . "')";
-        @mysql_query($q);
+        getDatabase()->execQuery($q);
     }
     
     /**
@@ -26,7 +26,7 @@ class Image {
      */
      public static function get($paramKey){
          $q = "SELECT `img` FROM `images` WHERE `key` = '" .$paramKey . "'";
-         $result = @mysql_query($q);
+         $result = getDatabase()->execQuery($q);
          $img = mysql_fetch_assoc($result);
          mysql_free_result($result);
          return $img['img'];

@@ -24,7 +24,7 @@ class Comment implements IHTMLConvertable {
     public function __construct($paramID){
         $this->id = $paramID;
         $q = "SELECT `content`,`authorID`,`articleID`,`timestamp` FROM `comments` WHERE `id` = '" . $this->id . "'";
-        $result = @mysql_query($q);
+        $result = getDatabase()->execQuery($q);
         $row = mysql_fetch_assoc($result);
         $count = mysql_num_rows($result);
         if($count < 1){
@@ -59,7 +59,7 @@ class Comment implements IHTMLConvertable {
     */
     public function setContent($paramContent){
         $q = "UPDATE `comments` SET `content`='" . $paramContent . "' WHERE `id` = '" . $this->id ."'";
-        @mysql_query($q);
+        getDatabase()->execQuery($q);
         $this->content = $paramContent;
     }
     
@@ -100,7 +100,7 @@ class Comment implements IHTMLConvertable {
      */
     public function delete(){
         $q = "DELETE FROM `comments` WHERE `id` = '" . $this->id ."'";
-        @mysql_query($q);
+        getDatabase()->execQuery($q);
     }
     
     /**
@@ -109,7 +109,7 @@ class Comment implements IHTMLConvertable {
      */
     public static function getLastCommentID(){
         $q = 'SELECT `id` FROM `comments` ORDER BY `id` DESC';
-        $result = @mysql_query($q);
+        $result = getDatabase()->execQuery($q);
         $row = mysql_fetch_assoc($result);
         $lastID = $row['id'];
         mysql_free_result($result);
@@ -138,7 +138,7 @@ class Comment implements IHTMLConvertable {
         if($paramUser != null && ($paramUser instanceof User) == false) throw new IllegalArgumentException("User object expected."); 
         if($paramUser == null ) $author_id = 00; else $author_id = $paramUser->getID(); 
         $q = "INSERT INTO `comments` (`id`,`content`,`authorID`,`articleID`, `timestamp`) VALUES ('" . $newID . "', 'not_set_error', '" . $author_id . " ','" .$paramArticleID .  "', UNIX_TIMESTAMP())";
-        @mysql_query($q);
+        getDatabase()->execQuery($q);
         return new Comment($newID);
     }
 }

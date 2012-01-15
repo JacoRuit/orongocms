@@ -14,7 +14,7 @@ class Settings {
     public static function getWebsiteURL(){
         if(Cache::isStored('website_url'))return Cache::get('website_url'); 
         $q = "SELECT `value` FROM `settings` WHERE `setting` = 'url'";
-        $result = @mysql_query($q);
+        $result = getDatabase()->execQuery($q);
         $row = mysql_fetch_assoc($result);
         $url = $row['value'];
         #http:// prefix
@@ -36,7 +36,7 @@ class Settings {
     public static function getWebsiteName(){
         if(Cache::isStored('website_name'))return Cache::get('website_name'); 
         $q = "SELECT `value` FROM `settings` WHERE `setting` = 'name'";
-        $result = @mysql_query($q);
+        $result = getDatabase()->execQuery($q);
         $row = mysql_fetch_assoc($result);
         $name = $row['value'];
         mysql_free_result($result);
@@ -51,7 +51,7 @@ class Settings {
      */
     public static function getStyle($paramPrefix){
         $q = "SELECT `value` FROM `settings` WHERE `setting` = 'style'";
-        $result = @mysql_query($q);
+        $result = getDatabase()->execQuery($q);
         $row = mysql_fetch_assoc($result);
         $styleFolder = $row['value'];
         mysql_free_result($result);
@@ -66,11 +66,11 @@ class Settings {
     public static function setStyle($paramPrefix, $paramStyle){
         try{
             $q = 'TRUNCATE TABLE `styles`'; 
-            @mysql_query($q);
+            getDatabase()->execQuery($q);
             Style::install($paramPrefix, $paramStyle);
         }catch(Exception $e){ throw $e; }
         $q = "UPDATE `settings` SET `value`='" . $paramStyle . "' WHERE `setting` = 'style'";
-        @mysql_query($q);
+        getDatabase()->execQuery($q);
     }
     
     /**
@@ -80,7 +80,7 @@ class Settings {
     public static function getEmail(){
         if(Cache::isStored('website_email')) return Cache::get('website_email'); 
         $q = "SELECT `value` FROM `settings` WHERE `setting` = 'email'";
-        $result = @mysql_query($q);
+        $result = getDatabase()->execQuery($q);
         $row = mysql_fetch_assoc($result);
         $address = $row['value'];
         mysql_free_result($result);
