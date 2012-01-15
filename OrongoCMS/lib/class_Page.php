@@ -21,7 +21,7 @@ class Page {
     public function __construct($paramID){
         $this->id = $paramID;
         $q = "SELECT `title`,`content` FROM `pages` WHERE `id` = '" . $this->id . "'";
-        $result = @mysql_query($q);
+        $result = getDatabase()->execQuery($q);
         $row = mysql_fetch_assoc($result);
         $count = mysql_num_rows($result);
         if($count < 1){
@@ -55,7 +55,7 @@ class Page {
     */
     public function setTitle($paramTitle){
         $q = "UPDATE `pages` SET `title`='" . addslashes($paramTitle) . "' WHERE `id` = '" . $this->id ."'";
-        @mysql_query($q);
+        getDatabase()->execQuery($q);
         $this->title = $paramTitle;
     }
     
@@ -72,7 +72,7 @@ class Page {
     */
     public function setContent($paramContent){
         $q = "UPDATE `pages` SET `content`='" . addslashes($paramContent) . "' WHERE `id` = '" . $this->id ."'";
-        @mysql_query($q);
+        getDatabase()->execQuery($q);
         $this->content = $paramContent;
     }
     
@@ -82,7 +82,7 @@ class Page {
      */
     public static function getPageCount(){
         $q = 'SELECT `id` FROM `pages`';
-        $result = @mysql_query($q);
+        $result = getDatabase()->execQuery($q);
         $num = mysql_num_rows($result);
         mysql_free_result($result);
         return $num;
@@ -94,7 +94,7 @@ class Page {
      */
     public static function getLastPageID(){
         $q = 'SELECT `id` FROM `pages` ORDER BY `id` DESC';
-        $result = @mysql_query($q);
+        $result = getDatabase()->execQuery($q);
         $row = mysql_fetch_assoc($result);
         $lastID = $row['id'];
         mysql_free_result($result);
@@ -110,7 +110,7 @@ class Page {
     public static function createPage($paramName){
         $newID = self::getLastPageID() + 1;
         $q = "INSERT INTO `pages` (`id`,`title`) VALUES ('" . $newID . "', '" . $paramName . "')";
-        @mysql_query($q);
+        getDatabase()->execQuery($q);
         return new Page($newID);
     }
     
@@ -121,7 +121,7 @@ class Page {
      */
     public static function getPageID($paramTitle){
         $q = "SELECT `id` FROM `pages` WHERE `title` LIKE '" . addslashes($paramTitle) . "'";
-        $result = @mysql_query($q);
+        $result = getDatabase()->execQuery($q);
         $row = mysql_fetch_assoc($result);
         mysql_free_result($result);
         return $row['id'];

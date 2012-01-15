@@ -254,7 +254,7 @@ class Style {
                 }else if($key == 'default'){
                     $default = str_replace('{$website_url}', Settings::getWebsiteURL(), $value);
                     $q2 = "UPDATE `styles` SET `setting_value` = '" . $default . "' WHERE `style_main_class` = '" . $info['style']['main_class'] . "' AND `setting` = '" . $setting . "'";
-                    @mysql_query($q2);
+                    getDatabase()->execQuery($q2);
                 }
             }
         }  
@@ -268,7 +268,7 @@ class Style {
      */
     private static function installSetting($paramStyleMainClass, $paramSetting, $paramSettingType){
         $q = "INSERT INTO `styles` (`style_main_class`, `setting`, `setting_type`, `setting_value`) VALUES ('" . $paramStyleMainClass . "', '" .$paramSetting . "', '" . $paramSettingType . "', '')";
-        @mysql_query($q);  
+        getDatabase()->execQuery($q);  
     }
     
     /**
@@ -280,7 +280,7 @@ class Style {
         if(!is_array($backtrace)) throw new Exception ("Couldn't get array from debug_backtrace function.");
         if(!isset($backtrace[1]['class'])) throw new IllegalMemoryAccessException("You can only call this function inside a class.");
         $q = "SELECT `setting_value`, `setting`, `setting_type` FROM `styles` WHERE `style_main_class` = '" . $backtrace[1]['class'] . "'";
-        $result = @mysql_query($q);
+        $result = getDatabase()->execQuery($q);
         $settings = array();
         while($row = mysql_fetch_assoc($result)){
             if($row['setting_type'] == 'boolean'){
@@ -309,10 +309,10 @@ class Style {
         $paramSetting =  mysql_escape_string($paramSetting);
         $paramValue =  mysql_escape_string($paramValue);
         $q1 = "SELECT `setting_value` FROM `styles` WHERE `style_main_class` = '" . $backtrace[1]['class'] . "' AND `setting` = '" . $paramSetting . "'";
-        $result = @mysql_query($q1);
+        $result = getDatabase()->execQuery($q1);
         if(mysql_num_rows($result)  < 1 && $backtrace[1]['class'] != __CLASS__) throw new IllegalMemoryAccessException("This settings doesn't exist or you are accessing the setting illegal.");
         $q2 = "UPDATE `styles` SET `setting_value` = '" . $paramValue . "' WHERE `style_main_class` = '" . $backtrace[1]['class'] . "' AND `setting` = '" . $paramSetting . "'";
-        @mysql_query($q);
+        getDatabase()->execQuery($q);
     }
 }
 

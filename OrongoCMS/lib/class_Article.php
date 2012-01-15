@@ -24,7 +24,7 @@ class Article implements IHTMLConvertable {
     public function __construct($paramID){
         $this->id = $paramID;
         $q = "SELECT `title`,`content`,`authorID`,`date` FROM `articles` WHERE `id` = '" . $this->id . "'";
-        $result = @mysql_query($q);
+        $result = getDatabase()->execQuery($q);
         $row = mysql_fetch_assoc($result);
         $count = mysql_num_rows($result);
         if($count < 1){
@@ -65,7 +65,7 @@ class Article implements IHTMLConvertable {
     */
     public function setTitle($paramTitle){
         $q = "UPDATE `articles` SET `title`='" . $paramTitle . "' WHERE `id` = '" . $this->id ."'";
-        @mysql_query($q);
+        getDatabase()->execQuery($q);
         $this->title = $paramTitle;
     }
     
@@ -83,7 +83,7 @@ class Article implements IHTMLConvertable {
     */
     public function setContent($paramContent){
         $q = "UPDATE `articles` SET `content`='" . $paramContent . "' WHERE `id` = '" . $this->id ."'";
-        @mysql_query($q);
+        getDatabase()->execQuery($q);
         $this->content = $paramContent;
     }
     
@@ -124,7 +124,7 @@ class Article implements IHTMLConvertable {
      */
     public function delete(){
         $q = "DELETE FROM `articles` WHERE `id` = '" . $this->id ."'";
-        @mysql_query($q);
+        getDatabase()->execQuery($q);
     }
     
     /**
@@ -184,7 +184,7 @@ class Article implements IHTMLConvertable {
      */
     public static function getLastArticleID(){
         $q = 'SELECT `id` FROM `articles` ORDER BY `id` DESC';
-        $result = @mysql_query($q);
+        $result = getDatabase()->execQuery($q);
         $row = mysql_fetch_assoc($result);
         $lastID = $row['id'];
         mysql_free_result($result);
@@ -202,7 +202,7 @@ class Article implements IHTMLConvertable {
         if($paramUser != null && ($paramUser instanceof User) == false) throw new IllegalArgumentException("User object expected."); 
         if($paramUser == null ) $author_id = 00; else $author_id = $paramUser->getID(); 
         $q = "INSERT INTO `articles` (`id`,`title`,`authorID`,`date`) VALUES ('" . $newID . "', '" . $paramName . "', '" . $author_id . " ', CURDATE())";
-        @mysql_query($q);
+        getDatabase()->execQuery($q);
         return new Article($newID);
     }
     
@@ -213,7 +213,7 @@ class Article implements IHTMLConvertable {
      */
     public static function getArticleID($paramTitle){
         $q = "SELECT `id` FROM `articles` WHERE `title` LIKE '" . addslashes($paramTitle) . "'";
-        $result = @mysql_query($q);
+        $result = getDatabase()->execQuery($q);
         $row = mysql_fetch_assoc($result);
         mysql_free_result($result);
         return $row['id'];

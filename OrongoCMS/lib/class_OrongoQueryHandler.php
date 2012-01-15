@@ -178,7 +178,7 @@ class OrongoQueryHandler {
         }
         
         $q  =  "SELECT `id` FROM `" . $from . 's`' . $where  . $order . $orderc . $limit . $offset;
-        $result = @mysql_query($q);
+        $result = getDatabase()->execQuery($q);
         if($query['action'] == 'fetch'){
             $resultset = array();
             $c = 0;

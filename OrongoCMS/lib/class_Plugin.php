@@ -30,7 +30,7 @@ class Plugin {
                 }else if($key == 'default'){
                     $default = $value;
                     $q2 = "UPDATE `plugins` SET `setting_value` = '" . $default . "' WHERE `plugin_main_class` = '" . $info['plugin']['main_class'] . "' AND `setting` = '" . $setting . "'";
-                    @mysql_query($q2);
+                    getDatabase()->execQuery($q2);
                 }
             }
         }  
@@ -44,7 +44,7 @@ class Plugin {
      */
     private static function installSetting($paramPluginMainClass, $paramSetting, $paramSettingType){
         $q = "INSERT INTO `plugins` (`plugin_main_class`, `setting`, `setting_type`, `setting_value`) VALUES ('" . $paramPluginMainClass . "', '" .$paramSetting . "', '" . $paramSettingType . "', '')";
-        @mysql_query($q);  
+        getDatabase()->execQuery($q);  
     }
     
     /**
@@ -56,7 +56,7 @@ class Plugin {
         if(!is_array($backtrace)) throw new Exception ("Couldn't get array from debug_backtrace function.");
         if(!isset($backtrace[1]['class'])) throw new IllegalMemoryAccessException("You can only call this function inside a class.");
         $q = "SELECT `setting_value`, `setting`, `setting_type` FROM `plugins` WHERE `plugin_main_class` = '" . $backtrace[1]['class'] . "'";
-        $result = @mysql_query($q);
+        $result = getDatabase()->execQuery($q);
         $settings = array();
         while($row = mysql_fetch_assoc($result)){
             if($row['setting_type'] == 'boolean'){
@@ -85,10 +85,10 @@ class Plugin {
         $paramSetting =  mysql_escape_string($paramSetting);
         $paramValue =  mysql_escape_string($paramValue);
         $q1 = "SELECT `setting_value` FROM `plugins` WHERE `plugin_main_class` = '" . $backtrace[1]['class'] . "' AND `setting` = '" . $paramSetting . "'";
-        $result = @mysql_query($q1);
+        $result = getDatabase()->execQuery($q1);
         if(mysql_num_rows($result)  < 1 && $backtrace[1]['class'] != __CLASS__) throw new IllegalMemoryAccessException("This settings doesn't exist or you are accessing the setting illegal.");
         $q2 = "UPDATE `plugins` SET `setting_value` = '" . $paramValue . "' WHERE `plugin_main_class` = '" . $backtrace[1]['class'] . "' AND `setting` = '" . $paramSetting . "'";
-        @mysql_query($q);
+        getDatabase()->execQuery($q);
     }
     
     /**
@@ -149,7 +149,7 @@ class Plugin {
      */
     public static function getActivatedPlugins($paramPrefix){
         $q =  "SELECT `plugin_folder` FROM `activated_plugins`";
-        $result = @mysql_query($q);
+        $result = getDatabase()->execQuery($q);
         $plugins = array();
         $count = 0;
         while($row = mysql_fetch_assoc($result)){
@@ -179,7 +179,7 @@ class Plugin {
      */
     public static function getPluginCount(){
         $q = "SELECT `plugin_folder` FROM `activated_plugins`";
-        $result = @mysql_query($q);
+        $result = getDatabase()->execQuery($q);
         $rows = mysql_num_rows($result);
         mysql_free_result($result);
         return $rows;
