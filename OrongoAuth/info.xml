@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<root>
+    <plugin>
+        <name>OrongoAuth</name>
+        <php_file>OrongoAuthMain</php_file>
+        <main_class>OrongoAuthMain</main_class>
+        <description>OrongoAuth makes your website also act like an authentification server! This plugin makes you able to connect desktop apps to your OrongoCMS website.</description>
+        <author>
+            <name>Jaco Ruit</name>
+            <website>http://www.jacosoftware.nl</website>
+        </author>
+        <settings>
+            <use_terminal>
+                <description>Please choose wether you want to have orongoauth commands in the OrongoTerminal.</description>
+                <type>boolean</type>
+                <default>true</default>
+            </use_terminal>
+        </settings>
+    </plugin>
+</root>
