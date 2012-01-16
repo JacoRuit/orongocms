@@ -16,12 +16,17 @@ class OrongoEvent {
      * @param array $paramEventArgs Event arguments
      */
     public function __construct($paramAction, $paramEventArgs){
+        if(!in_array($paramAction, OrongoEventManager::getAllActions()))
+            throw new IllegalArgumentException("Invalid argument, valid action expected!");
+        if(!is_array($paramEventArgs))
+            throw new IllegalArgumentException("Invalid argument, array expected!");
+        
         $this->action = $paramAction;
         $this->eventArgs = $paramEventArgs;
     }
     
     /**
-     * @return int EVENT_*
+     * @return int ACTION_*
      */
     public function getAction(){
         return $this->action;

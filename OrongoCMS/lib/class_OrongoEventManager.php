@@ -5,6 +5,8 @@
  *
  * @author Ruit
  */
+
+//FIXME replace ACTION_* defines with strings?
 class OrongoEventManager {
     
     private static $eventHandlers;
@@ -21,7 +23,7 @@ class OrongoEventManager {
         if(!method_exists($paramClass, $paramMethod))
                 throw new IllegalArgumentException("Invalid argument, valid method name expected!");
         if(!in_array($paramAction, self::$actions))
-                throw new IllegalArgumentException("Invalid argument, valid event expected!");
+                throw new IllegalArgumentException("Invalid argument, valid action expected!");
         
         self::$eventHandlers[$paramAction][count($eventHandlers[$paramEvent])] = array($paramClass, $paramMethod);
     }
@@ -31,7 +33,7 @@ class OrongoEventManager {
      * @param OrongoEvent $paramEventObject event to raise 
      */
     public static function raiseEvent($paramEventObject){
-        if(($paramEventObject instanceof OrongoEvent))
+        if(($paramEventObject instanceof OrongoEvent) == false)
             throw new IllegalArgumentExceptin("Invalid argument, OrongoEvent object expected!");
         if(!isset(self::$eventHandlers[$paramEventObject->getAction()]) || !is_array(self::$eventHandlers[$paramEventObject->getAction()])) return;
         foreach(self::$eventHandlers[$paramEventObject->getAction()] as $eventHandler){
@@ -41,7 +43,15 @@ class OrongoEventManager {
     }
     
     /**
-     * Do all EVENT_* defines, init some vars
+     * Get all possible actions
+     * @return array Possible ACTION_*s
+     */
+    public static function getAllActions(){
+        return self::$actions;
+    }
+    
+    /**
+     * Do all ACTION_* defines, init some vars
      */
     public static function init(){
         if(self::$initted)

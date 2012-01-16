@@ -20,8 +20,6 @@ define('ARTICLE_NOT_EXIST', 200);
 define('PAGE_NOT_EXIST', 300);
 define('USER_NOT_EXIST', 400);
 
-$GLOBALS["_orongo_database"] = &$db;
-
 function getDatabase(){
     return $GLOBALS["_orongo_database"];
 }
