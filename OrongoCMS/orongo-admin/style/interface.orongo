@@ -1,0 +1,11 @@
+    <script src="{$website_url}js/widget.prettyAlert.js" type="text/javascript" charset="utf-8"></script>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            {$document_ready}
+        });
+    </script>
+    {$menu_bar}
+    {$errors}
+    <div id="container" class="hidden">
+        {include file="$inner.orongo" }
+    </div>

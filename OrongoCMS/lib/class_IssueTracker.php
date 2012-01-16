@@ -17,6 +17,8 @@ class IssueTracker {
      */
     public function __construct($paramToken){
         $this->token = $paramToken;
+        
+        
     }
     
     /**
