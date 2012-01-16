@@ -39,7 +39,7 @@ if(strlen($_POST['content']) < 3){
    exit;
 }
 
-$user = handleSessions();
+$user = getUser();
 
 if($user == null){
     errorDie("You need to be logged in in order to post comments.", NOT_LOGGED_IN);

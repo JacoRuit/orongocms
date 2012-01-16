@@ -4,6 +4,7 @@
  * @var array
  * @author Jaco Ruit
  */
+
 $_CONFIG = array();
 
 
