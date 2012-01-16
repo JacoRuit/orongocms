@@ -7,10 +7,9 @@ require 'globals.php';
 
 
 
-
+$errors = "";
 $user = getUser();
-if($user == null)
-    header("Location: ../orongo-login.php");
+
 
 $website_name = Settings::getWebsiteName();
 
@@ -35,13 +34,20 @@ if($plCount > 1 || $plCount == 0) $content_block_1 .= "s</p>"; else $content_blo
 $smarty->assign("head_title", $website_name . " - Administration - Logged in as " . $user->getName());
 $smarty->assign("website_url", Settings::getWebsiteURL());
 $smarty->assign("website_name", $website_name);
+$smarty->assign("style", "style.interface");
 $smarty->assign("document_ready", '');
+
+$mb = new MenuBar(getUser());
+$smarty->assign("menu_bar", $mb->toHTML());
+$smarty->assign("errors", $errors);
+
 $smarty->assign("content_block_1", $content_block_1);
 
-$smarty->assign("style", "style.interface");
-$smarty->assign("username", $user->getName());
+$smarty->assign("user", $user);
+
 $smarty->display("header.orongo");
-$smarty->display("index.orongo");
+$smarty->assign("inner", "inner_index");
+$smarty->display("interface.orongo");
 $smarty->display("footer.orongo");
 
 ?>

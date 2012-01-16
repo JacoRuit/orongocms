@@ -1,5 +1,5 @@
 <?php
-
+//TODO DELETE THIZ WHY DID I MAKE IT, AM I RETARDED?
 /**
  * Mail Class
  *
@@ -14,9 +14,9 @@ class Mail {
      */
     public static function sendEmail($paramEmailArray, $paramSendHeaders){ 
         if($paramSendHeaders){
-            echo $paramHeaders;
-            return mail($paramEmailArray['to'], $paramEmailArray['subject'], $paramEmailArray['headers']);
             
+            return mail($paramEmailArray['to'], $paramEmailArray['subject'], $paramEmailArray['headers']);
+            //I'm so retarded -_-
         }
         else{
             return mail($paramEmailArray['to'], $paramEmailArray['subject']);

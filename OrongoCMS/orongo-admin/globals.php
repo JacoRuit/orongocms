@@ -20,6 +20,9 @@ $smarty->template_dir = "style/";
 
 setUser(handleSessions());
 
+if(getUser() == null)
+    header("Location: ../orongo-login.php");
+
 try{
     setPlugins(Plugin::getActivatedPlugins('../orongo-admin/'));
 }catch(Exception $e){

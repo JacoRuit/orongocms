@@ -29,11 +29,7 @@ if(!isset($_GET['id'])){
 }
 
 
-$article->setTitle($article->getTitle());
-
 $user = getUser();
-
-
 $head = "<meta name=\"generator\" content=\"OrongoCMS r" . REVISION . "\" />";
 
 $errors = "";
