@@ -12,7 +12,8 @@ require 'globals.php';
 setCurrentPage('index');
 
 #handle orongo-id, orongo-session-id
-$user = handleSessions();
+$user = getUser();
+
 
 
 $head = "<meta name=\"generator\" content=\"OrongoCMS r" . REVISION . "\" />";
@@ -27,7 +28,7 @@ $menu = HTMLFactory::getMenuCode($pages);
 $pluginHTML = null;
 
 try{
-    $plugins = Plugin::getActivatedPlugins('orongo-admin/');
+    $plugins = getPlugins();
     $pluginHTML = handlePlugins($plugins);
 }catch(Exception $e){
     $msgbox = new MessageBox();

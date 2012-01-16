@@ -43,7 +43,7 @@ if(isset($_GET['msg'])){
 
 
 #handle orongo-id, orongo-session-id
-$user = handleSessions();
+$user = getUser();
 if($user != null){ header("Location: orongo-admin"); exit; }
 
 

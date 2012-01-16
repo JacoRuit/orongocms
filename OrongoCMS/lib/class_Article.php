@@ -67,7 +67,9 @@ class Article implements IHTMLConvertable {
         $q = "UPDATE `articles` SET `title`='" . $paramTitle . "' WHERE `id` = '" . $this->id ."'";
         getDatabase()->execQuery($q);
         $this->title = $paramTitle;
+        $this->raiseArticleEvent('article_edit');
     }
+    
     
     
     #   contents
@@ -85,6 +87,7 @@ class Article implements IHTMLConvertable {
         $q = "UPDATE `articles` SET `content`='" . $paramContent . "' WHERE `id` = '" . $this->id ."'";
         getDatabase()->execQuery($q);
         $this->content = $paramContent;
+        $this->raiseArticleEvent('article_edit');
     }
     
     
@@ -125,7 +128,19 @@ class Article implements IHTMLConvertable {
     public function delete(){
         $q = "DELETE FROM `articles` WHERE `id` = '" . $this->id ."'";
         getDatabase()->execQuery($q);
+        $this->raiseArticleEvent('article_deleted');
     }
+    
+    /**
+     * Shortcut for raising article edit events:)
+     * @param String $paramAction action string
+     * @param int $paramArticleID article ID (default current ID)
+     */
+    private function raiseArticleEvent($paramAction, $paramArticleID = null){
+        if($paramArticleID == null) $paramArticleID = $this->id;
+        @OrongoEventManager::raiseEvent(new OrongoEvent($paramAction, array("article_id" => $paramArticleID, "by" => getUser()->getID())));
+    }
+    
     
     /**
      * @return array Article Information in Array
@@ -203,6 +218,7 @@ class Article implements IHTMLConvertable {
         if($paramUser == null ) $author_id = 00; else $author_id = $paramUser->getID(); 
         $q = "INSERT INTO `articles` (`id`,`title`,`authorID`,`date`) VALUES ('" . $newID . "', '" . $paramName . "', '" . $author_id . " ', CURDATE())";
         getDatabase()->execQuery($q);
+        $this->raiseArticleEvent('article_created', $newID);
         return new Article($newID);
     }
     

@@ -12,8 +12,7 @@ define('JQUERYTERMINAL_VERSION', "0.4.6");
 require('globals.php');
 require('json-rpc.php');
 
-//Load plugins
-Plugin::getActivatedPlugins('../orongo-admin/');
+
 
 //Get loaded terminal plugins
 $plugins = Plugin::getHookedTerminalPlugins();

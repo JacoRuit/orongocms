@@ -8,7 +8,7 @@ require 'globals.php';
 
 
 
-$user = handleSessions();
+$user = getUser();
 if($user == null)
     header("Location: ../orongo-login.php");
 

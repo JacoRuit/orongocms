@@ -8,12 +8,14 @@
 class ExampleClass implements IOrongoPlugin{
     private $injectHTML = true;
     private $htmlToInject = '';
-    
+    private $htmlArray;
     
     public function __construct(){
+         $this->htmlArray = array();
         require 'TerminalPlugin.php';
         Plugin::hookTerminalPlugin(new TerminalPlugin());
         $stored = Plugin::getSettings();
+        OrongoEventManager::addEventHandler('article_edit', $this, 'onArticleEdit');
         //Access the settings in the array.
         if($stored['example_setting_2']){
             $this->injectHTML = true;
@@ -43,7 +45,7 @@ class ExampleClass implements IOrongoPlugin{
     
     public function getHTML(){
         //$p = "not supported";
-        $htmlArray = array();
+       
         /**if(getCurrentPage() == 'index') $p = "the landing page";
         else if(getCurrentPage() == 'article') $p = "an article";
         else if(getCurrentPage() == 'page') $p = "a page";
@@ -59,8 +61,8 @@ class ExampleClass implements IOrongoPlugin{
             $htmlArray['html']['body'] .= "<div id='msgbox" . $c . "'></div>";
             $c++;
         } **/
-        $htmlArray['html']['footer'] = "<br />" . Settings::getWebsiteName() . " is using example plugin. This text was added by the Example Plugin.";
-        return $htmlArray;
+        $this->htmlArray['html']['footer'] = "<br />" . Settings::getWebsiteName() . " is using example plugin. This text was added by the Example Plugin.";
+        return $this->htmlArray;
     }
     
 
@@ -75,6 +77,11 @@ class ExampleClass implements IOrongoPlugin{
     public function getSettings(){
         //TODO make this work
         return array('show_menubar' => false);
+    }
+    
+    public function onArticleEdit($eventArgs){
+        $msgBox = new MessageBox($eventArgs['by']);
+        $this->htmlArray['html']['body'] = $msgBox->toHTML();
     }
     
 }

@@ -9,6 +9,7 @@
 * Defines the function getCurrentPage
 * @param String $paramPage can be index,archive,article,page
 */
+
 function setCurrentPage($paramPage){
     $pages = array('index','archive','article', 'page');
     if(!in_array($paramPage, $pages)) throw new Exception("This page doesn't exist.");

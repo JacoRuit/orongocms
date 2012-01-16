@@ -12,7 +12,7 @@ class OrongoEvent {
     private $eventArgs;
     
     /**
-     * @param int $paramAction Any EVENT_*
+     * @param String $paramAction Any action
      * @param array $paramEventArgs Event arguments
      */
     public function __construct($paramAction, $paramEventArgs){
@@ -26,7 +26,7 @@ class OrongoEvent {
     }
     
     /**
-     * @return int ACTION_*
+     * @return String action string
      */
     public function getAction(){
         return $this->action;
