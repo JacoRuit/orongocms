@@ -8,7 +8,7 @@
 </script>
 {$menu_bar}
 {$plugin_body}
-{$errors}
+
 <div class="header">
 	<div id="logo">
 		<a href="{$website_url}">

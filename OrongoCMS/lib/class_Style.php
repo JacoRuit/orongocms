@@ -182,14 +182,13 @@ class Style {
     
     /**
      * Runs the style's PHP file if it has one.
-     * @param Smarty $paramSmarty Smarty Object
      */
-    public function run(&$paramSmarty){
+    public function run(){
         if($this->usePHP){
             if($this->getPHPFile() != null){
                 try{
                     if($this->mainClass instanceof IOrongoStyle){
-                        $this->mainClass->run($paramSmarty);
+                        $this->mainClass->run();
                     }
                 }catch(Exception $e){
                     //TODO throw error in db
