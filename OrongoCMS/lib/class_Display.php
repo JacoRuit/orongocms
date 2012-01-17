@@ -12,6 +12,10 @@ class Display {
     private $rendered;
     private $messageboxes;
     private $head;
+    private $js;
+    private $generalhtml;
+    
+    private static $jQueryIgnoreQuotes = array('document', 'window');
     
     /**
      * Initialize the smarty and display object
@@ -31,6 +35,8 @@ class Display {
         $this->tpls = array();
         $this->messageboxes = "";
         $this->head = "<meta name=\"generator\" content=\"OrongoCMS r" . REVISION . "\" />";
+        $this->js = "";
+        $this->generalhtml = "";
     }
     
     /**
@@ -73,6 +79,48 @@ class Display {
     }
     
     /**
+     * Add JavaScript to display
+     * @param String $paramJS JavaScript
+     * @param String $paramEvent jQuery event like document.ready or #example.scroll [OPTIONAL]
+     */
+    public function addJS($paramJS, $paramEvent = null){
+        $jsBuilder = $paramJS;
+        if(!empty($paramEvent)){
+            $exploded = explode(".", $paramEvent);
+            $event = end($exploded);
+            $eventele = str_replace("." . $event, "", $paramEvent);
+            $jsBuilder = "$(";
+            if(in_array($eventele, self::$jQueryIgnoreQuotes))
+                $jsBuilder .= $eventele;
+            else
+                $jsBuilder .= "'" . $eventele . "'";
+            $jsBuilder .= ")." . $event . "(function(event){ " . $paramJS . " });";
+        }
+        $this->js .= $jsBuilder;
+    }
+    
+    /**
+     * Add HTML to display
+     * @param String $paramHTML HTML Code (This is added where style has $body var)
+     */
+    public function addHTML($paramHTML){
+        if(!is_string($paramHTML)) throw new IllegalArgumentException("Invalid argument, string expected.");
+        $this->generalhtml .= $paramHTML;
+    }
+    
+    /**
+     * Set CSS using jQuery(like http://api.jquery.com/css/)
+     * @param String $paramElement HTML Element
+     * @param String $paramProperty CSS property 
+     * @param String $paramValue new value
+     */
+    public function setCSS($paramElement, $paramProperty, $paramValue){
+        if(!is_string($paramElement) || !is_string($paramProperty) || !is_string($paramValue))
+            throw new IllegalArgumentException("Invalid argument, string expected!");
+        $this->addJS("$('" . $paramElement . "').css('".  $paramProperty . "', '" . $paramValue . "')");
+    }
+    
+    /**
      * Adds a TPL file
      * @param String $paramTPLFile TPL (*.orongo) file to add to display 
      * @return boolean indicating if was added succesful
@@ -105,6 +153,8 @@ class Display {
         $this->setTemplateVariable("website_name", Settings::getWebsiteName());
         $this->setTemplateVariable("website_url", Settings::getWebsiteURL());
         $this->addToTemplateVariable("body", $this->messageboxes);
+        $this->addToTemplateVariable("body", '<script type="text/javascript">' . $this->js . '</script>');
+        $this->addToTemplateVariable("body", $this->generalhtml);
         $this->addToTemplateVariable("head", $this->head);
         if(getUser() != null){
             $this->setTemplateVariable("user", getUser());
