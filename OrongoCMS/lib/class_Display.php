@@ -71,6 +71,16 @@ class Display {
     }
     
     /**
+     * Add an OrongoDisplayableObject to display
+     * @param OrongoDisplayableObject $paramObject (class extending abstract class OrongoDisplayableObject)
+     */
+    public function addObject($paramObject){
+        if(($paramObject instanceof OrongoDisplayableObject))
+            throw new IllegalArgumentException("Invalid argument, class extending OrongoDisplayableObject expected.");
+        //TODO code it, and delete MessageBox class after that and let it extend OrongoDisplayableObject
+    }
+    
+    /**
      * Adds a messagebox to display
      * @param MessageBox $paramMessageBox MessageBox object
      */
@@ -84,9 +94,12 @@ class Display {
      * @param String $paramEvent jQuery event like document.ready or #example.scroll [OPTIONAL]
      */
     public function addJS($paramJS, $paramEvent = null){
+        if(!is_string($paramJS) || ($paramEvent != null || !is_string($paramEvent)))
+            throw new IllegalArgumentException("Invalid argument, string expected.");
         $jsBuilder = $paramJS;
         if(!empty($paramEvent)){
             $exploded = explode(".", $paramEvent);
+            //TODO empty check => illegal argument exc
             $event = end($exploded);
             $eventele = str_replace("." . $event, "", $paramEvent);
             $jsBuilder = "$(";
@@ -146,7 +159,7 @@ class Display {
     }
     
     /**
-     * Renders the Display
+     * Renders the Display, should be last method called by your script..
      */
     public function render(){
         if($this->rendered) return;
