@@ -79,7 +79,7 @@ if($style->doArticleHTML()){
 #       Assigns
    
     #General
-
+    
     getDisplay()->setTemplateVariable("head_title", $website_name . " - Home");
     getDisplay()->setTemplateVariable("body", $body);
     
