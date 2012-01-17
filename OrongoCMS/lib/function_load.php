@@ -15,9 +15,9 @@
 function load($paramLibFolder){
     define('REVISION', 22);
     //REGISTER NEW FUNCTIONS, INTERFACES, CLASSES, EXCEPTIONS HERE! :D
-    $orongo_functions = array('orongo_query', 'handleSessions', 'handlePlugins', 'setCurrentPage', 'setDatabase', 'setPlugins', 'setUser');
+    $orongo_functions = array('orongo_query', 'handleSessions', 'handlePlugins', 'setCurrentPage', 'setDatabase', 'setDisplay', 'setPlugins', 'setUser');
     $orongo_interfaces = array('IHTMLConvertable', 'IJSConvertable', 'IOrongoPlugin', 'IOrongoStyle', 'IOrongoTerminalPlugin', 'IStorable');
-    $orongo_classes = array('AjaxLoadCommentsAction', 'AjaxPostCommentAction', 'Article', 'Cache', 'Comment', 'Database', 'HTMLFactory', 'Image','Issue', 'IssueTracker', 'Mail', 'MailFactory', 'MenuBar', 'MessageBox', 'OrongoEvent', 'OrongoEventManager', 'OrongoQuery', 'OrongoQueryHandler', 'OrongoTerminal', 'Page', 'Plugin', 'Security', 'Session', 'Settings', 'Storage', 'Style', 'User');
+    $orongo_classes = array('AjaxLoadCommentsAction', 'AjaxPostCommentAction', 'Article', 'Cache', 'Comment', 'Database', 'Display', 'HTMLFactory', 'Image','Issue', 'IssueTracker', 'Mail', 'MailFactory', 'MenuBar', 'MessageBox', 'OrongoEvent', 'OrongoEventManager', 'OrongoQuery', 'OrongoQueryHandler', 'OrongoTerminal', 'Page', 'Plugin', 'Security', 'Session', 'Settings', 'Storage', 'Style', 'User');
     $orongo_exceptions = array('ClassLoadException', 'IllegalArgumentException', 'IllegalMemoryAccessException', 'QueryException');
     $orongo_function_packages = array('Utils');
     $smarty_path = $paramLibFolder . '/Smarty/Smarty.class.php';

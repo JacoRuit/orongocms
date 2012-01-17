@@ -10,7 +10,7 @@ class MonkStyle implements IOrongoStyle{
     
     public function __construct(){}
     
-    public function run(&$smarty){
+    public function run(){
         $settings = Style::getSettings();
         try{
            //reverse the menu because we have a righ float on menu
@@ -28,12 +28,12 @@ class MonkStyle implements IOrongoStyle{
            }
            
            $html .= "<li><a href=\"" . $websiteURL . "index.php\">Home</a></li>";
-           $smarty->assign("menu", $html);           
+           getDisplay()->setTemplateVariable("menu", $html);           
         }catch(Exception $e){}
         
         foreach($settings as $setting=>$value){
             if($value != null)
-                $smarty->assign($settings,$value);
+                getDisplay()->setTemplateVariable($settings,$value);
         }
     }
     

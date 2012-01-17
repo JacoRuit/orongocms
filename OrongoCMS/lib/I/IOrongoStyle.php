@@ -11,10 +11,8 @@ interface IOrongoStyle {
     
     /**
      * Runs the style, do you things here.
-     * Smarty object will be given by the CMS.
-     * @param Smarty $paramSmarty Smarty Object given by CMS
      */
-    public function run(&$paramSmarty);
+    public function run();
     
     
     /**

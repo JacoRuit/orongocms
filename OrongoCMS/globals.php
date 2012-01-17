@@ -8,7 +8,7 @@ require 'lib/function_load.php';
 try{ load('lib'); }catch(Exception $e){ die($e->getMessage()); }
 
 setDatabase(new Database('config.php'));
-$smarty = new Smarty();
+
 
 try{
     $style = Settings::getStyle('');
@@ -18,10 +18,7 @@ try{
     die($msgbox->getImports() . $msgbox->toHTML());
 }
 
-$smarty->template_dir = "themes/" . $style->getStyleFolder(); 
-$smarty->compile_dir = "smarty/compile"; 
-$smarty->cache_dir = "smarty/cache"; 
-$smarty->config_dir = "smarty/config"; 
+
 
 setUser(handleSessions());
 
@@ -33,6 +30,7 @@ try{
     die($msgbox->getImports() . $msgbox->toHTML());
 }
 
+setDisplay(new Display($style->getStylePath()));
 
 define('RANK_ADMIN', 3);
 define('RANK_WRITER', 2);
