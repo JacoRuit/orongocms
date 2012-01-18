@@ -12,7 +12,11 @@ class HTMLFactory {
      * @param array $paramPages Pages array from Page::getPages()
      * @return String Generated HTML Code
      */
-    public static function getMenuCode($paramPages){
+    public static function getMenuCode($paramPages = null){
+        if($paramPages == null){
+            $paramPages = array();
+            $paramPages = @orongo_query('action=fetch&object=page&max=10000&order=page.id');
+        }
         $websiteURL = Settings::getWebsiteURL();
         $generatedHTML = " <li><a href=\"". $websiteURL . "index.php\">Home</a></li>";
         if(is_array($paramPages) == false) throw new IllegalArgumentException("Invalid paramater, array expected.");

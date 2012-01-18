@@ -12,13 +12,9 @@ try{ load('../lib'); }catch(Exception $e){ die($e->getMessage()); }
 
 setDatabase(new Database('../config.php'));
 
-$smarty = new Smarty();
-$smarty->compile_dir = "../smarty/compile"; 
-$smarty->cache_dir = "../smarty/cache"; 
-$smarty->config_dir = "../smarty/config"; 
-$smarty->template_dir = "style/"; 
-
 setUser(handleSessions());
+
+setDisplay(new Display("style"));
 
 if(getUser() == null)
     header("Location: ../orongo-login.php");

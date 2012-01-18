@@ -1,4 +1,5 @@
     <script src="{$website_url}js/widget.prettyAlert.js" type="text/javascript" charset="utf-8"></script>
+    {$body}
     <script type="text/javascript">
         $(document).ready(function(){
             $(".login").fadeIn(700);
@@ -16,7 +17,6 @@
     <div class="logowrap">
 	<a href="{$website_url}orongo-login.php"><img class="logo" src="{$website_url}/orongo-admin/style/images/logo.png" alt="orongo"/></a>
     </div>
-    {$login_msg}
     <div class="login">
 	<p>{$website_name} - Login</p>
 	<form  method="post" action="{$website_url}actions/action_Login.php" >

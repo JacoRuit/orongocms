@@ -12,6 +12,7 @@ try{ load('../lib'); }catch(Exception $e){ die($e->getMessage()); }
 setDatabase(new Database('../config.php'));
 
 setUser(handleSessions());
+setDisplay(new Display($style->getStylePath()));
 
 try{
     setPlugins(Plugin::getActivatedPlugins('../orongo-admin/'));

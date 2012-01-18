@@ -4,7 +4,7 @@
  */
 
 require 'globals.php';
-$smarty->template_dir = "orongo-admin/style/"; 
+getDisplay()->setTemplateDir("orongo-admin/style/"); 
 
 $msg = '';
 
@@ -37,23 +37,23 @@ if(isset($_GET['msg'])){
 $user = getUser();
 if($user != null){ header("Location: orongo-admin"); exit; }
 
-$website_name = Settings::getWebsiteName();
-$msgJQuery = "";
+
 if($msg != "")
 {
-    $msgJQuery = "prettyAlert('#prettyAlert', '" . $msg . "', '" . $website_name . "');";
+    getDisplay()->addObject(new MessageBox($msg));
 }
 
 
 #   Template
 
-$smarty->assign("head_title", $website_name . " - Register");
-$smarty->assign("website_url", Settings::getWebsiteURL());
-$smarty->assign("website_name", $website_name);
-$smarty->assign("document_ready", '$("#register_form").validationEngine(\'attach\'); ' . $msgJQuery);
-$smarty->assign("register_msg", '<div id="prettyAlert"></div>');
-$smarty->assign("style", "style.login");
-$smarty->display("header.orongo");
-$smarty->display("register.orongo");
-$smarty->display("footer.orongo");
+getDisplay()->setTemplateVariable("head_title", Settings::getWebsiteName() . " - Register");
+getDisplay()->addJS('$("#register_form").validationEngine(\'attach\');', "document.ready");
+
+getDisplay()->setTemplateVariable("style", "style.login");
+
+getDisplay()->add("header.orongo");
+getDisplay()->add("register.orongo");
+getDisplay()->add("footer.orongo");
+
+getDisplay()->render();
 ?>

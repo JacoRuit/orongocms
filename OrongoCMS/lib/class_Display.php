@@ -10,7 +10,7 @@ class Display {
     private $smarty;
     private $tpls;
     private $rendered;
-    private $messageboxes;
+    private $objects;
     private $head;
     private $js;
     private $generalhtml;
@@ -33,10 +33,21 @@ class Display {
         
         $this->rendered = false;
         $this->tpls = array();
-        $this->messageboxes = "";
+        $this->objects = array();
         $this->head = "<meta name=\"generator\" content=\"OrongoCMS r" . REVISION . "\" />";
         $this->js = "";
         $this->generalhtml = "";
+        $this->setTemplateVariable("menu", HTMLFactory::getMenuCode());
+    }
+    
+    /**
+     * Sets the template dir
+     * @param String $paramTemplateDir new template directory
+     */
+    public function setTemplateDir($paramTemplateDir){
+        if(!is_string($paramTemplateDir))
+            throw new IllegalArgumentException("Invalid argument, string expected.");
+        $this->smarty->template_dir = $paramTemplateDir;
     }
     
     /**
@@ -74,18 +85,10 @@ class Display {
      * Add an OrongoDisplayableObject to display
      * @param OrongoDisplayableObject $paramObject (class extending abstract class OrongoDisplayableObject)
      */
-    public function addObject($paramObject){
-        if(($paramObject instanceof OrongoDisplayableObject))
+    public function addObject(&$paramObject){
+        if(($paramObject instanceof OrongoDisplayableObject) == false)
             throw new IllegalArgumentException("Invalid argument, class extending OrongoDisplayableObject expected.");
-        //TODO code it, and delete MessageBox class after that and let it extend OrongoDisplayableObject
-    }
-    
-    /**
-     * Adds a messagebox to display
-     * @param MessageBox $paramMessageBox MessageBox object
-     */
-    public function addMessageBox($paramMessageBox){
-        $this->messageboxes .= $paramMessageBox->toHTML();
+        $this->objects[count($this->objects)] = $paramObject;
     }
     
     /**
@@ -94,7 +97,7 @@ class Display {
      * @param String $paramEvent jQuery event like document.ready or #example.scroll [OPTIONAL]
      */
     public function addJS($paramJS, $paramEvent = null){
-        if(!is_string($paramJS) || ($paramEvent != null || !is_string($paramEvent)))
+        if(!is_string($paramJS) || ($paramEvent != null && !is_string($paramEvent)))
             throw new IllegalArgumentException("Invalid argument, string expected.");
         $jsBuilder = $paramJS;
         if(!empty($paramEvent)){
@@ -159,15 +162,36 @@ class Display {
     }
     
     /**
-     * Renders the Display, should be last method called by your script..
+     * Deletes an object from Display
+     * @param OrongoDisplayableObject $paramObject (class extending abstract class OrongoDisplayableObject)
+     * @return boolean indicating if its added succesful
+     */
+    public function deleteObject($paramObject){
+        if(($paramObject instanceof OrongoDisplayableObject) == false)
+            throw new IllegalArgumentException("Invalid argument, class extending OrongoDisplayableObject expected.");
+        foreach($this->objects as &$object){
+            if($object == $paramObject){
+                $object = null;
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    /**
+     * Renders the Display
      */
     public function render(){
         if($this->rendered) return;
         $this->setTemplateVariable("website_name", Settings::getWebsiteName());
         $this->setTemplateVariable("website_url", Settings::getWebsiteURL());
-        $this->addToTemplateVariable("body", $this->messageboxes);
         $this->addToTemplateVariable("body", '<script type="text/javascript">' . $this->js . '</script>');
         $this->addToTemplateVariable("body", $this->generalhtml);
+        foreach($this->objects as $object){
+            if($object == null) continue;
+            if(($object instanceof OrongoDisplayableObject) == false) continue;
+            $this->addToTemplateVariable("body", $object->toHTML());
+        }
         $this->addToTemplateVariable("head", $this->head);
         if(getUser() != null){
             $this->setTemplateVariable("user", getUser());

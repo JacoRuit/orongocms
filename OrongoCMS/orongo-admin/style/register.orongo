@@ -1,9 +1,9 @@
     <script src="{$website_url}js/widget.prettyAlert.js" type="text/javascript" charset="utf-8"></script>
+    {$body}
     <script type="text/javascript">
         $(document).ready(function(){
             $(".register").fadeIn(700);
             $(".logowrap").fadeIn(2000); 
-            {$document_ready}
         });
     </script>
     <script src="{$website_url}js/interface.menu_effects.js" type="text/javascript" charset="utf-8"></script>
@@ -16,7 +16,6 @@
     <div class="logowrap">
 	<a href="($website_url}orongo-login.php"><img class="logo" src="{$website_url}orongo-admin/style/images/logo.png" alt="orongo"/></a>
     </div>
-    {$register_msg}
     <div class="register">
 	<p>{$website_name} - Register</p>
         <form id="register_form" method="post" action="{$website_url}actions/action_Register.php">

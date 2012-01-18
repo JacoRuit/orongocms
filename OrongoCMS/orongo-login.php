@@ -4,7 +4,8 @@
  */
 
 require 'globals.php';
-$smarty->template_dir = "orongo-admin/style/"; 
+
+getDisplay()->setTemplateDir("orongo-admin/style/"); 
 
 $msg = '';
 
@@ -47,22 +48,21 @@ $user = getUser();
 if($user != null){ header("Location: orongo-admin"); exit; }
 
 
-$website_name = Settings::getWebsiteName();
-$msgJQuery = "";
 if($msg != "")
 {
-    $msgJQuery = "prettyAlert('#prettyAlert', '" . $msg . "', '" . $website_name . "');";
+    getDisplay()->addObject(new MessageBox($msg));
 }
 
 #   Template
 
-$smarty->assign("head_title", $website_name . " - Login");
-$smarty->assign("website_name", $website_name);
-$smarty->assign("website_url", Settings::getWebsiteURL());
-$smarty->assign("document_ready", $msgJQuery);
-$smarty->assign("style", "style.login");
-$smarty->assign("login_msg", '<div id="prettyAlert"></div>');
-$smarty->display("header.orongo");
-$smarty->display("login.orongo");
-$smarty->display("footer.orongo");
+getDisplay()->setTemplateVariable("head_title", Settings::getWebsiteName() . " - Login");
+
+getDisplay()->setTemplateVariable("document_ready", "");
+getDisplay()->setTemplateVariable("style", "style.login");
+
+getDisplay()->add("header.orongo");
+getDisplay()->add("login.orongo");
+getDisplay()->add("footer.orongo");
+
+getDisplay()->render();
 ?>

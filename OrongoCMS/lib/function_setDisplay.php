@@ -6,7 +6,7 @@
  */
 
 /**
-* Defines the function setDisplay
+* Defines the function getDisplay
 * @param Display $paramDisplay display object
 */
 

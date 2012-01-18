@@ -5,7 +5,7 @@
  * 
  * @author Jaco Ruit
  */
-class MessageBox implements IHTMLConvertable {
+class MessageBox extends OrongoDisplayableObject {
     
     private static $messageCount = 0;
     
