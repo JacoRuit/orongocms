@@ -36,14 +36,10 @@ $user = getUser();
 
 $head = "<meta name=\"generator\" content=\"OrongoCMS r" . REVISION . "\" />";
 
-$errors = "";
 $website_name = Settings::getWebsiteName();
 $website_url = Settings::getWebsiteURL();
 $body = "<script src=\"" . $website_url . "js/widget.prettyAlert.js\" type=\"text/javascript\" charset=\"utf-8\"></script>";
 $document_ready = "";
-$pages = array();
-$pages = @orongo_query('action=fetch&object=page&max=10000&order=page.id');
-$menu = HTMLFactory::getMenuCode($pages);
 $pluginHTML = null;
 
 try{
@@ -52,15 +48,7 @@ try{
 }catch(Exception $e){
     $msgbox = new MessageBox();
     $msgbox->bindException($e);
-    $errors.= $msgbox->toHTML();
-}
-
-
-
-$menu_bar = "";
-if($user != null){
-    $mb = new MenuBar($user);
-    $menu_bar = $mb->toHTML();
+    getDisplay()->addObject($msgbox);
 }
 
 
@@ -70,36 +58,29 @@ if($user != null){
 
 #       Assigns
    
-    #General
-    $smarty->assign("website_url", $website_url);
-    $smarty->assign("website_name", $website_name);
+    #General   
+    getDisplay()->setTemplateVariable("head_title", $website_name . " - " . $page->getTitle());
+    getDisplay()->setTemplateVariable("body", $body);
     
-    $smarty->assign("head", $head);
-    $smarty->assign("head_title", $website_name . " - " . $page->getTitle());
-    $smarty->assign("body", $body);
+    getDisplay()->setTemplateVariable("document_ready", $document_ready);
     
-    $smarty->assign("document_ready", $document_ready);
-    $smarty->assign("menu_bar", $menu_bar);
-    $smarty->assign("menu", $menu);
-    $smarty->assign("errors", $errors);
-    
-    if($user != null)
-        $smarty->assign("user", $user);
-    $smarty->assign("page", $page);
-    
+    getDisplay()->setTemplateVariable("page", $page);
+
     #Plugins
-    $smarty->assign("plugin_document_ready", $pluginHTML['javascript']['document_ready']);
-    $smarty->assign("plugin_head", $pluginHTML['html']['head']);
-    $smarty->assign("plugin_body", $pluginHTML['html']['body']);
-    $smarty->assign("plugin_footer", $pluginHTML['html']['footer']);
+    getDisplay()->setTemplateVariable("plugin_document_ready", $pluginHTML['javascript']['document_ready']);
+    getDisplay()->setTemplateVariable("plugin_head", $pluginHTML['html']['head']);
+    getDisplay()->setTemplateVariable("plugin_body", $pluginHTML['html']['body']);
+    getDisplay()->setTemplateVariable("plugin_footer", $pluginHTML['html']['footer']);
     
 #       Handle Style
-$style->run($smarty);
+$style->run();
 
 #       Show
-$smarty->display("header.orongo");
-$smarty->display("page.orongo");
-$smarty->display("footer.orongo");
+getDisplay()->add("header.orongo");
+getDisplay()->add("page.orongo");
+getDisplay()->add("footer.orongo");
+
+getDisplay()->render();
 
 //Debug lines
 // TODO remove on release

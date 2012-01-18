@@ -7,7 +7,6 @@ require 'globals.php';
 
 
 
-$errors = "";
 $user = getUser();
 
 
@@ -29,25 +28,19 @@ $plCount = Plugin::getPluginCount();
 $content_block_1 .= "<p>" . $plCount .= " activated plugin";
 if($plCount > 1 || $plCount == 0) $content_block_1 .= "s</p>"; else $content_block_1 .= "</p>";
 
+
 #   Template
 
-$smarty->assign("head_title", $website_name . " - Administration - Logged in as " . $user->getName());
-$smarty->assign("website_url", Settings::getWebsiteURL());
-$smarty->assign("website_name", $website_name);
-$smarty->assign("style", "style.interface");
-$smarty->assign("document_ready", '');
+getDisplay()->setTemplateVariable("head_title", $website_name . " - Administration - Logged in as " . $user->getName());
+getDisplay()->setTemplateVariable("style", "style.interface");
+getDisplay()->setTemplateVariable("document_ready", '');
 
-$mb = new MenuBar(getUser());
-$smarty->assign("menu_bar", $mb->toHTML());
-$smarty->assign("errors", $errors);
+getDisplay()->setTemplateVariable("content_block_1", $content_block_1);
 
-$smarty->assign("content_block_1", $content_block_1);
+getDisplay()->add("header.orongo");
+getDisplay()->setTemplateVariable("inner", "inner_index");
+getDisplay()->add("interface.orongo");
+getDisplay()->add("footer.orongo");
 
-$smarty->assign("user", $user);
-
-$smarty->display("header.orongo");
-$smarty->assign("inner", "inner_index");
-$smarty->display("interface.orongo");
-$smarty->display("footer.orongo");
-
+getDisplay()->render();
 ?>

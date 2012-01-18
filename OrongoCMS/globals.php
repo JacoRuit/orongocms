@@ -18,7 +18,7 @@ try{
     die($msgbox->getImports() . $msgbox->toHTML());
 }
 
-
+setStyle($style);
 
 setUser(handleSessions());
 

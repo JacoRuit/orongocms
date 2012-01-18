@@ -6,7 +6,7 @@
  */
 
 /**
-* Defines the function setDatabase
+* Defines the function getDatabase
 * @param Database $paramDatabase db object
 */
 
