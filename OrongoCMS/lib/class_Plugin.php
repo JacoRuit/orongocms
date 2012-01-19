@@ -201,7 +201,7 @@ class Plugin {
             try{
                $className = self::getMainClass($infoXML);
                $accessKey = self::getAccessKey($infoXML);
-               $authKey = md5(microtime() . rand());
+               $authKey = md5(rand() . microtime() . rand());
                self::$authKeys[$authKey] = $accessKey;
                $plugin = new $className(array("time" => time(), "auth_key" => $authKey));
                if($plugin instanceof OrongoPluggableObject) $plugins[$count] = $plugin; 
