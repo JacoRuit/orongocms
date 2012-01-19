@@ -6,7 +6,7 @@
  */
 abstract class OrongoPluggableObject{
     
-    abstract public function __construct();
+    abstract public function __construct($paramArgs);
     
     /**
      * Called when the plugin is being installed
@@ -27,12 +27,6 @@ abstract class OrongoPluggableObject{
         return $path;
     }
     
-    /**
-     * @return array Settings
-     */
-    final public function getSettings(){
-        
-    }
     
     /**
      * @return String plugin name

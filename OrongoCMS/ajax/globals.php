@@ -12,6 +12,10 @@ try{ load('../lib'); }catch(Exception $e){ die($e->getMessage()); }
 setDatabase(new Database('../config.php'));
 
 setUser(handleSessions());
+
+$style = Settings::getStyle('../');
+setStyle($style);
+
 setDisplay(new Display($style->getStylePath()));
 
 try{

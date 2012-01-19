@@ -7,27 +7,15 @@
 class IndexFrontend extends OrongoFrontendObject {
     
     private $body;
-    private $pluginHTML;
     private $articleHTML;
     
     public function main($args){
         $this->body = "<script src=\"" . Settings::getWebsiteURL() . "js/widget.prettyAlert.js\" type=\"text/javascript\" charset=\"utf-8\"></script>";
         $this->pluginHTML = "";
         $this->articleHTML = "";  
-        $this->generatePluginHTML();
         $this->generateArticlesHTML();
     }
-    
-    private function generatePluginHTML(){
-        try{
-            $plugins = getPlugins();
-            $this->pluginHTML = handlePlugins($plugins);
-        }catch(Exception $e){
-            $msgbox = new MessageBox();
-            $msgbox->bindException($e);
-            getDisplay()->addObject($msgbox);
-        }
-    }
+
     
     private function generateArticlesHTML(){
         $articles = array();
@@ -70,11 +58,6 @@ class IndexFrontend extends OrongoFrontendObject {
     
         getDisplay()->setTemplateVariable("articles", $this->articleHTML);
 
-        getDisplay()->setTemplateVariable("plugin_document_ready", $this->pluginHTML['javascript']['document_ready']);
-        getDisplay()->setTemplateVariable("plugin_head", $this->pluginHTML['html']['head']);
-        getDisplay()->setTemplateVariable("plugin_body", $this->pluginHTML['html']['body']);
-        getDisplay()->setTemplateVariable("plugin_footer", $this->pluginHTML['html']['footer']);
-    
         getStyle()->run();
 
         getDisplay()->add("header.orongo");

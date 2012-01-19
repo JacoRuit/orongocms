@@ -6,6 +6,7 @@
         <php_file>ExamplePHP</php_file>
         <main_class>ExampleClass</main_class>
         <description>Hello world!</description>
+        <access_key>2348axl20</access_key>
         <author>
             <name>Jaco Ruit</name>
             <website>http://www.jacosoftware.nl</website>

@@ -6,8 +6,9 @@
 
 require 'globals.php';
 
+setCurrentPage('admin_terminal');
 
-
+Security::promptAuth();
 
 $user = getUser();
 if($user == null)
