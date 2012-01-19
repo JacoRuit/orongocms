@@ -28,7 +28,7 @@ class ArticleFrontend extends OrongoFrontendObject {
         $this->generateCommentsHTML();
     }
     
-    public function generatePluginHTML(){
+    private function generatePluginHTML(){
         try{
             $plugins = getPlugins();
             $this->pluginHTML = handlePlugins($plugins);
@@ -39,7 +39,7 @@ class ArticleFrontend extends OrongoFrontendObject {
         }
     }
     
-    public function generateCommentsHTML(){
+    private function generateCommentsHTML(){
         $comments = $this->article->getComments();
         $this->commentHTML = "";
         if(getStyle()->doCommentHTML()){

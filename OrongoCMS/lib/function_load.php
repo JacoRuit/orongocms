@@ -17,8 +17,8 @@ function load($paramLibFolder){
     //REGISTER NEW FUNCTIONS, INTERFACES, (ABSTRACT) CLASSES, EXCEPTIONS HERE! :D
     $orongo_functions = array('orongo_query', 'handleSessions', 'handlePlugins', 'setCurrentPage', 'setDatabase', 'setDisplay', 'setPlugins', 'setStyle', 'setUser');
     $orongo_interfaces = array('IHTMLConvertable', 'IJSConvertable', 'IOrongoPlugin', 'IOrongoStyle', 'IOrongoTerminalPlugin', 'IStorable');
-    $orongo_abstracts = array('OrongoDisplayableObject');
-    $orongo_classes = array('AjaxLoadCommentsAction', 'AjaxPostCommentAction', 'Article', 'Cache', 'Comment', 'Database', 'Display', 'HTMLFactory', 'Image','Issue', 'IssueTracker', 'Mail', 'MailFactory', 'MenuBar', 'MessageBox', 'OrongoEvent', 'OrongoEventManager', 'OrongoFrontendObject', 'OrongoQuery', 'OrongoQueryHandler', 'OrongoTerminal', 'Page', 'Plugin', 'Security', 'Session', 'Settings', 'Storage', 'Style', 'User');
+    $orongo_abstracts = array('OrongoDisplayableObject', 'OrongoPluggableObject', 'OrongoFrontendObject');
+    $orongo_classes = array('AjaxLoadCommentsAction', 'AjaxPostCommentAction', 'Article', 'Cache', 'Comment', 'Database', 'Display', 'HTMLFactory', 'Image','Issue', 'IssueTracker', 'Mail', 'MailFactory', 'MenuBar', 'MessageBox', 'OrongoEvent', 'OrongoEventManager',  'OrongoQuery', 'OrongoQueryHandler', 'OrongoTerminal', 'Page', 'Plugin', 'Security', 'Session', 'Settings', 'Storage', 'Style', 'User');
     $orongo_exceptions = array('ClassLoadException', 'IllegalArgumentException', 'IllegalMemoryAccessException', 'QueryException');
     $orongo_function_packages = array('Utils');
     $orongo_frontend_objects = array('IndexFrontend', 'ArticleFrontend');

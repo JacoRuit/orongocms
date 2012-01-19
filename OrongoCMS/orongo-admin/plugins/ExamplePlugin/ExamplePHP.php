@@ -5,7 +5,7 @@
  *
  * @author Jaco Ruit
  */
-class ExampleClass implements IOrongoPlugin{
+class ExampleClass extends OrongoPluggableObject{
     private $injectHTML = true;
     private $htmlToInject = '';
     private $htmlArray;

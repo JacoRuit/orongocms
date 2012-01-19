@@ -12,7 +12,7 @@
 
 function setPlugins($paramPlugins){
     foreach($paramPlugins as $plugin){
-        if(($plugin instanceof IOrongoPlugin)==false) throw new Exception("Invalid argument, corrupt plugin classes!");
+        if(($plugin instanceof OrongoPluggableObject)==false) throw new Exception("Invalid argument, corrupt plugin classes!");
     }
     global $_orongo_plugins;
     $GLOBALS['_orongo_plugins'] = &$paramPlugins;

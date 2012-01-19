@@ -18,7 +18,7 @@ class IndexFrontend extends OrongoFrontendObject {
         $this->generateArticlesHTML();
     }
     
-    public function generatePluginHTML(){
+    private function generatePluginHTML(){
         try{
             $plugins = getPlugins();
             $this->pluginHTML = handlePlugins($plugins);
@@ -29,7 +29,7 @@ class IndexFrontend extends OrongoFrontendObject {
         }
     }
     
-    public function generateArticlesHTML(){
+    private function generateArticlesHTML(){
         $articles = array();
         $q = "action=fetch&object=article&max=5&order=article.id,desc";
         try{
