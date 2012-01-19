@@ -21,16 +21,17 @@ class Plugin {
         $info = @json_decode($json, true);
         $setting = '';
         $typeSetting= '';
+        if(!isset($info['plugin']['access_key'])) throw new Exception("The plugin's access key wasn't found");
+        $accessKey = $info['plugin']['access_key'];
         foreach($info['plugin']['settings'] as $key=>$value){
             $setting = $key;
             foreach($info['plugin']['settings'][$key] as $key=>$value){
                 if($key == 'type'){
                     $typeSetting = $value;
-                    self::installSetting($info['plugin']['main_class'] , $setting, $typeSetting);
+                    self::installSetting($accessKey , $setting, $typeSetting);
                 }else if($key == 'default'){
                     $default = $value;
-                    $q2 = "UPDATE `plugins` SET `setting_value` = '" . $default . "' WHERE `plugin_main_class` = '" . $info['plugin']['main_class'] . "' AND `setting` = '" . $setting . "'";
-                    getDatabase()->execQuery($q2);
+                    $this->setSetting($accessKey, $settings, $default);
                 }
             }
         }  
@@ -38,24 +39,22 @@ class Plugin {
     
     /**
      * Installs a setting
-     * @param String $paramPluginMainClass Plugin main class
+     * @param String $paramAccessKey Plugin access key
      * @param String $paramSetting     Setting name
      * @param String $paramSettingType Setting type
      */
-    private static function installSetting($paramPluginMainClass, $paramSetting, $paramSettingType){
-        $q = "INSERT INTO `plugins` (`plugin_main_class`, `setting`, `setting_type`, `setting_value`) VALUES ('" . $paramPluginMainClass . "', '" .$paramSetting . "', '" . $paramSettingType . "', '')";
+    private static function installSetting($paramAccessKey, $paramSetting, $paramSettingType){
+        $q = "INSERT INTO `plugins` (`access_key`, `setting`, `setting_type`, `setting_value`) VALUES ('" . $paramAccessKey . "', '" .$paramSetting . "', '" . $paramSettingType . "', '')";
         getDatabase()->execQuery($q);  
     }
     
     /**
      * Gets the plugin settings
+     * @param String $paramAccessKey Plugin access key
      * @return array Settings of plugin
      */
-    public static function getSettings(){
-        $backtrace = debug_backtrace();
-        if(!is_array($backtrace)) throw new Exception ("Couldn't get array from debug_backtrace function.");
-        if(!isset($backtrace[1]['class'])) throw new IllegalMemoryAccessException("You can only call this function inside a class.");
-        $q = "SELECT `setting_value`, `setting`, `setting_type` FROM `plugins` WHERE `plugin_main_class` = '" . $backtrace[1]['class'] . "'";
+    public static function getSettings($paramAccessKey){
+        $q = "SELECT `setting_value`, `setting`, `setting_type` FROM `plugins` WHERE `access_key` = '" . $paramAccessKey . "'";
         $result = getDatabase()->execQuery($q);
         $settings = array();
         while($row = mysql_fetch_assoc($result)){
@@ -75,19 +74,19 @@ class Plugin {
     
     /**
      * Sets a plugin setting
+     * @param String $paramAccessKey Plugin access key
      * @param String $paramSetting      The setting to edit
      * @param String $paramValue        New value of settings
      */
-    public static function setSetting($paramSetting, $paramValue){
+    public static function setSetting($paramAccessKey, $paramSetting, $paramValue){
         $backtrace = debug_backtrace();
-        if(!is_array($backtrace)) throw new Exception ("Couldn't get array from debug_backtrace function.");
-        if(!isset($backtrace[1]['class'])) throw new IllegalMemoryAccessException("You can only call this function inside a class.");
+
         $paramSetting =  mysql_escape_string($paramSetting);
         $paramValue =  mysql_escape_string($paramValue);
-        $q1 = "SELECT `setting_value` FROM `plugins` WHERE `plugin_main_class` = '" . $backtrace[1]['class'] . "' AND `setting` = '" . $paramSetting . "'";
+        $q1 = "SELECT `setting_value` FROM `plugins` WHERE `access_key` = '" . $paramAccessKey . "'' AND `setting` = '" . $paramSetting . "'";
         $result = getDatabase()->execQuery($q1);
         if(mysql_num_rows($result)  < 1 && $backtrace[1]['class'] != __CLASS__) throw new IllegalMemoryAccessException("This settings doesn't exist or you are accessing the setting illegal.");
-        $q2 = "UPDATE `plugins` SET `setting_value` = '" . $paramValue . "' WHERE `plugin_main_class` = '" . $backtrace[1]['class'] . "' AND `setting` = '" . $paramSetting . "'";
+        $q2 = "UPDATE `plugins` SET `setting_value` = '" . $paramValue . "' WHERE `access_key` = '" . $paramAccessKey . "' AND `setting` = '" . $paramSetting . "'";
         getDatabase()->execQuery($q);
     }
     
@@ -119,15 +118,41 @@ class Plugin {
     
     /**
      * Gets the plugin description
-     * @param String $paramPrefix Prefix for the folder, sub-folders use this
-     * @param String $paramPluginFolder Plugin folder
+     * @param String $paramInfoXML path of info.xml
      * @return String Description of plugin
      */
-    public static function getDescription($paramPrefix, $paramPluginFolder){
-        $xml = @simplexml_load_file($paramPrefix . 'plugins/'. $paramPluginFolder . '/info.xml');
+    public static function getDescription($paramInfoXML){
+        if(empty($paramInfoXML) || !file_exists($paramInfoXML)) return "";
+        $xml = @simplexml_load_file($paramInfoXML);
         $json = @json_encode($xml);
         $info = @json_decode($json, true);
         return $info['plugin']['description'];
+    }
+    
+   /**
+    * Gets the plugin name
+    * @param String $paramInfoXML path of info.xml
+    * @return String name of plugin
+    */
+    public static function getName($paramInfoXML){
+        if(empty($paramInfoXML) || !file_exists($paramInfoXML)) return "";
+        $xml = @simplexml_load_file($paramInfoXML);
+        $json = @json_encode($xml);
+        $info = @json_decode($json, true);
+        return $info['plugin']['name'];
+    }
+    
+    /**
+     * Gets author info
+     * @param String $paramInfoXML path of info.xml
+     * @return array author info
+     */
+    public static function getAuthorInfo($paramInfoXML){
+        if(empty($paramInfoXML) || !file_exists($paramInfoXML)) return "";
+        $xml = @simplexml_load_file($paramInfoXML);
+        $json = @json_encode($xml);
+        $info = @json_decode($json, true);
+        return $info['plugin']['author'];
     }
     
     /**
@@ -145,7 +170,7 @@ class Plugin {
     /**
      * Returns activated plugins
      * @param String $paramPrefix Prefix for the folder, sub-folders inserts before plugins/plugin_name
-     * @return array containing plugin folders
+     * @return array containing plugins
      */
     public static function getActivatedPlugins($paramPrefix){
         $q =  "SELECT `plugin_folder` FROM `activated_plugins`";
@@ -159,7 +184,7 @@ class Plugin {
             try{
                $className = self::getMainClass($paramPrefix, $row['plugin_folder']);
                $plugin = new $className;
-               if($plugin instanceof IOrongoPlugin) $plugins[$count] = $plugin; 
+               if($plugin instanceof OrongoPluggableObject) $plugins[$count] = $plugin; 
                $count++;
             }catch(IllegalMemoryAccessException $ie){
                 throw new ClassLoadException("Plugin tried to access illegal memory. Unable to load plugin: <br /> " . $pluginFolder);
