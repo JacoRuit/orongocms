@@ -5,6 +5,10 @@
 
 require 'globals.php';
 
+setCurrentPage('admin_list');
+
+Security::promptAuth();
+
 $queryString = trim($_SERVER['QUERY_STRING']);
 $errors = "";
 $website_name = Settings::getWebsiteName();

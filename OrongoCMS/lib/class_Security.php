@@ -37,6 +37,25 @@ class Security {
     public static function escape($paramString){
         return htmlspecialchars($paramString);
     }
+    
+    /**
+     * Redirects user to login and if he logged he will be returned to where this was calles
+     * @param String $paramTo To what should he be redirected? (OPTIONAL)
+     */
+    public static function promptAuth($paramTo = null){
+        if(getUser() != null) return;
+        if($paramTo != null){
+            header("Location: " . orongoURL('orongo-login.php?redirect=' . $paramTo));
+            exit;
+        }
+        if(!function_exists('getCurrentPage')){
+            header("Location: " . orongoURL('orongo-login.php'));
+            exit;
+        }
+        $currentPage = str_replace("admin_", "orongo-admin/", getCurrentPage()) . '.php';
+        header("Location: " . orongoURL('orongo-login.php?redirect=' . $currentPage));
+        exit;
+    }
  
 }
 

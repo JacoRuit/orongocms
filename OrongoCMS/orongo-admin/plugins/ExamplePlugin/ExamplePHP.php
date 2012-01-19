@@ -5,19 +5,21 @@
  *
  * @author Jaco Ruit
  */
+
 class ExampleClass extends OrongoPluggableObject{
-    private $injectHTML = true;
-    private $htmlToInject = '';
-    private $htmlArray;
+
     
-    public function __construct(){
-         $this->htmlArray = array();
+    public function __construct($args){
+        
         require 'TerminalPlugin.php';
         Plugin::hookTerminalPlugin(new TerminalPlugin());
-        $stored = Plugin::getSettings();
+        $stored = Plugin::getSettings($args['auth_key']);
         OrongoEventManager::addEventHandler('article_edit', $this, 'onArticleEdit');
+        foreach($stored as  $value){
+            getDisplay()->addObject(new MessageBox($value));
+        }
         //Access the settings in the array.
-        if($stored['example_setting_2']){
+        if(isset($stored['example_setting_2'] ) && $stored['example_setting_2']){
             $this->injectHTML = true;
             $this->htmlToInject = $stored['example_setting_1'];
         }else{
@@ -38,36 +40,9 @@ class ExampleClass extends OrongoPluggableObject{
         }
     }
     
-    public function injectHTMLOnWebPage(){
-        return true;
-    }
-    
-    
-    public function getHTML(){
-        //$p = "not supported";
-       
-        /**if(getCurrentPage() == 'index') $p = "the landing page";
-        else if(getCurrentPage() == 'article') $p = "an article";
-        else if(getCurrentPage() == 'page') $p = "a page";
-        else if(getCurrentPage() == 'archive') $p = "archive"; 
-        $htmlArray['javascript']['document_ready']="";
-        $msgbox = new MessageBox("The example plugin detected that you're viewing " . $p . "." , "ExamplePlugin getHTML() function");
-        $htmlArray['html']['body'] = $msgbox->toHTML();
-        $c=0;
-        debug lines:       
-        $stored = Plugin::getSettings();
-        foreach($stored as $value){
-            $htmlArray['javascript']['document_ready'] .= "prettyAlert('#msgbox" . $c . "', '" . $value . "! :D','Plugin');          ";
-            $htmlArray['html']['body'] .= "<div id='msgbox" . $c . "'></div>";
-            $c++;
-        } **/
-        $this->htmlArray['html']['footer'] = "<br />" . Settings::getWebsiteName() . " is using example plugin. This text was added by the Example Plugin.";
-        return $this->htmlArray;
-    }
-    
 
-    public function getVersionNumber(){
-        return 0.1;
+    public function getVersionString(){
+        return "v0.1";
     }
     
     public function onInstall(){

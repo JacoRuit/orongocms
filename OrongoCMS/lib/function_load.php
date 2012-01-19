@@ -21,7 +21,7 @@ function load($paramLibFolder){
     $orongo_classes = array('AjaxLoadCommentsAction', 'AjaxPostCommentAction', 'Article', 'Cache', 'Comment', 'Database', 'Display', 'HTMLFactory', 'Image','Issue', 'IssueTracker', 'Mail', 'MailFactory', 'MenuBar', 'MessageBox', 'OrongoEvent', 'OrongoEventManager',  'OrongoQuery', 'OrongoQueryHandler', 'OrongoTerminal', 'Page', 'Plugin', 'Security', 'Session', 'Settings', 'Storage', 'Style', 'User');
     $orongo_exceptions = array('ClassLoadException', 'IllegalArgumentException', 'IllegalMemoryAccessException', 'QueryException');
     $orongo_function_packages = array('Utils');
-    $orongo_frontend_objects = array('IndexFrontend', 'ArticleFrontend');
+    $orongo_frontend_objects = array('PageFrontend', 'IndexFrontend', 'ArticleFrontend');
     $smarty_path = $paramLibFolder . '/Smarty/Smarty.class.php';
     if(!file_exists($smarty_path)) throw new Exception("Couldn't load smarty (" . $smarty_path . " was missing!)");
     require $smarty_path;

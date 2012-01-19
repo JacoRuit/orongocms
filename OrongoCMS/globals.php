@@ -18,8 +18,9 @@ try{
     die($msgbox->getImports() . $msgbox->toHTML());
 }
 
-setStyle($style);
 
+setStyle($style);
+setDisplay(new Display($style->getStylePath()));
 setUser(handleSessions());
 
 try{
@@ -30,7 +31,7 @@ try{
     die($msgbox->getImports() . $msgbox->toHTML());
 }
 
-setDisplay(new Display($style->getStylePath()));
+
 
 define('RANK_ADMIN', 3);
 define('RANK_WRITER', 2);

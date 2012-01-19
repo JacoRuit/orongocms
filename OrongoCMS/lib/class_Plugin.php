@@ -7,22 +7,24 @@
 class Plugin {
     
     private static $tPlugins = array();
+    private static $requiresDone = false;
+    private static $authKeys;
     
     /**
      * Installs database for the plugin
-     * @param String $paramPrefix Prefix for the folder, sub-folders use this (starts from plugins/)
-     * @param String $paramPluginFolder folder where plugin is located
+     * @param String $paramInfoXML path of info.xml
      */
-    public static function install($paramPrefix, $paramPluginFolder){
-        $filePath = $paramPrefix . 'plugins/'. $paramPluginFolder . '/info.xml';
-        if(file_exists($filePath) == false) throw new Exception("The plugin's info.xml doesn't exist!");
-        $xml = @simplexml_load_file($filePath);
+    public static function install($paramInfoXML){
+        if(file_exists($paramInfoXML) == false) throw new Exception("The plugin's info.xml doesn't exist!");
+        $xml = @simplexml_load_file($paramInfoXML);
         $json = @json_encode($xml);
         $info = @json_decode($json, true);
         $setting = '';
         $typeSetting= '';
         if(!isset($info['plugin']['access_key'])) throw new Exception("The plugin's access key wasn't found");
         $accessKey = $info['plugin']['access_key'];
+        $q = "DELETE FROM `plugins` WHERE `access_key` = '" . $accessKey . "'";
+        getDatabase()->execQuery($q);
         foreach($info['plugin']['settings'] as $key=>$value){
             $setting = $key;
             foreach($info['plugin']['settings'][$key] as $key=>$value){
@@ -31,10 +33,12 @@ class Plugin {
                     self::installSetting($accessKey , $setting, $typeSetting);
                 }else if($key == 'default'){
                     $default = $value;
-                    $this->setSetting($accessKey, $settings, $default);
+                    self::setSetting($accessKey, $setting, $default);
                 }
             }
-        }  
+        }
+        $q = "INSERT INTO `activated_plugins` (`plugin_xml_path`) VALUES ('" . $paramInfoXML . "')";
+        getDatabase()->execQuery($q);
     }
     
     /**
@@ -50,11 +54,13 @@ class Plugin {
     
     /**
      * Gets the plugin settings
-     * @param String $paramAccessKey Plugin access key
+     * @param String $paramAuthKey Plugin auth key 
      * @return array Settings of plugin
      */
-    public static function getSettings($paramAccessKey){
-        $q = "SELECT `setting_value`, `setting`, `setting_type` FROM `plugins` WHERE `access_key` = '" . $paramAccessKey . "'";
+    public static function getSettings($paramAuthKey){
+        if(!isset(self::$authKeys[$paramAuthKey])) throw new IllegalMemortyAccessException("Invalid auth key!");
+        else $accessKey = self::$authKeys[$paramAuthKey];
+        $q = "SELECT `setting_value`, `setting`, `setting_type` FROM `plugins` WHERE `access_key` = '" . $accessKey . "'";
         $result = getDatabase()->execQuery($q);
         $settings = array();
         while($row = mysql_fetch_assoc($result)){
@@ -74,43 +80,26 @@ class Plugin {
     
     /**
      * Sets a plugin setting
-     * @param String $paramAccessKey Plugin access key
+     * @param String $paramAuthKey Plugin auth key 
      * @param String $paramSetting      The setting to edit
      * @param String $paramValue        New value of settings
      */
-    public static function setSetting($paramAccessKey, $paramSetting, $paramValue){
-        $backtrace = debug_backtrace();
-
+    public static function setSetting($paramAuthKey, $paramSetting, $paramValue){
+        if(!isset(self::$authKeys[$paramAuthKey])) throw new IllegalMemortyAccessException("Invalid auth key!");
+        else $accessKey = self::$authKeys[$paramAuthKey];
         $paramSetting =  mysql_escape_string($paramSetting);
         $paramValue =  mysql_escape_string($paramValue);
-        $q1 = "SELECT `setting_value` FROM `plugins` WHERE `access_key` = '" . $paramAccessKey . "'' AND `setting` = '" . $paramSetting . "'";
-        $result = getDatabase()->execQuery($q1);
-        if(mysql_num_rows($result)  < 1 && $backtrace[1]['class'] != __CLASS__) throw new IllegalMemoryAccessException("This settings doesn't exist or you are accessing the setting illegal.");
-        $q2 = "UPDATE `plugins` SET `setting_value` = '" . $paramValue . "' WHERE `access_key` = '" . $paramAccessKey . "' AND `setting` = '" . $paramSetting . "'";
-        getDatabase()->execQuery($q);
-    }
-    
-    /**
-     * Gets the plugin name
-     * @param String $paramPrefix Prefix for the folder, sub-folders use this
-     * @param String $paramPluginFolder Plugin name
-     * @return String Name of plugin
-     */
-    public static function getName($paramPrefix, $paramPluginFolder){
-        $xml = @simplexml_load_file($paramPrefix . 'plugins/'. $paramPluginFolder . '/info.xml');
-        $json = @json_encode($xml);
-        $info = @json_decode($json, true);
-        return $info['plugin']['name'];
+        $q2 = "UPDATE `plugins` SET `setting_value` = '" . $paramValue . "' WHERE `access_key` = '" . $accessKey . "' AND `setting` = '" . $paramSetting . "'";
+        getDatabase()->execQuery($q2);
     }
     
     /**
      * Gets the plugin main_class
-     * @param String $paramPrefix Prefix for the folder, sub-folders use this
-     * @param String $paramPluginFolder Plugin folder
+     * @param String $paramInfoXML path of info.xml
      * @return String Main class of plugin
      */
-    public static function getMainClass($paramPrefix,$paramPluginFolder){
-        $xml = @simplexml_load_file($paramPrefix.'plugins/'. $paramPluginFolder . '/info.xml');
+    public static function getMainClass($paramInfoXML){
+        $xml = @simplexml_load_file($paramInfoXML);
         $json = @json_encode($xml);
         $info = @json_decode($json, true);
         return $info['plugin']['main_class'];
@@ -156,41 +145,72 @@ class Plugin {
     }
     
     /**
-     * @param String $paramPrefix Prefix for the folder, sub-folders use this
-     * @param String $paramPluginFolder Plugin folder
-     * @return String PHP file of plugin
+     * @param String $paramInfoXML path of info.xml
+     * @return String PHP path of plugin
      */
-    public static function getPHPFile($paramPrefix, $paramPluginFolder){
-        $xml = @simplexml_load_file($paramPrefix . 'plugins/'. $paramPluginFolder . '/info.xml');
+    public static function getPHPFile($paramInfoXML){
+        $xml = @simplexml_load_file($paramInfoXML);
         $json = @json_encode($xml);
         $info = @json_decode($json, true);
-        return $info['plugin']['php_file'] . '.php';
+        $path = dirname($paramInfoXML) . '/' . $info['plugin']['php_file'] . '.php';
+        if(file_exists($path)) return $path;
+        else if (file_exists('../' . $path)) return '../' . $path;
+        else if (file_exists(str_replace("orongo-admin/", "", $path))) return str_replace("orongo-admin/", "", $path);
+        else throw new Exception("Couldn't find the PHP file (info.xml: " . $paramInfoXML . ")");
+    }
+    
+    /**
+     * Gets plugin access key
+     * @param String $paramInfoXML path of info.xml
+     * @return array author info
+     */
+    private static function getAccessKey($paramInfoXML){
+        if(empty($paramInfoXML) || !file_exists($paramInfoXML)) return "";
+        $xml = @simplexml_load_file($paramInfoXML);
+        $json = @json_encode($xml);
+        $info = @json_decode($json, true);
+        return $info['plugin']['access_key'];
     }
     
     /**
      * Returns activated plugins
-     * @param String $paramPrefix Prefix for the folder, sub-folders inserts before plugins/plugin_name
      * @return array containing plugins
      */
-    public static function getActivatedPlugins($paramPrefix){
-        $q =  "SELECT `plugin_folder` FROM `activated_plugins`";
+    public static function getActivatedPlugins(){
+        if(self::$requiresDone) throw new Exception();
+        self::$requiresDone = true;
+        self::$authKeys = array();
+        $q =  "SELECT `plugin_xml_path` FROM `activated_plugins`";
         $result = getDatabase()->execQuery($q);
         $plugins = array();
         $count = 0;
         while($row = mysql_fetch_assoc($result)){
-            $pluginFolder = $paramPrefix . 'plugins/' . $row['plugin_folder'] . '/'. self::getPHPFile($paramPrefix, $row['plugin_folder']);
-            if(!file_exists($pluginFolder)) continue;
-            require $pluginFolder;
+            $infoXML = $row['plugin_xml_path'];
+            if(!file_exists($infoXML)){
+                if(!file_exists('../' . $infoXML)) continue;
+                $infoXML = '../' . $infoXML;
+            }
             try{
-               $className = self::getMainClass($paramPrefix, $row['plugin_folder']);
-               $plugin = new $className;
+               $phpFile = self::getPHPFile($infoXML);
+            }catch(Exception $e){ 
+                $msgbox = new MessageBox();
+                $msgbox->bindException($e);
+                die($msgbox->getImports() . $msgbox->toHTML());
+            }
+            require_once($phpFile);
+            try{
+               $className = self::getMainClass($infoXML);
+               $accessKey = self::getAccessKey($infoXML);
+               $authKey = md5(microtime() . rand());
+               self::$authKeys[$authKey] = $accessKey;
+               $plugin = new $className(array("time" => time(), "auth_key" => $authKey));
                if($plugin instanceof OrongoPluggableObject) $plugins[$count] = $plugin; 
                $count++;
             }catch(IllegalMemoryAccessException $ie){
-                throw new ClassLoadException("Plugin tried to access illegal memory. Unable to load plugin: <br /> " . $pluginFolder);
+                throw new ClassLoadException("Plugin tried to access illegal memory. Unable to load plugin: <br /> " . $phpFile);
                 continue;
             }catch(Exception $e){
-                throw new ClassLoadException("Unable to load plugin: <br /> " . $pluginFolder);
+                throw new ClassLoadException("Unable to load plugin: <br /> " . $phpFile);
                 continue;
             }
         }
@@ -203,7 +223,7 @@ class Plugin {
      * @return int plugins count
      */
     public static function getPluginCount(){
-        $q = "SELECT `plugin_folder` FROM `activated_plugins`";
+        $q = "SELECT `plugin_xml_path` FROM `activated_plugins`";
         $result = getDatabase()->execQuery($q);
         $rows = mysql_num_rows($result);
         mysql_free_result($result);

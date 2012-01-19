@@ -6,9 +6,13 @@
 require 'globals.php';
 
 
+setCurrentPage('admin_index');
+
+Security::promptAuth();
+
 
 $user = getUser();
-
+ 
 
 $website_name = Settings::getWebsiteName();
 
