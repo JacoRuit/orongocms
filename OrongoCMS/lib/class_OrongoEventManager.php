@@ -6,7 +6,7 @@
  * @author Ruit
  */
 
-//FIXME replace ACTION_* defines with strings?
+
 class OrongoEventManager {
     
     private static $eventHandlers;

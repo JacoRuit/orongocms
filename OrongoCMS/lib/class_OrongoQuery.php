@@ -29,7 +29,7 @@ class OrongoQuery {
     /**
      * Generates a proper query array which can be interpret by OrongoQueryHandler
      */
-    private function  generateQueryArray(){
+    private function generateQueryArray(){
        $query = array();
        foreach($this->queryArray as $key=>$value){
            $value = strtolower($value);

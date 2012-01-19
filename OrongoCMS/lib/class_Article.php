@@ -27,7 +27,7 @@ class Article implements IHTMLConvertable {
         $result = getDatabase()->execQuery($q);
         $row = mysql_fetch_assoc($result);
         $count = mysql_num_rows($result);
-        if($count < 1){
+        if($count < 1 || !is_numeric($this->id)){
             mysql_free_result($result);
             throw new Exception('Article does not exist', ARTICLE_NOT_EXIST);
         }
@@ -180,7 +180,9 @@ class Article implements IHTMLConvertable {
      */
     public function getCommentCount(){
         $count = 0;
-        $count = @orongo_query("action=count&object=comment&max=10000000&where=article.id:" . $this->id);
+        try{
+            $count = orongo_query("action=count&object=comment&max=10000000&where=article.id:" . $this->id);
+        }catch(Exception $e){}
         return $count;
     }
     
@@ -189,7 +191,9 @@ class Article implements IHTMLConvertable {
      */
     public function getComments(){
         $comments = array();
-        $comments = @orongo_query("action=fetch&object=comment&max=10000000&order=comment.id,desc&where=article.id:" . $this->id);
+        try{
+            $comments = orongo_query("action=fetch&object=comment&max=10000000&order=comment.id,desc&where=article.id:" . $this->id);
+        }catch(Exception $e){}
         return $comments;
     }
     

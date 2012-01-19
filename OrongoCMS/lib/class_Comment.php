@@ -27,7 +27,7 @@ class Comment implements IHTMLConvertable {
         $result = getDatabase()->execQuery($q);
         $row = mysql_fetch_assoc($result);
         $count = mysql_num_rows($result);
-        if($count < 1){
+        if($count < 1|| !is_numeric($this->id)){
             mysql_free_result($result);
             throw new Exception('Comment does not exist', COMMENT_NOT_EXIST);
         }

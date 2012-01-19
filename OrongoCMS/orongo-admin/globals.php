@@ -3,8 +3,6 @@
  * @author Jaco Ruit
  */
 
-//FIXME same as ../globals.php
-
 session_start();
 
 require '../lib/function_load.php';
