@@ -19,9 +19,10 @@ function load($paramLibFolder){
     $orongo_interfaces = array('IHTMLConvertable', 'IJSConvertable', 'IOrongoPlugin', 'IOrongoStyle', 'IOrongoTerminalPlugin', 'IStorable');
     $orongo_abstracts = array('OrongoDisplayableObject', 'OrongoPluggableObject', 'OrongoFrontendObject');
     $orongo_classes = array('AjaxLoadCommentsAction', 'AjaxPostCommentAction', 'Article', 'Cache', 'Comment', 'Database', 'Display', 'HTMLFactory', 'Image','Issue', 'IssueTracker', 'Mail', 'MailFactory', 'MenuBar', 'MessageBox', 'OrongoEvent', 'OrongoEventManager',  'OrongoQuery', 'OrongoQueryHandler', 'OrongoTerminal', 'Page', 'Plugin', 'Security', 'Session', 'Settings', 'Storage', 'Style', 'User');
-    $orongo_exceptions = array('ClassLoadException', 'IllegalArgumentException', 'IllegalMemoryAccessException', 'QueryException');
+    $orongo_exceptions = array('ClassLoadException', 'IllegalArgumentException', 'IllegalMemoryAccessException', 'OrongoScriptParseException', 'QueryException');
     $orongo_function_packages = array('Utils');
     $orongo_frontend_objects = array('PageFrontend', 'IndexFrontend', 'ArticleFrontend');
+    $orongo_script_core = array('OrongoFunction', 'OrongoPackage', 'OrongoIfStatement', 'OrongoScriptParser', 'OrongoScriptRuntime', 'OrongoVariable');
     $smarty_path = $paramLibFolder . '/Smarty/Smarty.class.php';
     if(!file_exists($smarty_path)) throw new Exception("Couldn't load smarty (" . $smarty_path . " was missing!)");
     require $smarty_path;
@@ -72,7 +73,13 @@ function load($paramLibFolder){
             require $path;
         }
     }
-    
+    foreach($orongo_script_core as $os_core){
+        if(!class_exists($os_core)){
+            $path =  $paramLibFolder . '/OrongoScript/orongocore_' . $os_core . '.php';
+            if(!file_exists($path)) throw new Exception("Couldn't load the OrongoScript core objects (" . $path . " was missing!)");
+            require $path;
+        }
+    }
     OrongoEventManager::init();
 
 }

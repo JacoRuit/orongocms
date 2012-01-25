@@ -13,22 +13,9 @@ and open the template in the editor.
     <body>
         <?php
         require 'globals.php';
-        class Test{
-            public static function testStatic(){
-                Security::promptAuth();
-            }
-            public function test(){
-                Security::promptAuth();
-            }
-        }
-        echo '<br/><p>Static</p><br/>';
-        Test::testStatic();
-        
-        echo '<br /><br /><p>Inside class</p><br />';
-        $t = new Test(); $t->test();
-        
-        echo '<br /><br /><p>No Scope</p><br />';
-        Security::promptAuth();
+        $script = file_get_contents("lib/OrongoScript/Tests/test.osc");
+        $parser = new OrongoScriptParser($script);
+        $parser->parse();
         ?>
     </body>
 </html>

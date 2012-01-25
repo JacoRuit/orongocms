@@ -1,0 +1,6 @@
+import Orongo.Data.MySQL;
+
+let bla = doei;
+let vla = doei;
+
+if(bla == echo(doei,vla));
