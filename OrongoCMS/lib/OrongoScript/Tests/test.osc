@@ -1,6 +1,28 @@
 import Orongo.Data.MySQL;
 
-let bla = doei;
-let vla = doei;
+let hoi = hallo;
+let doeg = dag;
 
-if(bla == echo(doei,vla));
+if(dag == doeg);
+    do echo(Dit laat hij zien!);
+    if(hoi == hallo);
+        do echo(Dit laat hij zien!);
+    endif;
+    do echo(Sluit deze if!);
+endif;
+
+do echo(<br />);
+
+if(dag == boe);
+    do echo(Dit laat hij niet zien!);
+    if(boe == boe);
+        do echo(Dit laat hij niet zien!);
+    endif;
+endif;
+
+if(doei == doei);
+    do echo(Dit laat hij zien!);
+endif;
+
+
+do echo(Einde van het script!);
