@@ -20,17 +20,12 @@ class Page {
      */
     public function __construct($paramID){
         $this->id = $paramID;
-        $q = "SELECT `title`,`content` FROM `pages` WHERE `id` = '" . $this->id . "'";
-        $result = getDatabase()->execQuery($q);
-        $row = mysql_fetch_assoc($result);
-        $count = mysql_num_rows($result);
-        if($count < 1|| !is_numeric($this->id)){
-            mysql_free_result($result);
+        $row = getDatabase()->queryFirstRow("SELECT `title`,`content` FROM `pages` WHERE `id` = %i", $this->id);
+        if($row == null){
             throw new Exception('Page does not exist', PAGE_NOT_EXIST);
         }
-        $this->title = stripslashes($row['title']);
-        $this->content = stripslashes($row['content']);
-        mysql_free_result($result);
+        $this->title = $row['title'];
+        $this->content = $row['content'];
     }
     
     #   id
@@ -54,8 +49,9 @@ class Page {
     * @param String $paramTitle new Page Title
     */
     public function setTitle($paramTitle){
-        $q = "UPDATE `pages` SET `title`='" . addslashes($paramTitle) . "' WHERE `id` = '" . $this->id ."'";
-        getDatabase()->execQuery($q);
+        getDatabase()->update("pages", array(
+            "title" => $paramTitle
+        ), "`id`=%i", $this->id);
         $this->title = $paramTitle;
     }
     
@@ -71,9 +67,9 @@ class Page {
     * @param String $paramContent new Page Content
     */
     public function setContent($paramContent){
-        $q = "UPDATE `pages` SET `content`='" . addslashes($paramContent) . "' WHERE `id` = '" . $this->id ."'";
-        getDatabase()->execQuery($q);
-        $this->content = $paramContent;
+        getDatabase()->update("pages", array(
+            "content" => $paramContent
+        ), "`id`=%i", $this->id);
     }
     
     /**
@@ -81,11 +77,8 @@ class Page {
      * @return int page count
      */
     public static function getPageCount(){
-        $q = 'SELECT `id` FROM `pages`';
-        $result = getDatabase()->execQuery($q);
-        $num = mysql_num_rows($result);
-        mysql_free_result($result);
-        return $num;
+        getDatabase()->query("SELECT `id` FROM `pages`");
+        return getDatabase()->count();
     }
     
     /**
@@ -93,12 +86,8 @@ class Page {
      * @return int page ID
      */
     public static function getLastPageID(){
-        $q = 'SELECT `id` FROM `pages` ORDER BY `id` DESC';
-        $result = getDatabase()->execQuery($q);
-        $row = mysql_fetch_assoc($result);
-        $lastID = $row['id'];
-        mysql_free_result($result);
-        return $lastID;
+        $row = getDatabase()->queryFirstRow("SELECT `id` FROM `pages` ORDER BY `id` DESC");
+        return $row['id'];
     }
     
     
@@ -109,8 +98,10 @@ class Page {
      */
     public static function createPage($paramName){
         $newID = self::getLastPageID() + 1;
-        $q = "INSERT INTO `pages` (`id`,`title`) VALUES ('" . $newID . "', '" . $paramName . "')";
-        getDatabase()->execQuery($q);
+        getDatabase()->insert("pages", array(
+            "id" => $newID,
+            "title" => $paramName
+        ));
         return new Page($newID);
     }
     
@@ -120,10 +111,7 @@ class Page {
      * @return int page ID
      */
     public static function getPageID($paramTitle){
-        $q = "SELECT `id` FROM `pages` WHERE `title` LIKE '" . addslashes($paramTitle) . "'";
-        $result = getDatabase()->execQuery($q);
-        $row = mysql_fetch_assoc($result);
-        mysql_free_result($result);
+        $row = getDatabase()->queryFirstRow("SELECT `id` FROM `pages` WHERE `title` LIKE %s", $paramTitle);
         return $row['id'];
     }
 }

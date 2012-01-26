@@ -18,7 +18,7 @@ if(!isset($_GET['id'])){
     exit;
 }else{
     try{
-        $article = new Article(mysql_escape_string($_GET['id']));
+        $article = new Article($_GET['id']);
     }catch(Exception $e){
         if($e->getCode() == ARTICLE_NOT_EXIST){
             header("Location: 404.php");

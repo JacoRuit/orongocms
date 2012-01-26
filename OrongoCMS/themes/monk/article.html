@@ -6,7 +6,7 @@
 <div class="header">
 	<div id="logo">
 		<a href="{$website_url}">
-		<img alt="logo" src="{$logo_url}">
+		<img alt="logo" src="{$logo_url}#">
 		</a>
 	</div>
 
@@ -41,7 +41,7 @@
 <div class="new_comment">
     <h2>Post a new comment</h2>
 
-    {if isset($user)}
+    {if condition="isset($user)"}
     <form class="new_comment_form" id="_orongo_ajax_comment_form">
          <textarea name="_orongo_ajax_new_comment" rows="5">Comment</textarea>
          <input type="submit" value="Post" />

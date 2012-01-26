@@ -60,9 +60,9 @@ class IndexFrontend extends OrongoFrontendObject {
 
         getStyle()->run();
 
-        getDisplay()->add("header.orongo");
-        getDisplay()->add("index.orongo");
-        getDisplay()->add("footer.orongo");
+        getDisplay()->add("header");
+        getDisplay()->add("index");
+        getDisplay()->add("footer");
         getDisplay()->render();
     }
 }

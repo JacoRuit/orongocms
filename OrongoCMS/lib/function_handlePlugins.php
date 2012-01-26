@@ -1,5 +1,5 @@
 <?php
-
+//TODO delete this is sooo outdated (since Jan 2012)
 /**
  * handlePlugins function
  *

@@ -23,9 +23,12 @@ function load($paramLibFolder){
     $orongo_function_packages = array('Utils');
     $orongo_frontend_objects = array('PageFrontend', 'IndexFrontend', 'ArticleFrontend');
     $orongo_script_core = array('OrongoFunction', 'OrongoPackage', 'OrongoIfStatement', 'OrongoScriptParser', 'OrongoScriptRuntime', 'OrongoVariable');
-    $smarty_path = $paramLibFolder . '/Smarty/Smarty.class.php';
-    if(!file_exists($smarty_path)) throw new Exception("Couldn't load smarty (" . $smarty_path . " was missing!)");
-    require $smarty_path;
+    $raintpl_path = $paramLibFolder . '/rain.tpl.class.php';
+    if(!file_exists($raintpl_path)) throw new Exception("Couldn't load RainTPL (" . $raintpl_path . " was missing!)");
+    require $raintpl_path;
+    $meekro_path = $paramLibFolder . '/meekrodb.2.0.class.php';
+    if(!file_exists($meekro_path)) throw new Exception("Could't load MeekroDB (" . $meekro_paht . " was missing!)");
+    require $meekro_path;
     foreach($orongo_interfaces as $interface){
         if(!interface_exists($interface)){ 
             $path = $paramLibFolder . '/I/' . $interface . '.php';

@@ -20,6 +20,7 @@ class ArticleFrontend extends OrongoFrontendObject {
             die($msgbox->getImports() . $msgbox->toHTML());
         }
         $this->article = &$args['article'];
+        $this->article->setTitle("test");
         $this->body = "<script src=\"" . Settings::getWebsiteURL() . "js/widget.prettyAlert.js\" type=\"text/javascript\" charset=\"utf-8\"></script>";
         $this->pluginHTML = "";
         $this->commentsHTML = "";  
@@ -71,9 +72,9 @@ class ArticleFrontend extends OrongoFrontendObject {
     
         getStyle()->run();
 
-        getDisplay()->add("header.orongo");
-        getDisplay()->add("article.orongo");
-        getDisplay()->add("footer.orongo");
+        getDisplay()->add("header");
+        getDisplay()->add("article");
+        getDisplay()->add("footer");
         getDisplay()->render();
     }
 }
