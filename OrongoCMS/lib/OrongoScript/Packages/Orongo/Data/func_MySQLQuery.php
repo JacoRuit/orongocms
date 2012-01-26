@@ -8,7 +8,9 @@
 class FuncMySQLQuery extends OrongoFunction {
 
     public function __invoke($args) {
-        return new OrongoVariable($args[0] . $args[1]);
+        echo $args[0];
+        echo "<br />";
+        return new OrongoVariable($args[0]);
     }
     public function getShortname() {
         return "echo";

@@ -9,7 +9,6 @@ class OrongoIfStatement {
     
     private $runtime;
     private $expression;
-    private $logic;
     
     private static $expressions = array('==', '!=');
     
@@ -17,17 +16,16 @@ class OrongoIfStatement {
      * Init an if statement
      * @param OrongoScriptRuntime $paramRuntime pointer! &
      * @param String $paramExpression expression like ... == ...
-     * @param String $paramLogic OrongoScript code 
      */
-    public function __construct($paramRuntime, $paramExpression, $paramLogic){
+    public function __construct($paramRuntime, $paramExpression){
         $this->runtime = &$paramRuntime;
         $this->expression = $paramExpression;
-        $this->logic = $paramLogic;
     }
     
     
     /**
      * Executes logic if expression was true
+     * @return boolean indicating if logic should be executed
      */
     public function exec(){
         $exp = null;
@@ -66,16 +64,14 @@ class OrongoIfStatement {
             switch($case){
                 case "==":
                     if($toCompare[0] == $toCompare[1]){
-                        //TODO execute logic ;)
-                       echo "execute";
+                        return true;
                     }
-                    return;
+                    return false;
                case "!=":
                    if($toCompare[0] != $toCompare[1]){
-                       //TODO execute logic ;)
-                       echo "execute";
+                       return true;
                    }
-                   return;
+                   return false;
                default:
                    break;
             }
@@ -100,16 +96,14 @@ class OrongoIfStatement {
             switch($case){
                 case "==":
                     if($toCompare[0] == $toCompare[1]){
-                        //TODO execute logic ;)
-                       echo "execute";
+                        return true;
                     }
-                    return;
+                    return false;
                case "!=":
                    if($toCompare[0] != $toCompare[1]){
-                       //TODO execute logic ;)
-                       echo "execute";
+                       return true;
                    }
-                   return;
+                   return false;
                default:
                    break;
             }
@@ -125,16 +119,14 @@ class OrongoIfStatement {
             switch($case){
                 case "==":
                     if($toCompare[0] == $toCompare[1]){
-                        //TODO execute logic ;)
-                       echo "execute";
+                        return true;
                     }
-                    return;
+                    return false;
                case "!=":
                    if($toCompare[0] != $toCompare[1]){
-                       //TODO execute logic ;)
-                       echo "execute";
+                       return true;
                    }
-                   return;
+                   return false;
                default:
                    break;
             }

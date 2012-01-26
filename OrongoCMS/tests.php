@@ -15,7 +15,7 @@ and open the template in the editor.
         require 'globals.php';
         $script = file_get_contents("lib/OrongoScript/Tests/test.osc");
         $parser = new OrongoScriptParser($script);
-        $parser->parse();
+        $parser->startParser();
         ?>
     </body>
 </html>

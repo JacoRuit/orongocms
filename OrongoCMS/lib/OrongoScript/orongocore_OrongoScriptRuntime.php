@@ -20,7 +20,7 @@ class OrongoScriptRuntime {
      * @param var $paramVar variable
      */
     public function letVar($paramName, $paramVar){
-        $vare = explode($paramVar, ".");
+        /**$vare = explode($paramVar, ".");
         $var = $vare[0];
         if(isset($this->variables[$var]) || count($var) > 1){
             if($this->variables[$var] instanceof OrongoClass){
@@ -30,8 +30,8 @@ class OrongoScriptRuntime {
                     $this->variables[$paramName] = $tolet;
                 }
             }
-        }
-        $this->variables[$paramName] = new OrongoVariable(trim($paramVar));
+        }**/
+        $this->variables[$paramName] = new OrongoVariable($paramVar);
     }
     
     /**
@@ -96,7 +96,7 @@ class OrongoScriptRuntime {
         }catch(Exception $e){
             throw new OrongoScriptParseException("Couldn't import: " . $path);
         }
-        /**foreach(glob($path) as $file){
+         /**foreach(glob($path) as $file){
             echo $file;
             require_once($file);
             $class = false;
@@ -150,15 +150,8 @@ class OrongoScriptRuntime {
      * @return OrongoVariable orongovariable(null) if it didnt return anything or any error occured else the OrongoVariable returned
      */
     public function execFunction($paramName, $paramArgs = null){
-        $args = array();
-        if($paramArgs != null){
-            $args = explode(",", $paramArgs);
-            foreach($args as &$arg){
-                $arg = trim($arg);
-                if($this->isVar($arg))
-                    $arg = $this->getVar($arg)->get();
-            }
-        }
+        if(!is_array($paramArgs)) $args = array();
+        else $args = $paramArgs;
         //you should prevent this..
         if(!$this->isFunction($paramName)) return new OrongoVariable(null);
         $func = &$this->functions[$paramName];
