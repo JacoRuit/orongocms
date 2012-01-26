@@ -11,9 +11,12 @@ class OrongoScriptParser {
     
     private $orongoScript;
     
-    private static $ifStructure = "if % * %";
+    private $line;
     
-    private static $ifOperators = array("=", "!=");
+    private $lines;
+    
+    private $lineparsed;
+    
     
     /**
      * Starts the parser
@@ -28,13 +31,13 @@ class OrongoScriptParser {
     /**
      * Parses the script
      */
-    public function parse(){
+    public function startParser(){
+        $this->line = 0;
         $runtime = new OrongoScriptRuntime();
         $lines = explode(";", $this->orongoScript);
-        $inExpression = false;
-        $inIf = false;
-        $inElseIf = false;
+        $this->lines = $lines;
         for($linec = 0; $linec < count($lines) - 1; $linec++){
+            $this->line++;
             if(!is_string($lines[$linec])) continue;
             $line = trim($lines[$linec]);
             $words = explode(" ", $line);
@@ -66,14 +69,58 @@ class OrongoScriptParser {
         }
     }
     
-    private function throwError($paramLine, $paramWord){
-        throw new OrongoScriptParseException("Invalid character found at line " . $paramLine . " -> " . $paramWord);
+    /**
+     * @param boolean $paramAddOne if true, +1 added. (only to show real line number, not array index) (default false)
+     * @return int line number
+     */
+    public function getCurrentLine($paramAddOne = false){
+        if($paramAddOne) return $this->line + 1;
+        return $this->line;
+    }
+   
+    /**
+     * Checks if the line starts with specified string (CURRENT LINE)
+     * @param String $paramString string to search
+     * @return boolean indicating if the line started with this string
+     */
+    private function lineStartsWith($paramString){
+        $line = $this->lines[$this->getCurrentLine() - 1];
+        $c = 0;
+        for($i =0; $i < strlen($line) - 1; $i++){
+            $string = $paramString[$c];
+            $c++;
+            if($line[$i] == $string){
+                if($i == strlen($paramString) - 1) return true; 
+                continue;
+            }else return false;
+        }
+        return false;
     }
     
-    private function compareLine($paramLine, $paramComparison){
-        $wordsLine = explode($paramLine, " ");
+    /**
+     * Move to next line
+     */
+    private function nextLine(){
+        if($this->line >= count($this->lines) - 1) return;
+        $this->lineparsed = false;
+        $this->line++;
     }
 
+    /**
+     * Parses current line
+     */
+    private function parseLine(){
+        if($this->lineparsed) return;
+        
+        $this->lineparsed = true;
+    }
+    
+    /**
+     * Checks if current line is parsed
+     */
+    private function lineIsParsed(){
+        return $this->lineparsed;
+    }
 }
 
 ?>

@@ -27,17 +27,14 @@ class User {
      */
     public function __construct($paramID){
         $this->id = $paramID;
-        $q = "SELECT `rank`,`email`,`name`,`activated`  FROM `users` WHERE `id` = '" . $this->id . "'";
-        $result = @mysql_query($q);
-        if(mysql_num_rows($result) < 1){
+        $row = getDatabase()->queryFirstRow("SELECT `rank`,`email`,`name`,`activated`  FROM `users` WHERE `id` = %i", $this->id);
+        if($row == null){
             throw new Exception('User doesnot exist!', USER_NOT_EXIST);
         }
-        $row = mysql_fetch_assoc($result);
         $this->rank = $row['rank'];
         $this->email = $row['email'];
         $this->name = stripslashes($row['name']);
         $this->activateStatus = $row['activated'];
-        mysql_free_result($result);
     }
     
     
@@ -66,8 +63,9 @@ class User {
      * @param int $paramRank new User Rank
      */
     public function setRank($paramRank){
-        $q = "UPDATE `users` SET `rank`='" . $paramRank . "' WHERE `id` = '" . $this->id ."'";
-        @mysql_query($q);
+        getDatabase()->update("users", array(
+           "rank" => $paramRank 
+        ), "id = %i", $this->id);
         $this->rank = $paramRank;
     }
     
@@ -86,8 +84,9 @@ class User {
      * @param String $paramEmail new User Email Address
      */
     public function setEmail($paramEmail){
-        $q = "UPDATE `users` SET `email`='" . $paramEmail . "' WHERE `id` = '" . $this->id ."'";
-        @mysql_query($q);
+        getDatabase()->update("users", array(
+           "email" => $paramRank 
+        ), "`id`=%i", $this->id);
         $this->email = $paramEmail;
     }
     
@@ -105,8 +104,9 @@ class User {
      * @param String $paramName new User Name
      */
     public function setName($paramName){
-        $q = "UPDATE `users` SET `name`='" . addslashes($paramName) . "' WHERE `id` = '" . $this->id ."'";
-        @mysql_query($q);
+        getDatabase()->update("users", array(
+           "name" => addslashes($paramName) 
+        ), "`id`=%i", $this->id);
         $this->name = $paramName;
     }
     
@@ -127,12 +127,9 @@ class User {
      * @return String Hashed password of User
      */
     private static function getPassword($paramID){
-        $q = "SELECT `password` FROM `users` WHERE `id` = '" . $paramID . "'";
-        $result = @mysql_query($q);
-        $row = mysql_fetch_assoc($result);
-        $pw = $row['password'];
-        mysql_free_result($result);
-        return $pw;
+        //$q = "SELECT `password` FROM `users` WHERE `id` = '" . $paramID . "'";
+        $row = getDatabase()->queryFirstRow("SELECT `password` FROM `users` WHERE `id` = %i", $paramID);
+        return $row['password'];
     }
     
     /**
@@ -152,10 +149,8 @@ class User {
      * @return boolean true if exists, false if it doesn't exist
      */
     public static function usernameExists($paramName){
-        $q = "SELECT `id` FROM `users` WHERE `name` LIKE '" . addslashes($paramName) ."'";
-        $result = @mysql_query($q);
-        $noOfRows = mysql_num_rows($result);
-        mysql_free_result($result);
+        getDatabase()->query("SELECT `id` FROM `users` WHERE `name` LIKE %s", addslashes($paramName));
+        $noOfRows = getDatabase()->count();
         return $noOfRows >= 1; 
     }
     
@@ -169,8 +164,13 @@ class User {
      */
     public static function registerUser ($paramName, $paramEmail, $paramPassword, $paramRank){
         $newID = self::getLastUserID() + 1;
-        $q = "INSERT INTO `users` (`id`, `name`, `password`, `email`, `rank`, `activated`) VALUES ('" . $newID . "', '" . addslashes($paramName) . "', '" . $paramPassword . "', '" . $paramEmail . "', '" . $paramRank . "', '0')"; 
-        @mysql_query($q);
+        getDatabase()->insert("users", array(
+            "id" => $newID,
+            "name" => $paramName,
+            "password" => $paramPassword,
+            "rank" => $paramRank,
+            "activated" => 0
+        ));
         return $newID == self::getLastUserID();
     }
     
@@ -179,10 +179,8 @@ class User {
      * @return int user count
      */
     public static function getUserCount(){
-        $q = 'SELECT `id` FROM `users` WHERE `activated`=1';
-        $result = @mysql_query($q);
-        $num = mysql_num_rows($result);
-        mysql_free_result($result);
+        getDatabase()->query('SELECT `id` FROM `users` WHERE `activated`=1');
+        $num = getDatabase()->count();
         return $num;
     }
     
@@ -191,12 +189,8 @@ class User {
      * @return int last user ID
      */
     public static function getLastUserID(){
-        $q = 'SELECT `id` FROM `users` ORDER BY `id` DESC';
-        $result = @mysql_query($q);
-        $row = mysql_fetch_assoc($result);
-        $lastID = $row['id'];
-        mysql_free_result($result);
-        return $lastID;
+        $row = getDatabase()->queryFirstRow('SELECT `id` FROM `users` ORDER BY `id` DESC');
+        return $row['id'];
     }
     
     /**
@@ -207,8 +201,10 @@ class User {
     public static function generateActivationURL($paramID){
         $websiteURL = Settings::getWebsiteURL();
         $activationCode = self::getRandomString();
-        $q = "INSERT INTO `activations` (`userID`, `code`) VALUES ('" . $paramID  . "', '" . $activationCode . "')";
-        @mysql_query($q);
+        getDatabase()->insert("activations", array(
+            "userID" => $paramID,
+            "code" => $activationCode
+        ));
         return $websiteURL . 'orongo-activation.php?code=' .  $activationCode;
     }
     
@@ -230,9 +226,7 @@ class User {
      * @return String Activation URL
      */
     public static function getActivationURL($paramID){
-        $q = "SELECT `code` FROM `activations` WHERE `userID` = '" . $paramID . "'";
-        $result = @mysql_query($q);
-        $row = mysql_fetch_assoc($result);
+        $row = getDatabase()->queryFirstRow("SELECT `code` FROM `activations` WHERE `userID` = %i", $paramID);
         $url = Settings::getWebsiteURL() . $row['code'];
         mysql_free_result($result);
         return $url;
@@ -243,8 +237,9 @@ class User {
      * @param int $paramID ID of User
      */
     public static function activateUser($paramID){
-        $q = "UPDATE `users` SET `activated` = '1' WHERE `id` = '" . $paramID . "'";
-        @mysql_query($q);
+        getDatabase()->update("users",array(
+            "activated" => 1
+        ), "`id`=%i", $paramID);
     }
     
     /**
@@ -253,10 +248,8 @@ class User {
      * @return boolean indicating if the activation code is good
      */
     public static function isGoodActivationCode($paramCode){
-        $q = "SELECT `id` FROM `activations` WHERE `code` = '" . $paramCode . "'";
-        $result = @mysql_query($q);
-        $c = mysql_num_rows($result);
-        mysql_free_result($result);
+        getDatabase()->query("SELECT `id` FROM `activations` WHERE `code` = %s", $paramCode);
+        $c = getDatabase()->count();
         return $c == 1;
     }
     
@@ -266,12 +259,8 @@ class User {
      * @return int User ID
      */
     public static function getUserIDByActivationCode($paramCode){
-        $q = "SELECT `userID` FROM `activations` WHERE `code` = '" . $paramCode . "'";
-        $result = @mysql_query($q);
-        $row = mysql_fetch_assoc($result);
-        $userID = $row['userID'];
-        mysql_free_result($result);
-        return $userID;
+        $row = getDatabase()->queryFirstRow("SELECT `userID` FROM `activations` WHERE `code` = %s", $paramCode);
+        return $row['userID'];
     }
     
     /**
@@ -279,7 +268,7 @@ class User {
      * @param String $paramCode Activation Code
      */
     public static function deleteActivationCode($paramCode){
-        $q = "DELETE FROM `activations` WHERE `code`='" . $paramCode ."'";
+        getDatabase()->delete("activations", "`code`=%s", $paramCode);
         @mysql_query($q);
     }
     
@@ -289,10 +278,7 @@ class User {
      * @return int user ID
      */
     public static function getUserID($paramName){
-        $q = "SELECT `id` FROM `users` WHERE `name` LIKE '" . addslashes($paramName) . "'";
-        $result = @mysql_query($q);
-        $row = mysql_fetch_assoc($result);
-        mysql_free_result($result);
+        $row = getDatabase()->queryFirstRow("SELECT `id` FROM `users` WHERE `name` LIKE %s", $paramName);
         return $row['id'];
     }
     
@@ -302,10 +288,7 @@ class User {
      * @return String username
      */
     public static function getUserName($paramID){
-        $q = "SELECT `name` FROM `users` WHERE `id`='" . $paramID . "'";
-        $result = @mysql_query($q);
-        $row = mysql_fetch_assoc($result);
-        mysql_free_result($result);
+        $row = getDatabase()->queryFirstRow("SELECT `name` FROM `users` WHERE `id` = %i", $paramID);
         return $row['name'];
     }
     
@@ -316,10 +299,8 @@ class User {
      * @return boolean indicating if the user is activated
      */
     public static function userIsActivated($paramID){
-        $q = "SELECT `name` FROM `users` WHERE `activated` = '1' AND `id` = '" . $paramID . "'";
-        $result = @mysql_query($q);
-        $count = mysql_num_rows($result);
-        mysql_free_result($result);
+        getDatabase()->query("SELECT `name` FROM `users` WHERE `activated` = '1' AND `id` = %i", $paramID);
+        $count = getDatabase()->count();
         return $count > 0;
     }
 }

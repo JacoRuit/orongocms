@@ -20,16 +20,13 @@ class Display {
     /**
      * Initialize the smarty and display object
      * @param String $paramTemplateDir smarty/template dir
-     * @param String $paramCompileDir smarty/compile dir
      * @param String $paramCacheDir smarty/cache dir
-     * @param String $paramConfigDir  smarty/config dir
      */
-    public function __construct($paramTemplateDir, $paramCompileDir = "../smarty/compile", $paramCacheDir = "../smarty/cache", $paramConfigDir = "../smarty/config"){
-        $this->smarty = new Smarty();
-        $this->smarty->template_dir = $paramTemplateDir;
-        $this->smarty->compile_dir = $paramCompileDir;
-        $this->smarty->cache_dir = $paramCacheDir;
-        $this->smarty->config_dir = $paramConfigDir; 
+    public function __construct($paramTemplateDir, $paramCacheDir = "../tpl/tmp"){
+        raintpl::$tpl_dir = $paramTemplateDir; 
+        raintpl::$cache_dir = $paramCacheDir; 
+        
+        $this->raintpl = new raintpl();
         
         $this->rendered = false;
         $this->tpls = array();
@@ -47,7 +44,7 @@ class Display {
     public function setTemplateDir($paramTemplateDir){
         if(!is_string($paramTemplateDir))
             throw new IllegalArgumentException("Invalid argument, string expected.");
-        $this->smarty->template_dir = $paramTemplateDir;
+         raintpl::$tpl_dir = $paramTemplateDir;
     }
     
     /**
@@ -64,11 +61,7 @@ class Display {
      * @param String $paramVariable name of the variable
      */
     public function getTemplateVariable($paramVariable){
-        $var = "";
-        try{
-            $var = $this->smarty->getTemplateVars($paramVariable);
-        }catch(Exception $e){ }
-        return $var;
+        return $this->raintpl->get_assign($paramVariable);
     }
     
     /**
@@ -78,7 +71,7 @@ class Display {
      */
     public function setTemplateVariable($paramVariable, $paramValue){
         if($this->rendered) return;
-        $this->smarty->assign($paramVariable,$paramValue);
+        $this->raintpl->assign($paramVariable,$paramValue);
     }
     
     /**
@@ -202,7 +195,7 @@ class Display {
         }
         foreach($this->tpls as $tpl){
             if(empty($tpl)) continue;
-            $this->smarty->display($tpl);
+            $this->raintpl->draw($tpl);
         }
         $this->rendered = true;
     }

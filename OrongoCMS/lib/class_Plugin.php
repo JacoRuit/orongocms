@@ -23,8 +23,7 @@ class Plugin {
         $typeSetting= '';
         if(!isset($info['plugin']['access_key'])) throw new Exception("The plugin's access key wasn't found");
         $accessKey = $info['plugin']['access_key'];
-        $q = "DELETE FROM `plugins` WHERE `access_key` = '" . $accessKey . "'";
-        getDatabase()->execQuery($q);
+        getDatabase()->delete("plugins", "access_key =  %s", $accessKey);
         foreach($info['plugin']['settings'] as $key=>$value){
             $setting = $key;
             foreach($info['plugin']['settings'][$key] as $key=>$value){
@@ -37,8 +36,9 @@ class Plugin {
                 }
             }
         }
-        $q = "INSERT INTO `activated_plugins` (`plugin_xml_path`) VALUES ('" . $paramInfoXML . "')";
-        getDatabase()->execQuery($q);
+        getDatabase()->insert("activated_plugins", array(
+            "plugin_xml_path" => $paramInfoXML
+        ));
     }
     
     /**
@@ -48,8 +48,12 @@ class Plugin {
      * @param String $paramSettingType Setting type
      */
     private static function installSetting($paramAccessKey, $paramSetting, $paramSettingType){
-        $q = "INSERT INTO `plugins` (`access_key`, `setting`, `setting_type`, `setting_value`) VALUES ('" . $paramAccessKey . "', '" .$paramSetting . "', '" . $paramSettingType . "', '')";
-        getDatabase()->execQuery($q);  
+        getDatabase()->insert("plugins", array(
+            "access_key" => $paramAccessKey,
+            "setting" => $paramSetting,
+            "setting_type" => $paramSettingType,
+            "setting_value" => ""
+        ));
     }
     
     /**
@@ -60,10 +64,9 @@ class Plugin {
     public static function getSettings($paramAuthKey){
         if(!isset(self::$authKeys[$paramAuthKey])) throw new IllegalMemortyAccessException("Invalid auth key!");
         else $accessKey = self::$authKeys[$paramAuthKey];
-        $q = "SELECT `setting_value`, `setting`, `setting_type` FROM `plugins` WHERE `access_key` = '" . $accessKey . "'";
-        $result = getDatabase()->execQuery($q);
+        $rows = getDatabase()->query("SELECT `setting_value`, `setting`, `setting_type` FROM `plugins` WHERE `access_key` = %s", $accessKey);
         $settings = array();
-        while($row = mysql_fetch_assoc($result)){
+        foreach($rows as $row){
             if($row['setting_type'] == 'boolean'){
                 if($row['setting_value'] == 'true'){
                     $settings[$row['setting']] = true;
@@ -74,7 +77,6 @@ class Plugin {
                 $settings[$row['setting']] = $row['setting_value'];
             }
         }
-        mysql_free_result($result);
         return $settings;
     }
     
@@ -89,8 +91,9 @@ class Plugin {
         else $accessKey = self::$authKeys[$paramAuthKey];
         $paramSetting =  mysql_escape_string($paramSetting);
         $paramValue =  mysql_escape_string($paramValue);
-        $q2 = "UPDATE `plugins` SET `setting_value` = '" . $paramValue . "' WHERE `access_key` = '" . $accessKey . "' AND `setting` = '" . $paramSetting . "'";
-        getDatabase()->execQuery($q2);
+        getDatabase()->update("plugins",array(
+            "setting_value" => $paramValue
+        ),"`access_key`=%s AND `setting`=%s", $accessKey, $paramSetting);
     }
     
     /**
@@ -180,11 +183,10 @@ class Plugin {
         if(self::$requiresDone) throw new Exception();
         self::$requiresDone = true;
         self::$authKeys = array();
-        $q =  "SELECT `plugin_xml_path` FROM `activated_plugins`";
-        $result = getDatabase()->execQuery($q);
+        $rows = getDatabase()->query("SELECT `plugin_xml_path` FROM `activated_plugins`");
         $plugins = array();
         $count = 0;
-        while($row = mysql_fetch_assoc($result)){
+        foreach($rows as $row){
             $infoXML = $row['plugin_xml_path'];
             if(!file_exists($infoXML)){
                 if(!file_exists('../' . $infoXML)) continue;
@@ -214,7 +216,6 @@ class Plugin {
                 continue;
             }
         }
-        mysql_free_result($result);
         return $plugins;
     }
     
@@ -223,11 +224,8 @@ class Plugin {
      * @return int plugins count
      */
     public static function getPluginCount(){
-        $q = "SELECT `plugin_xml_path` FROM `activated_plugins`";
-        $result = getDatabase()->execQuery($q);
-        $rows = mysql_num_rows($result);
-        mysql_free_result($result);
-        return $rows;
+        getDatabase()->query("SELECT `plugin_xml_path` FROM `activated_plugins`");
+        return getDatabase()->count();
     }
     
     /**

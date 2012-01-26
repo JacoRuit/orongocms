@@ -23,19 +23,14 @@ class Comment implements IHTMLConvertable {
      */
     public function __construct($paramID){
         $this->id = $paramID;
-        $q = "SELECT `content`,`authorID`,`articleID`,`timestamp` FROM `comments` WHERE `id` = '" . $this->id . "'";
-        $result = getDatabase()->execQuery($q);
-        $row = mysql_fetch_assoc($result);
-        $count = mysql_num_rows($result);
-        if($count < 1|| !is_numeric($this->id)){
-            mysql_free_result($result);
+        $row = getDatabase()->queryFirstRow(" SELECT `content`,`authorID`,`articleID`,`timestamp` FROM `comments` WHERE `id` = %i", $this->id);
+        if($row == null){
             throw new Exception('Comment does not exist', COMMENT_NOT_EXIST);
         }
         $this->content = htmlspecialchars($row['content']);
         $this->authorID = $row['authorID'];
         $this->timestamp = $row['timestamp'];
         $this->articleID = $row['articleID'];
-        mysql_free_result($result);
     }
     
     #   id

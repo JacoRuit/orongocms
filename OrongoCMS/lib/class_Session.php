@@ -15,11 +15,8 @@ class Session {
      * @return int User ID
      */
     public static function getUserID($paramSessionID){
-        $q = "SELECT `userID` FROM `sessions` WHERE `sessionID` = '" . $paramSessionID ."'";
-        $result = getDatabase()->execQuery($q);
-        $set = mysql_fetch_assoc($result);
-        mysql_free_result($result);
-        return $set['userID'];
+        $row = getDatabase()->queryFirstRow("SELECT `userID` FROM `sessions` WHERE `sessionID` = %s", $paramSessionID);
+        return $row['userID'];
     }
     
     /**
@@ -29,8 +26,10 @@ class Session {
      */
     public static function createSession($paramUserID){
         $sessionID = self::getRandomString();
-        $q = "INSERT INTO `sessions` (`userID`,`sessionID`) VALUES ('" . $paramUserID . "', '" . $sessionID ."')";
-        getDatabase()->execQuery($q);
+        getDatabase()->insert("sessions", array(
+           "userID" => $paramUserID,
+           "sessionID" => $sessionID
+        ));
         return $sessionID;
     }
     
@@ -55,10 +54,8 @@ class Session {
         if(strlen($paramSessionID) != self::$sessionLength){
             return false;
         }
-        $q = "SELECT `userID` FROM `sessions` WHERE `sessionID`='" . $paramSessionID . "'";
-        $result = getDatabase()->execQuery($q);
-        $count = mysql_num_rows($result);
-        mysql_free_result($result);
+        getDatabase()->query("SELECT `userID` FROM `sessions` WHERE `sessionID`= %s", $paramSessionID);
+        $count = getDatabase()->count();
         return $count > 0;
     }
     
@@ -67,8 +64,7 @@ class Session {
      * @param String $paramSessionID Session ID
      */
     public static function delete($paramSessionID){
-        $q = "DELETE FROM `sessions` WHERE `sessionID`='" . $paramSessionID . "'";
-        getDatabase()->execQuery($q);
+        getDatabase()->delete("sessions","`sessionID`=%s", $paramSessionID);
     }
 }
 

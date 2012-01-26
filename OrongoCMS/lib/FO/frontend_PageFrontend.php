@@ -31,9 +31,9 @@ class PageFrontend extends OrongoFrontendObject {
 
         getStyle()->run();
 
-        getDisplay()->add("header.orongo");
-        getDisplay()->add("page.orongo");
-        getDisplay()->add("footer.orongo");
+        getDisplay()->add("header");
+        getDisplay()->add("page");
+        getDisplay()->add("footer");
 
         getDisplay()->render();
     }

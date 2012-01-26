@@ -178,11 +178,11 @@ class OrongoQueryHandler {
         }
         
         $q  =  "SELECT `id` FROM `" . $from . 's`' . $where  . $order . $orderc . $limit . $offset;
-        $result = getDatabase()->execQuery($q);
+        $rows = getDatabase()->query($q);
         if($query['action'] == 'fetch'){
             $resultset = array();
             $c = 0;
-            while($row = mysql_fetch_assoc($result)){
+            foreach($rows as $row){
                 $obj = null;
                 try{
                     switch($from){
@@ -207,7 +207,7 @@ class OrongoQueryHandler {
             }
             return $resultset;
         }else if($query['action'] == 'count')
-            return mysql_num_rows($result);
+            return getDatabase()->count();
     }
 }
 

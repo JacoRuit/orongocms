@@ -17,10 +17,8 @@ class Storage {
      */
     public static function store($paramKey, $paramVar, $paramOverwrite = true){
         $paramKey = mysql_escape_string($paramKey);
-        $q="SELECT `var` FROM `storage` WHERE `key`='" . $paramKey . "'";
-        $result = @mysql_query($q);
-        $rows = mysql_num_rows($result);
-        mysql_free_result($result);
+        getDatabase()->query("SELECT `var` FROM `storage` WHERE `key`=%s", $paramKey);
+        $rows = getDatabase()->count();
         $isObj = false;
         if(is_object($paramVar)){
             if($paramVar instanceof IStorable){
@@ -50,13 +48,18 @@ class Storage {
             if($paramOverwrite == false){
                 return false;
             }else{
-                $q2 = "UPDATE `storage` SET `var`='" . $paramVar . "',`is_object`='" . $isObj . "' WHERE `key`='" . $paramKey .  "'";
-                @mysql_query($q2);
+                getDatabase()->update("storage", array(
+                   "var" => $paramVar,
+                   "is_object" => $isObj
+                ),"`key`=%s", $paramKey);
                 return true;
             }
         }else{
-            $q3 = "INSERT INTO `storage` (`key`,`var`, `is_object`) VALUES ('" . $paramKey . "', '" . $paramVar . "','" . $isObj . "')";
-            @mysql_query($q3);
+            getDatabase()->insert("storage",array(
+                "key" => $paramKey,
+                "var" => $paramVar,
+                "is_object" => $isObj
+            ));
             return true;
         }
     }
@@ -66,9 +69,7 @@ class Storage {
      * @param String $paramKey Storage key
      */
     public static function delete($paramKey){
-        $paramKey = mysql_escape_string($paramKey);
-        $q = "DELETE FROM `storage` WHERE `key` = '" . $paramKey . "'";
-        @mysql_query($q);
+        getDatabase()->delete("storage", "`key`=%s", $paramKey);
     }
     
     /**
@@ -76,11 +77,7 @@ class Storage {
      * @param String $paramKey Storage key
      */
     public static function get($paramKey){
-        $paramKey =  mysql_escape_string($paramKey);
-        $q = "SELECT `var`, `is_object` FROM `storage` WHERE `key` = '" . $paramKey . "'";
-        $result = @mysql_query($q);
-        $row = mysql_fetch_assoc($result);
-        mysql_free_result($result);
+        $row = getDatabase()->queryFirstRow("SELECT `var`, `is_object` FROM `storage` WHERE `key` = %s", $paramKey);
         if($row['is_object'] == false) return $row['var'];
         else{
             try{
@@ -104,11 +101,8 @@ class Storage {
      * @return int stored items count
      */
     public static function getStorageCount(){
-        $q = "SELECT `is_object` FROM `storage`";
-        $result = @mysql_query($q);
-        $rows = mysql_num_rows($result);
-        mysql_free_result($result);
-        return $rows;
+        getDatabase()->query("SELECT `is_object` FROM `storage`");
+        return getDatabase()->count();
     }
     
     
