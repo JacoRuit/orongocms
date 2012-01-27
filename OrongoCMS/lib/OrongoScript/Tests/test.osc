@@ -1,11 +1,20 @@
-import Orongo.Data.MySQL;
+import Orongo.IO.Output;
+import Orongo.Display.MessageBox;
 
-let hoi = hallo;
-let doeg = dag;
+let hi=hallo;
+let bye=dag;
+let text=test<br />;
+let msgbox=make_msgbox(text,OrongoScript test);
 
-if(dag == doeg);
+do show_msgbox(msgbox);
+
+do echo(msgbox);
+
+do echo(<br /><br /><br /><br />);
+
+if(dag == bye);
     do echo(Dit laat hij zien!);
-    if(hoi == hallo);
+    if(hi == hallo);
         do echo(Dit laat hij zien!);
     endif;
     do echo(Sluit deze if!);

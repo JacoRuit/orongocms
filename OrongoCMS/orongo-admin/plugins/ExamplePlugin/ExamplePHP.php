@@ -10,7 +10,9 @@ class ExampleClass extends OrongoPluggableObject{
 
     
     public function __construct($args){
-        
+        $script = file_get_contents("lib/OrongoScript/Tests/test.osc");
+        $parser = new OrongoScriptParser($script);
+        $parser->startParser();
         require 'TerminalPlugin.php';
         Plugin::hookTerminalPlugin(new TerminalPlugin());
         $stored = Plugin::getSettings($args['auth_key']);

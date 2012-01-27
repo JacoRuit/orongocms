@@ -31,7 +31,10 @@ class OrongoScriptRuntime {
                 }
             }
         }**/
-        $this->variables[$paramName] = new OrongoVariable($paramVar);
+        $tolet = "";
+        if($paramVar instanceof OrongoVariable) $tolet = $paramVar;
+        else $tolet = new OrongoVariable($paramVar);
+        $this->variables[$paramName] = $tolet;
     }
     
     /**
@@ -64,7 +67,7 @@ class OrongoScriptRuntime {
         if($file != "*") $path .= "/orongopackage_" . $file . ".php";
         else $path .= "/" . $file;
         $path = dirname(__FILE__) . '\\' . $path;
-
+        if(!file_exists($path)) throw new OrongoScriptParseException("Invalid import, package not found!");
         require_once($path);
         $class = false;
         //Snippet provided here: http://stackoverflow.com/questions/928928/determining-what-classes-are-defined-in-a-php-class-file

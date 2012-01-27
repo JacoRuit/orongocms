@@ -186,7 +186,13 @@ class OrongoScriptParser {
             if(count($toLet) != 2) throw new OrongoScriptParseException("Invalid let at line " . $this->getCurrentLine(true));
             if(empty($toLet[0])) throw new OrongoScriptParseException("Invalid let (empty variable name) at line " . $this->getCurrentLine(true));
             if(empty($toLet[1])) throw new OrongoScriptParseException("Invalid let (empty value) at line " . $this->getCurrentLine(true));
-            $this->runtime->letVar(trim($toLet[0]), trim($toLet[1]));
+            if(stristr($toLet[1], ")") && stristr($toLet[1], "(")){
+                try{
+                    $func = $this->parseFunction(trim($toLet[1]));
+                    $toLet[1] = $this->runtime->execFunction($func['function_name'], $func['args']);
+                }catch(Exception $e){}
+            }
+            $this->runtime->letVar(trim($toLet[0]), $toLet[1]);
         }
         
         #DO
@@ -231,7 +237,9 @@ class OrongoScriptParser {
        $rawArgs = str_replace(")", "", $f[1]);
        $args = explode(",", $rawArgs);
        foreach($args as &$arg){
-           $arg = trim($arg);
+           if($this->runtime->isVar($arg)){
+               $arg = $this->runtime->getVar($arg)->get();
+           }
        }
        return array("function_name" => $f[0], "args" => $args);
     }
