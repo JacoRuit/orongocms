@@ -1,0 +1,43 @@
+OrongoAuth Protocol
+
+1 Defenitions
+    A = Application
+    U = User
+    S = OrongoAuth Server
+
+SCHEME
+
+(A)                 (U)                 (S)
+
+Send orongoauth
+key request
+---------------------------------------->    (1)
+                                        
+                         Sends user to 
+                         orongo-login.php 
+                        <---------------     (2)
+
+
+                   User logs 
+                   in
+                   --------------------->    (3)
+                    
+                   
+                           Generates key     (4)
+                                   
+                           Send key to A             
+ <--------------------------------------     (5)
+
+
+Obtain information
+using key
+--------------------------------------->     (6)
+
+
+
+
+STEPS
+
+1:  JSON { "application-name": "Example", "application-description": "Desc" }
+
+2: orongo-login.php redirect add messageboxes to display contain application name + description

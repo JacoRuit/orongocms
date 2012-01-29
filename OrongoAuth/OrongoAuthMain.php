@@ -7,13 +7,14 @@ define("ORONGOAUTH_VERSION", 2);
  * @author Jaco Ruit
  */
 
-class OrongoAuthMain implements IOrongoPlugin{
+class OrongoAuthMain extends OrongoPluggableObject{
     
     private $settings;
     
-    public function __construct(){
-        //Getting stored things as of rev 32
-        $this->settings = Plugin::getSettings();
+    public function __construct($args){
+        $authKey = $args['auth_key'];
+        
+        $this->settings = Plugin::getSettings($authKey);
         
         //Hook terminal plugin
         if(!isset($this->settings["use_terminal"]))
@@ -25,29 +26,17 @@ class OrongoAuthMain implements IOrongoPlugin{
             Plugin::hookTerminalPlugin(new OrongoAuthTerminal($this->settings));
         }
     }
-    
-     public function injectHTMLOnWebPage(){
-        return false;
-    }
-    
-    
-    public function getHTML(){
-        return null;
-    }
-    
+   
 
-    public function getVersionNumber(){
-        return ORONGOAUTH_VERSION;
+    public function getVersionString(){
+        return "v" . ORONGOAUTH_VERSION;
     }
     
     public function onInstall(){
         //TODO create database
     }
     
-    public function getSettings(){
-        //This does nothing
-        return null;
-    }
+
 
 }
 
