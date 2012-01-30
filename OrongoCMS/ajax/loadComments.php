@@ -5,7 +5,8 @@
  * @author Jaco Ruit
  */
 
-require 'globals.php';
+require '../startOrongo.php';
+startOrongo();
 
 //TODO IP check or some kinda spam prevention thing
 define("NO_ARTICLE", 1);

@@ -4,8 +4,8 @@
  */
 
 
-require 'globals.php';
-require '../config.php';
+require '../startOrongo.php';
+startOrongo();
 
 if(isset($_POST['username']) && isset($_POST['password']) && !isset($_SESSION['orongo-id']) && !(isset($_SESSION['orongo-session-id']))){
     $username = Security::escape($_POST['username']);

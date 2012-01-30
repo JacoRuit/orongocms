@@ -2,7 +2,8 @@
 /**
  * @author Jaco Ruit
  */
-require 'globals.php';
+require 'startOrongo.php';
+startOrongo();
 
 if(isset($_SESSION['orongo-id']) || isset($_SESSION['orongo-session-id'])){
     $sessionID = Security::escapeSQL($_SESSION['orongo-session-id']);

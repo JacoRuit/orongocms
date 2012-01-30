@@ -3,8 +3,8 @@
  * Using the great terminal jQuery plugin: http://terminal.jcubic.pl. Also credits for the guy(s) who made it, it rocks!
  * @author Jaco Ruit
  */
-
-require 'globals.php';
+require '../startOrongo.php';
+startOrongo();
 
 setCurrentPage('admin_terminal');
 

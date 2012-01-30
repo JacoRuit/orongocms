@@ -22,7 +22,8 @@ class Display {
      * @param String $paramTemplateDir smarty/template dir
      * @param String $paramCacheDir smarty/cache dir
      */
-    public function __construct($paramTemplateDir, $paramCacheDir = "../tpl/tmp"){
+    public function __construct($paramTemplateDir, $paramCacheDir = false){
+        if(!$paramCacheDir) $paramCacheDir = ROOT . "/tpl/tmp";
         raintpl::$tpl_dir = $paramTemplateDir; 
         raintpl::$cache_dir = $paramCacheDir; 
         

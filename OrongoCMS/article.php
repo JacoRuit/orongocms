@@ -7,7 +7,8 @@
 //TODO remove on release
 $time_start = microtime(true);
 
-require 'globals.php';
+require 'startOrongo.php';
+startOrongo();
 
 setCurrentPage('article');
 

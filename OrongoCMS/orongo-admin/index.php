@@ -3,7 +3,8 @@
  * @author Jaco Ruit
  */
 
-require 'globals.php';
+require '../startOrongo.php';
+startOrongo();
 
 
 setCurrentPage('admin_index');

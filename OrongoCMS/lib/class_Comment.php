@@ -23,7 +23,7 @@ class Comment implements IHTMLConvertable {
      */
     public function __construct($paramID){
         $this->id = $paramID;
-        $row = getDatabase()->queryFirstRow(" SELECT `content`,`authorID`,`articleID`,`timestamp` FROM `comments` WHERE `id` = %i", $this->id);
+        $row = getDatabase()->queryFirstRow("SELECT `content`,`authorID`,`articleID`,`timestamp` FROM `comments` WHERE `id` = %i", $this->id);
         if($row == null){
             throw new Exception('Comment does not exist', COMMENT_NOT_EXIST);
         }
@@ -53,8 +53,9 @@ class Comment implements IHTMLConvertable {
     * @param String $paramContent new Comment Content
     */
     public function setContent($paramContent){
-        $q = "UPDATE `comments` SET `content`='" . $paramContent . "' WHERE `id` = '" . $this->id ."'";
-        getDatabase()->execQuery($q);
+        getDatabase()->update("comments", array(
+           "content" => $paramContent 
+        ),"id=%i", $this->id);
         $this->content = $paramContent;
     }
     
@@ -94,8 +95,7 @@ class Comment implements IHTMLConvertable {
      * Deletes the article from database.
      */
     public function delete(){
-        $q = "DELETE FROM `comments` WHERE `id` = '" . $this->id ."'";
-        getDatabase()->execQuery($q);
+        getDatabase()->delete("comments","id=%i", $this->id);
     }
     
     /**
@@ -103,12 +103,8 @@ class Comment implements IHTMLConvertable {
      * @return int comment ID
      */
     public static function getLastCommentID(){
-        $q = 'SELECT `id` FROM `comments` ORDER BY `id` DESC';
-        $result = getDatabase()->execQuery($q);
-        $row = mysql_fetch_assoc($result);
-        $lastID = $row['id'];
-        mysql_free_result($result);
-        return $lastID;
+        $row = getDatabase()->queryFirstRow('SELECT `id` FROM `comments` ORDER BY `id` DESC');
+        return $row['id'];
     }
     
     public function toHTML(){
@@ -132,8 +128,13 @@ class Comment implements IHTMLConvertable {
         $newID = self::getLastCommentID() + 1;
         if($paramUser != null && ($paramUser instanceof User) == false) throw new IllegalArgumentException("User object expected."); 
         if($paramUser == null ) $author_id = 00; else $author_id = $paramUser->getID(); 
-        $q = "INSERT INTO `comments` (`id`,`content`,`authorID`,`articleID`, `timestamp`) VALUES ('" . $newID . "', 'not_set_error', '" . $author_id . " ','" .$paramArticleID .  "', UNIX_TIMESTAMP())";
-        getDatabase()->execQuery($q);
+        getDatabase()->insert("comments", array(
+           "id" => $newID,
+           "content" => "not_set_error",
+           "authorID" => $author_id,
+           "articleID" => $paramArticleID,
+           "timestamp" => getDatabase()->sqleval("UNIX_TIMESTAMP()")
+        ));
         return new Comment($newID);
     }
 }
