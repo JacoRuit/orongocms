@@ -3,8 +3,8 @@
  * @author Jaco Ruit
  */
 
-require 'globals.php';
-require '../config.php';
+require '../startOrongo.php';
+startOrongo();
 
 if(isset($_POST['username']) && isset($_POST['email']) && isset($_POST['password_again']) && isset($_POST['password']) && !isset($_SESSION['orongo-id']) && !(isset($_SESSION['orongo-session-id']))){
     if(strtolower($_POST['username']) == 'username' ){

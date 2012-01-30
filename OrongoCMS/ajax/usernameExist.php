@@ -6,7 +6,8 @@
  * @author Jaco Ruit
  */
 
-require 'globals.php';
+require '../startOrongo.php';
+startOrongo();
 
 $validateValue=mysql_escape_string($_GET['fieldValue']);
 $validateId=$_GET['fieldId'];

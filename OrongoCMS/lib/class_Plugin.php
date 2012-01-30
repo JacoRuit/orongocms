@@ -23,7 +23,7 @@ class Plugin {
         $typeSetting= '';
         if(!isset($info['plugin']['access_key'])) throw new Exception("The plugin's access key wasn't found");
         $accessKey = $info['plugin']['access_key'];
-        getDatabase()->delete("plugins", "access_key =  %s", $accessKey);
+        getDatabase()->delete("plugin_data", "access_key =  %s", $accessKey);
         foreach($info['plugin']['settings'] as $key=>$value){
             $setting = $key;
             foreach($info['plugin']['settings'][$key] as $key=>$value){
@@ -31,8 +31,9 @@ class Plugin {
                     $typeSetting = $value;
                     self::installSetting($accessKey , $setting, $typeSetting);
                 }else if($key == 'default'){
-                    $default = $value;
-                    self::setSetting($accessKey, $setting, $default);
+                    getDatabase()->update("plugin_data",array(
+                        "setting_value" => $value
+                    ),"`access_key`=%s AND `setting`=%s", $accessKey, $setting);
                 }
             }
         }
@@ -48,7 +49,7 @@ class Plugin {
      * @param String $paramSettingType Setting type
      */
     private static function installSetting($paramAccessKey, $paramSetting, $paramSettingType){
-        getDatabase()->insert("plugins", array(
+        getDatabase()->insert("plugin_data", array(
             "access_key" => $paramAccessKey,
             "setting" => $paramSetting,
             "setting_type" => $paramSettingType,
@@ -64,7 +65,7 @@ class Plugin {
     public static function getSettings($paramAuthKey){
         if(!isset(self::$authKeys[$paramAuthKey])) throw new IllegalMemortyAccessException("Invalid auth key!");
         else $accessKey = self::$authKeys[$paramAuthKey];
-        $rows = getDatabase()->query("SELECT `setting_value`, `setting`, `setting_type` FROM `plugins` WHERE `access_key` = %s", $accessKey);
+        $rows = getDatabase()->query("SELECT `setting_value`, `setting`, `setting_type` FROM `plugin_data` WHERE `access_key` = %s", $accessKey);
         $settings = array();
         foreach($rows as $row){
             if($row['setting_type'] == 'boolean'){
@@ -87,11 +88,11 @@ class Plugin {
      * @param String $paramValue        New value of settings
      */
     public static function setSetting($paramAuthKey, $paramSetting, $paramValue){
-        if(!isset(self::$authKeys[$paramAuthKey])) throw new IllegalMemortyAccessException("Invalid auth key!");
+        if(!isset(self::$authKeys[$paramAuthKey])) throw new IllegalMemoryAccessException("Invalid auth key!");
         else $accessKey = self::$authKeys[$paramAuthKey];
         $paramSetting =  mysql_escape_string($paramSetting);
         $paramValue =  mysql_escape_string($paramValue);
-        getDatabase()->update("plugins",array(
+        getDatabase()->update("plugin_data",array(
             "setting_value" => $paramValue
         ),"`access_key`=%s AND `setting`=%s", $accessKey, $paramSetting);
     }
@@ -212,7 +213,7 @@ class Plugin {
                 throw new ClassLoadException("Plugin tried to access illegal memory. Unable to load plugin: <br /> " . $phpFile);
                 continue;
             }catch(Exception $e){
-                throw new ClassLoadException("Unable to load plugin: <br /> " . $phpFile);
+                throw new ClassLoadException("Unable to load plugin: <br /> " . $phpFile . "<br/><br /><strong>Exception</strong><br />" . $e->getMessage());
                 continue;
             }
         }

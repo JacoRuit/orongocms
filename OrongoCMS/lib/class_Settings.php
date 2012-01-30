@@ -13,7 +13,7 @@ class Settings {
      */
     public static function getWebsiteURL(){
         if(Cache::isStored('website_url'))return Cache::get('website_url'); 
-        $row = getDatabase()->queryFirstRow("SELECT `value` FROM `settings` WHERE `setting` = 'url'");
+        $row = getDatabase()->queryFirstRow("SELECT `value` FROM `settings` WHERE `setting` = 'website_url'");
         $url = $row['value'];
         #http:// prefix
        // if(strpos($url, "http://")==false){
@@ -33,7 +33,7 @@ class Settings {
      */
     public static function getWebsiteName(){
         if(Cache::isStored('website_name'))return Cache::get('website_name'); 
-        $row = getDatabase()->queryFirstRow("SELECT `value` FROM `settings` WHERE `setting` = 'name'");
+        $row = getDatabase()->queryFirstRow("SELECT `value` FROM `settings` WHERE `setting` = 'website_name'");
         $name = $row['value'];
         Cache::store('website_name', $name);
         return $name;
@@ -44,25 +44,25 @@ class Settings {
      * @param String $paramPrefix prefix for folder (starting from themes/)
      * @return Style Style Object
      */
-    public static function getStyle($paramPrefix){
-        $row = getDatabase()->queryFirstRow("SELECT `value` FROM `settings` WHERE `setting` = 'style'");
+    public static function getStyle(){
+        $row = getDatabase()->queryFirstRow("SELECT `value` FROM `settings` WHERE `setting` = 'website_style'");
         $styleFolder = $row['value'];
-        return new Style($paramPrefix, $styleFolder);
+        return new Style($styleFolder);
     }
     
     /**
      * Sets the style 
      * @param String $paramPrefix prefix for folder (starting from themes/)
-     * @param String $paramStyle  name of the style folder
+     * @param String $paramStyle  path of the style folder
      */
-    public static function setStyle($paramPrefix, $paramStyle){
+    public static function setStyle($paramStyle){
         try{
-            getDatabase()->query('TRUNCATE TABLE `styles`');
-            Style::install($paramPrefix, $paramStyle);
+            getDatabase()->query('TRUNCATE TABLE `style_data`');
+            Style::install($paramStyle);
         }catch(Exception $e){ throw $e; }
         getDatabase()->update("settings", array(
             "value" => $paramStyle
-        ), "setting = 'style'");
+        ), "setting = 'website_style'");
     }
     
     /**
@@ -71,7 +71,7 @@ class Settings {
      */
     public static function getEmail(){
         if(Cache::isStored('website_email')) return Cache::get('website_email'); 
-        $row = getDatabase()->queryFirstRow("SELECT `value` FROM `settings` WHERE `setting` = 'email'");
+        $row = getDatabase()->queryFirstRow("SELECT `value` FROM `settings` WHERE `setting` = 'website_email'");
         $address = $row['value'];
         Cache::store('website_email', $address);
         return $address;

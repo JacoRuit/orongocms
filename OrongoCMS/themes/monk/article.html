@@ -25,7 +25,7 @@
         <div id="_orongo_ajax_comment_count">{$article->getCommentCount()}</div> comments
     </div>
     <h1>{$article->getTitle()}</h1>  
-    <p>Written by <a href="{$website_url}archive.php?user={$article->getAuthor()->getName()}">{$article->getAuthor()->getName()}</a> on {$article->getDate()}</p>
+    <p>Written by <a href="{$website_url}archive.php?user={$article->getAuthorName()}">{$article->getAuthorName()}</a> on {$article->getDate()}</p>
 </div>
 
 {$article->getContent()}

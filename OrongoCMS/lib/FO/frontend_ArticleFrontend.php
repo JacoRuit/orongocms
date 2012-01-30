@@ -20,7 +20,6 @@ class ArticleFrontend extends OrongoFrontendObject {
             die($msgbox->getImports() . $msgbox->toHTML());
         }
         $this->article = &$args['article'];
-        $this->article->setTitle("test");
         $this->body = "<script src=\"" . Settings::getWebsiteURL() . "js/widget.prettyAlert.js\" type=\"text/javascript\" charset=\"utf-8\"></script>";
         $this->pluginHTML = "";
         $this->commentsHTML = "";  
