@@ -8,6 +8,9 @@ startOrongo();
 
 $msg = null;
 
+if(getUser() != null)
+    header("Location: orongo-admin");
+
 if(isset($_GET['msg'])){
     $msgCode = Security::escape($_GET['msg']);
     switch($msgCode){

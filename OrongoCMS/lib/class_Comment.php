@@ -137,6 +137,15 @@ class Comment implements IHTMLConvertable {
         ));
         return new Comment($newID);
     }
+    
+    /**
+     * Gets comments count
+     * @return int comment count
+     */
+    public static function getCommentCount(){
+        getDatabase()->query("SELECT `id` FROM `comments`");
+        return getDatabase()->count();
+    }
 }
 
 ?>

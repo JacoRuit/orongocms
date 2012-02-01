@@ -231,10 +231,17 @@ class Article implements IHTMLConvertable {
      * @return int article ID
      */
     public static function getArticleID($paramTitle){
-        //FIXME addslashes???????
-       // $q = "SELECT `id` FROM `articles` WHERE `title` LIKE '" . addslashes($paramTitle) . "'";
         $row = getDatabase()->queryFirstRow("SELECT `id` FROM `articles` WHERE `title` LIKE %s", $paramTitle);
         return $row['id'];
+    }
+    
+    /**
+     * Gets article count
+     * @return int article count
+     */
+    public static function getArticleCount(){
+        getDatabase()->query("SELECT `id` FROM `articles`");
+        return getDatabase()->count();
     }
 }
 

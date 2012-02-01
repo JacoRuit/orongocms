@@ -167,7 +167,6 @@ class OrongoTerminal {
       $user = terminalAuth();
       if($plugin == null || $command == null || $pluginargs = null)
           throw new Exception("You're missing some arguments!");
-      var_dump($pluginargs);
   }
   
   public function cout($string, $s2 = "",$s3 = "", $s4 = "", $s5 = ""){

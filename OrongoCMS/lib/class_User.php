@@ -127,7 +127,6 @@ class User {
      * @return String Hashed password of User
      */
     private static function getPassword($paramID){
-        //$q = "SELECT `password` FROM `users` WHERE `id` = '" . $paramID . "'";
         $row = getDatabase()->queryFirstRow("SELECT `password` FROM `users` WHERE `id` = %i", $paramID);
         return $row['password'];
     }
@@ -167,6 +166,7 @@ class User {
         getDatabase()->insert("users", array(
             "id" => $newID,
             "name" => $paramName,
+            "email" => $paramEmail,
             "password" => $paramPassword,
             "rank" => $paramRank,
             "activated" => 0

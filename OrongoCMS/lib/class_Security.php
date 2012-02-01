@@ -13,6 +13,7 @@ class Security {
      * @return String Hashed String
      */
     public static function hash($paramString){
+        global $_CONFIG;
         if(CRYPT_SHA512 != 1){
             throw new Exception('SHA-512 Hashing not supported!');
         }else{

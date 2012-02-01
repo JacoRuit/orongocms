@@ -5,6 +5,8 @@
  * @author Jaco Ruit
  */
 
+global $_CONFIG;
+
 $_CONFIG = array();
 
 
