@@ -37,6 +37,7 @@ class Plugin {
                 }
             }
         }
+        getDatabase()->delete("activated_plugins", "plugin_xml_path=%s", $paramInfoXML);
         getDatabase()->insert("activated_plugins", array(
             "plugin_xml_path" => $paramInfoXML
         ));

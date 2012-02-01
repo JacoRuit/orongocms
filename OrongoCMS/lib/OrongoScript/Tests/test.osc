@@ -8,30 +8,3 @@ let msgbox=make_msgbox(text,OrongoScript test);
 
 do show_msgbox(msgbox);
 
-do echo(msgbox);
-
-do echo(<br /><br /><br /><br />);
-
-if(dag == bye);
-    do echo(Dit laat hij zien!);
-    if(hi == hallo);
-        do echo(Dit laat hij zien!);
-    endif;
-    do echo(Sluit deze if!);
-endif;
-
-do echo(<br />);
-
-if(dag == boe);
-    do echo(Dit laat hij niet zien!);
-    if(boe == boe);
-        do echo(Dit laat hij niet zien!);
-    endif;
-endif;
-
-if(doei == doei);
-    do echo(Dit laat hij zien!);
-endif;
-
-
-do echo(Einde van het script!);

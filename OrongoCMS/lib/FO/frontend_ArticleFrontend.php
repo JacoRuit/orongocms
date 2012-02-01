@@ -12,16 +12,15 @@ class ArticleFrontend extends OrongoFrontendObject {
     
     public function main($args){
         if(!isset($args['article'])){
-            $msgbox = new MessageBox("Can't render article frontend: missing main argument 'article'!");
+            $msgbox = new MessageBox("Can't render article frontend: missing argument 'article'!");
             die($msgbox->getImports() . $msgbox->toHTML());
         }
         if(($args['article'] instanceof Article) == false){
-            $msgbox = new MessageBox("Can't render article frontend: wrong main argument 'article'!");
+            $msgbox = new MessageBox("Can't render article frontend: wrong argument 'article'!");
             die($msgbox->getImports() . $msgbox->toHTML());
         }
         $this->article = &$args['article'];
         $this->body = "<script src=\"" . Settings::getWebsiteURL() . "js/widget.prettyAlert.js\" type=\"text/javascript\" charset=\"utf-8\"></script>";
-        $this->pluginHTML = "";
         $this->commentsHTML = "";  
         $this->generateCommentsHTML();
     }
@@ -43,7 +42,7 @@ class ArticleFrontend extends OrongoFrontendObject {
             }
         }else{
             foreach($comments as $comment){
-                $commentHTML .= $comment->toHTML();
+                $this->commentHTML .= $comment->toHTML();
             }
         }
 
@@ -62,7 +61,7 @@ class ArticleFrontend extends OrongoFrontendObject {
     }
    
     public function render(){
-        getDisplay()->setTemplateVariable("head_title", Settings::getWebsiteName() . " - " . $this->article->getTitle());
+        getDisplay()->setTitle(Settings::getWebsiteName() . " - " . $this->article->getTitle());
         getDisplay()->setTemplateVariable("body", $this->body);
     
 

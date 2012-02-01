@@ -10,9 +10,6 @@ $time_start = microtime(true);
 require 'startOrongo.php';
 startOrongo();
 
-
-Plugin::install(ADMIN . "/plugins/ExamplePlugin/info.xml");
-
 setCurrentPage('index');
 
 $index = new IndexFrontend();

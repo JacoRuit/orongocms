@@ -2,13 +2,11 @@
 /**
  * @author Jaco Ruit
  */
-
-session_start();
-
 /**
  *Starts Orongo! :) 
  */
 function startOrongo(){
+    session_start();
     
     define("ROOT", dirname(__FILE__));
     define("LIB", ROOT . "/lib");

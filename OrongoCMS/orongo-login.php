@@ -6,9 +6,7 @@
 require 'startOrongo.php';
 startOrongo();
 
-getDisplay()->setTemplateDir("orongo-admin/style/"); 
-
-$msg = '';
+$msg = null;
 
 if(isset($_GET['msg'])){
     $msgCode = Security::escape($_GET['msg']);
@@ -42,28 +40,8 @@ if(isset($_GET['msg'])){
     }
 }
 
+$login = new LoginFrontend();
+$login->main(array("time" => time(), "msg" => $msg));
+$login->render();
 
-
-#handle orongo-id, orongo-session-id
-$user = getUser();
-if($user != null){ header("Location: orongo-admin"); exit; }
-
-
-if($msg != "")
-{
-    getDisplay()->addObject(new MessageBox($msg));
-}
-
-#   Template
-
-getDisplay()->setTemplateVariable("head_title", Settings::getWebsiteName() . " - Login");
-
-getDisplay()->setTemplateVariable("document_ready", "");
-getDisplay()->setTemplateVariable("style", "style.login");
-
-getDisplay()->add("header.orongo");
-getDisplay()->add("login.orongo");
-getDisplay()->add("footer.orongo");
-
-getDisplay()->render();
 ?>

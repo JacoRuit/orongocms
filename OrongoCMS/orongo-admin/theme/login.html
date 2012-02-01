@@ -1,0 +1,25 @@
+	<body>
+            {$body}
+	<div id="container">
+		<div class="logo">
+			<a href="#"><img src="{$website_url}orongo-admin/theme/assets/logo.png#" alt="" /></a>
+		</div>
+		<div id="box">
+			<form action="{$website_url}/actions/action_Login.php#" method="POST">
+			<p class="main">
+				<label>Username: </label>
+				<input name="username" value="username" /> 
+				<label>Password: </label>
+				<input type="password" name="password" value="asdf1234">	
+			</p>
+
+			<p class="space">
+				<span><input type="checkbox" />Remember me</span>
+				<input type="submit" value="Login" class="login" />
+			</p>
+			</form>
+		</div>
+	</div>
+
+	</body>
+</html>
