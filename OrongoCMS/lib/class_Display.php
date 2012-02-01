@@ -7,7 +7,7 @@
  */
 class Display {
     
-    private $smarty;
+    private $raintpl;
     private $tpls;
     private $rendered;
     private $objects;
@@ -73,6 +73,14 @@ class Display {
     public function setTemplateVariable($paramVariable, $paramValue){
         if($this->rendered) return;
         $this->raintpl->assign($paramVariable,$paramValue);
+    }
+    
+    /**
+     *Sets the title of the documtent
+     * @param String $paramTitle title of the page 
+     */
+    public function setTitle($paramTitle){
+        $this->setTemplateVariable("head_title", $paramTitle);
     }
     
     /**

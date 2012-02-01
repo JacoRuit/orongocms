@@ -66,7 +66,7 @@ class OrongoScriptRuntime {
         $file = end($file);
         if($file != "*") $path .= "/orongopackage_" . $file . ".php";
         else $path .= "/" . $file;
-        $path = dirname(__FILE__) . '\\' . $path;
+        $path = dirname(__FILE__) . '/' . $path;
         if(!file_exists($path)) throw new OrongoScriptParseException("Invalid import, package not found!");
         require_once($path);
         $class = false;
