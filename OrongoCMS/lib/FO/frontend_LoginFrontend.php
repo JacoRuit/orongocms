@@ -28,7 +28,6 @@ class LoginFrontend extends OrongoFrontendObject {
     
         getStyle()->run();
 
-        getDisplay()->add("header");
         getDisplay()->add("login");
         //getDisplay()->add("footer");
         getDisplay()->render();

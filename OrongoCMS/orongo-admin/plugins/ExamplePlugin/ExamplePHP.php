@@ -10,7 +10,7 @@ class ExampleClass extends OrongoPluggableObject{
 
     
     public function __construct($args){
-        $script = file_get_contents("lib/OrongoScript/Tests/test.osc");
+        $script = file_get_contents(LIB . "/OrongoScript/Tests/test.osc");
         $parser = new OrongoScriptParser($script);
         $parser->startParser();
         require 'TerminalPlugin.php';
