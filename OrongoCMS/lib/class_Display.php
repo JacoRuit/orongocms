@@ -23,7 +23,7 @@ class Display {
      * @param String $paramCacheDir smarty/cache dir
      */
     public function __construct($paramTemplateDir, $paramCacheDir = false){
-        if(!$paramCacheDir) $paramCacheDir = ROOT . "/tpl/tmp";
+        if(!$paramCacheDir) $paramCacheDir = ROOT . "/tpl/tmp/";
         raintpl::$tpl_dir = $paramTemplateDir; 
         raintpl::$cache_dir = $paramCacheDir; 
         
@@ -187,6 +187,7 @@ class Display {
         if($this->rendered) return;
         $this->setTemplateVariable("website_name", Settings::getWebsiteName());
         $this->setTemplateVariable("website_url", Settings::getWebsiteURL());
+        $this->setTemplateVariable("version", "r" . REVISION);
         $this->addToTemplateVariable("body", '<script type="text/javascript">' . $this->js . '</script>');
         $this->addToTemplateVariable("body", $this->generalhtml);
         foreach($this->objects as $object){

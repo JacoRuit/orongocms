@@ -1,0 +1,78 @@
+<body>
+    {$body}
+	<header id="header">
+		<hgroup>
+			<h1 class="site_title"><a href="index.html">OrongoAdmin</a></h1>
+			<h2 class="section_title">Dashboard</h2><div class="btn_view_site"><a href="{$website_url}#">View Site</a></div>
+		</hgroup>
+	</header> <!-- end of header bar -->
+	
+	<section id="secondary_bar">
+		<div class="user">
+		</div>
+		<div class="breadcrumbs_container">
+			<article class="breadcrumbs"><a href="{$website_url}orongo-admin/index.php#">{$website_name} Admin</a> <div class="breadcrumb_divider"></div> <a class="current">Login</a></article>
+		</div>
+	</section><!-- end of secondary bar -->
+	
+	<aside id="sidebar" class="column">
+		<h3>User</h3>
+		<ul>
+			<li class="icn_view_users"><a href="{$website_url}orongo-register.php#">Register</a></li>
+		</ul>
+		<footer>
+			<hr />
+			<p><strong>{$website_name} Admin Panel - Powered by OrongoCMS {$version}</strong></p>
+			<p>Theme by <a href="http://www.medialoot.com">MediaLoot</a></p>
+		</footer>
+	</aside>
+        <!-- end of sidebar -->
+        <section id="main" class="column">
+		
+                {if="isset($msgs)"}
+                {$msgs}
+                {else}
+		<h4 class="alert_error">You need to be logged in in order to enter the admin panel.</h4>
+                {/if}
+                <article class="module width_3_quarter">
+			<header><h3>Login</h3></header>
+                        <form action="{$website_url}actions/action_Login.php#" method="post">
+				<div class="module_content">
+						<fieldset>
+							<label>Username</label>
+							<input type="text" name="username">
+						</fieldset>
+						<fieldset>
+							<label>Password</label>
+                                                        <input type="password" name="password">
+						</fieldset>
+					<div class="clear"></div>
+				</div>
+                            </form>
+			<footer>
+				<div class="submit_link">
+
+					<input type="submit" value="Login" class="alt_btn">
+                                </div>
+			</footer>
+		</article>
+                <article class="module width_quarter">
+                        <header></header>
+			<div class="module_content">
+                            <h4>New here?</h4>
+                            <p>Click <a href="{$website_url}orongo-register.php#">here</a> to register</p>
+                            <br />
+                             <hr />
+                            <h4>Forgot password</h4>
+                            <p>No worries! You can request a new one <a href="{$website_url}orongo-lost-pw.php#">here</a></p>
+                            <br />
+                        </div>
+                        <footer></footer>
+                </article>
+               	<div class="spacer"></div>
+	</section>
+
+
+</body>
+
+</html>
