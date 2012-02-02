@@ -34,41 +34,8 @@
                 {else}
 		<h4 class="alert_error">You need to be logged in in order to enter the admin panel.</h4>
                 {/if}
-                <article class="module width_3_quarter">
-			<header><h3>Login</h3></header>
-                        <form action="{$website_url}actions/action_Login.php#" method="post">
-				<div class="module_content">
-						<fieldset>
-							<label>Username</label>
-							<input type="text" name="username">
-						</fieldset>
-						<fieldset>
-							<label>Password</label>
-                                                        <input type="password" name="password">
-						</fieldset>
-					<div class="clear"></div>
-				</div>
-                            </form>
-			<footer>
-				<div class="submit_link">
-
-					<input type="submit" value="Login" class="alt_btn">
-                                </div>
-			</footer>
-		</article>
-                <article class="module width_quarter">
-                        <header></header>
-			<div class="module_content">
-                            <h4>New here?</h4>
-                            <p>Click <a href="{$website_url}orongo-register.php#">here</a> to register</p>
-                            <br />
-                             <hr />
-                            <h4>Forgot password</h4>
-                            <p>No worries! You can request a new one <a href="{$website_url}orongo-lost-pw.php#">here</a></p>
-                            <br />
-                        </div>
-                        <footer></footer>
-                </article>
+                {$objects}
+                
                	<div class="spacer"></div>
 	</section>
 
