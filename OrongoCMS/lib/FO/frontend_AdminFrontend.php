@@ -139,19 +139,20 @@ class AdminFrontendObject implements IHTMLConvertable{
     private $content;
     private $size;
     
-    private static $sizes = array("3 quarter", "half", "quarter", "full");
+    private static $sizes = array("75" => "3_quarter", "50" => "half", "25" => "quarter", "100" => "full");
     /**
      *Init admin frontend object
+     * @param int $paramSize 25,50,75 or 100
      * @param String $paramTitle Title of object
      * @param String $paramContent Content of object
      * @param String $paramFooter footer of object (optional)
      */
-    public function __construct($paramTitle, $paramSize, $paramContent, $paramFooter = null){
-        if(!in_array($paramSize, self::$sizes)) throw new IllegalArgumentException("Invalid size!");
+    public function __construct($paramSize, $paramTitle, $paramContent, $paramFooter = null){
+        if(!array_key_exists($paramSize, self::$sizes)) throw new IllegalArgumentException("Invalid size!");
         $this->header = '<h3>' . $paramTitle . '</h3>';
         $this->content = '<div class="module_content">' . $paramContent . '</div><div class="clear"></div>';
         $this->footer =  $paramFooter;
-        $this->size = $paramSize;
+        $this->size = self::$sizes[$paramSize];
     }
     
     /**
@@ -244,7 +245,7 @@ class AdminFrontendObject implements IHTMLConvertable{
     public function toHTML() {
         $rt = "<header>". $this->header . "</header>" . $this->content;
         if($this->footer != null) $rt .= "<footer>" . $this->footer . "</footer>";
-        return "<article class=\"module width_". str_replace(" ", "_", $this->size) . "\">" . $rt . "</article>";
+        return "<article class=\"module width_". $this->size . "\">" . $rt . "</article>";
     }
 }
 
@@ -259,18 +260,18 @@ class AdminFrontendForm extends AdminFrontendObject{
     
     /**
      * Inits the form
+     * @param int $paramSize 25,50,75 or 100
      * @param String $paramTitle title of form
-     * @param String $paramSize size of form
      * @param String $paramMethod POST or GET
      * @param String $paramAction action of the form
      */
-    public function __construct($paramTitle, $paramSize, $paramMethod, $paramAction){
+    public function __construct($paramSize, $paramTitle, $paramMethod, $paramAction){
         $this->method = strtolower($paramMethod);
-        $this->action = strtolower($paramAction);
+        $this->action = $paramAction;
         $this->buttons = array();
         $this->inputs = array();
         if(!in_array($this->method, self::$methods)) throw new IllegalArgumentException("Invalid method!");
-        parent::__construct($paramTitle, $paramSize, "");
+        parent::__construct($paramSize, $paramTitle, "");
     }
     
     /**
@@ -292,13 +293,14 @@ class AdminFrontendForm extends AdminFrontendObject{
     
     /**
      * Adds an input
-     * @param String $paramType HTML form type
+     * 
      * @param String $paramLabel label for the input
      * @param String $paramName name of the input
+     * @param String $paramType HTML form type
      * @param String $paramValue value of the form (default nothing)
      * @param boolean $paramRequired indicating if this is required (default false)
      */
-    public function addInput($paramType, $paramLabel, $paramName, $paramValue = "", $paramRequired = false){
+    public function addInput($paramLabel, $paramName, $paramType, $paramValue = "", $paramRequired = false){
         $input = array(
            "type" => $paramType,  
            "label" => $paramLabel,
@@ -338,7 +340,6 @@ class AdminFrontendForm extends AdminFrontendObject{
             else $content .= ">";
             $content .= "</fieldset>";
         }
-        $content .= "</form>";
         parent::setContent($content);
         
         if(count($this->buttons) > 0){

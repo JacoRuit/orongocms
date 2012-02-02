@@ -41,7 +41,7 @@ try{
 }catch(Exception $e){
     $msgbox = new MessageBox("An error occured while fetching articles.");
     $msgbox->bindException($e);
-    getDatabase()->addObject($msgbox);
+    getDisplay()->addObject($msgbox);
     $articles = null;
 }
 $archive = new ArchiveFrontend();
