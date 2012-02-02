@@ -3,7 +3,7 @@
  * @author Jaco Ruit
  */
 
-require '../startOrongo.php';
+require 'startOrongo.php';
 startOrongo();
 getDisplay()->setTemplateDir("orongo-admin/style/"); 
 

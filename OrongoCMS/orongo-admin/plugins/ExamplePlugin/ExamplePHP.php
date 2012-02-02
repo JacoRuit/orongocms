@@ -10,14 +10,13 @@ class ExampleClass extends OrongoPluggableObject{
 
     
     public function __construct($args){
-        $script = file_get_contents(LIB . "/OrongoScript/Tests/test.osc");
-        $parser = new OrongoScriptParser($script);
-        $parser->startParser();
+        //$script = file_get_contents(LIB . "/OrongoScript/Tests/test.osc");
+        //$parser = new OrongoScriptParser($script);
+        //$parser->startParser();
         require 'TerminalPlugin.php';
         Plugin::hookTerminalPlugin(new TerminalPlugin());
         $stored = Plugin::getSettings($args['auth_key']);
         OrongoEventManager::addEventHandler('article_edit', $this, 'onArticleEdit');
-        getDisplay()->addObject(new MessageBox($args['auth_key']));
         //Access the settings in the array.
         if(isset($stored['example_setting_2'] ) && $stored['example_setting_2']){
             $this->injectHTML = true;

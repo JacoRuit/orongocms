@@ -27,7 +27,8 @@ class LoginFrontend extends OrongoFrontendObject {
    
     
         getStyle()->run();
-
+        getDisplay()->setTemplateVariable("style_url", Settings::getWebsiteURL() ."orongo-admin/theme/");
+        getDisplay()->add("header");
         getDisplay()->add("login");
         //getDisplay()->add("footer");
         getDisplay()->render();
