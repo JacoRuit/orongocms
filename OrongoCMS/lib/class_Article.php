@@ -139,6 +139,16 @@ class Article implements IHTMLConvertable {
         OrongoEventManager::raiseEvent(new OrongoEvent($paramAction, array("article_id" => $paramArticleID, "by" => $by)));
     }
     
+    /**
+     * Shortcut for raising article edit events:)
+     * @param String $paramAction action string
+     * @param int $paramArticleID article ID (default current ID)
+     */
+    private static function raiseArticleEventStatic($paramAction, $paramArticleID){
+        if(getUser() == null) $by = "admin";
+        else $by = getUser()->getID();
+        OrongoEventManager::raiseEvent(new OrongoEvent($paramAction, array("article_id" => $paramArticleID, "by" => $by)));
+    }
     
     /**
      * @return array Article Information in Array
@@ -168,7 +178,7 @@ class Article implements IHTMLConvertable {
         $generatedHTML .= "     <p id=\"author\">" . $author_name . "</p>"; 
         $generatedHTML .= "     <p id=\"date\"" . $this->date . "</p>";
         $generatedHTML .= " </div>";
-        $generatedHTML .= " <p id=\"content\">" . substr($this->content, 0, 100) . "</p>";
+        $generatedHTML .= " <p id=\"content\">" . substr(strip_tags($this->content), 0, 100) . "</p>";
         $generatedHTML .= "</div>";
         return $generatedHTML;
     }
@@ -221,7 +231,7 @@ class Article implements IHTMLConvertable {
             "authorID" => $author_id,
             "date" => getDatabase()->sqleval("CURDATE()")
         ));
-        $this->raiseArticleEvent('article_created', $newID);
+        self::raiseArticleEventStatic('article_created', $newID);
         return new Article($newID);
     }
     

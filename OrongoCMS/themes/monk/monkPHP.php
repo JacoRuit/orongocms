@@ -56,7 +56,7 @@ class MonkStyle implements IOrongoStyle{
             if($last) $generatedHTML .= 'column-last';
             $generatedHTML .= ' ">';
             $generatedHTML .= '<a href="'. Settings::getWebsiteURL() . 'article.php?id=' . $article->getID() . '"><h3>' . $article->getTitle() . '</h3></a>';
-            $generatedHTML .= '<p>' . substr($article->getContent(), 0 ,500) . '</p>';
+            $generatedHTML .= '<p>' . substr(strip_tags($article->getContent()), 0 ,500) . '</p>';
             $generatedHTML .= '</div>';
             if($last && $curPage == 'index' ) break;
         }
