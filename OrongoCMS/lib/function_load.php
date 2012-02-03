@@ -27,8 +27,14 @@ function load($paramLibFolder){
     if(!file_exists($raintpl_path)) throw new Exception("Couldn't load RainTPL (" . $raintpl_path . " was missing!)");
     require $raintpl_path;
     $meekro_path = $paramLibFolder . '/meekrodb.2.0.class.php';
-    if(!file_exists($meekro_path)) throw new Exception("Could't load MeekroDB (" . $meekro_paht . " was missing!)");
+    if(!file_exists($meekro_path)) throw new Exception("Could't load MeekroDB (" . $meekro_path . " was missing!)");
     require $meekro_path;
+    $ckeditor_path = $paramLibFolder . "/ckeditor/ckeditor_php5.php";
+    if(!file_exists($ckeditor_path)) throw new Exception("Could't load CKEditor (" . $ckeditor_path . " was missing!)");
+    require $ckeditor_path;
+    $ckfinder_path = $paramLibFolder . "/ckfinder/core/ckfinder_php5.php";
+    if(!file_exists($ckfinder_path)) throw new Exception("Could't load CKFinder (" . $ckfinder_path . " was missing!)");
+    require $ckfinder_path;
     foreach($orongo_interfaces as $interface){
         if(!interface_exists($interface)){ 
             $path = $paramLibFolder . '/I/' . $interface . '.php';
