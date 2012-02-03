@@ -29,8 +29,17 @@ function CheckAuthentication()
 	// ... where $_SESSION['IsAuthorized'] is set to "true" as soon as the
 	// user logs in your system. To be able to use session variables don't
 	// forget to add session_start() at the top of this file.
-
-	return false;
+        
+        if(!class_exists("User")){
+            //Check if Orongo was loaded
+            require "../../startOrongo.php";
+            startOrongo();
+        }
+        //ORONGOCMS AUTHENTICATION:
+        if(!function_exists('getUser')) return false;
+        if(getUser() == null) return false;
+        if(getUser()->getRank() < RANK_WRITER) return false;
+	return true;
 }
 
 // LicenseKey : Paste your license key here. If left blank, CKFinder will be
@@ -90,8 +99,8 @@ Thumbnails : thumbnails settings. All thumbnails will end up in the same
 directory, no matter the resource type.
 */
 $config['Thumbnails'] = Array(
-		'url' => $baseUrl . '_thumbs',
-		'directory' => $baseDir . '_thumbs',
+		'url' => Settings::getWebsiteURL() . 'orongo-media/thumbs',
+		'directory' => ROOT . '/orongo-media/thumbs',
 		'enabled' => true,
 		'directAccess' => false,
 		'maxWidth' => 100,
@@ -188,24 +197,24 @@ $config['DefaultResourceTypes'] = '';
 
 $config['ResourceType'][] = Array(
 		'name' => 'Files',				// Single quotes not allowed
-		'url' => $baseUrl . 'files',
-		'directory' => $baseDir . 'files',
+		'url' => Settings::getWebsiteURL() . 'orongo-media/files',
+		'directory' => ROOT . '/orongo-media/files',
 		'maxSize' => 0,
 		'allowedExtensions' => '7z,aiff,asf,avi,bmp,csv,doc,docx,fla,flv,gif,gz,gzip,jpeg,jpg,mid,mov,mp3,mp4,mpc,mpeg,mpg,ods,odt,pdf,png,ppt,pptx,pxd,qt,ram,rar,rm,rmi,rmvb,rtf,sdc,sitd,swf,sxc,sxw,tar,tgz,tif,tiff,txt,vsd,wav,wma,wmv,xls,xlsx,zip',
 		'deniedExtensions' => '');
 
 $config['ResourceType'][] = Array(
 		'name' => 'Images',
-		'url' => $baseUrl . 'images',
-		'directory' => $baseDir . 'images',
+		'url' => Settings::getWebsiteURL() . 'orongo-media/images',
+		'directory' => ROOT . '/orongo-media/images',
 		'maxSize' => 0,
 		'allowedExtensions' => 'bmp,gif,jpeg,jpg,png',
 		'deniedExtensions' => '');
 
 $config['ResourceType'][] = Array(
 		'name' => 'Flash',
-		'url' => $baseUrl . 'flash',
-		'directory' => $baseDir . 'flash',
+		'url' => Settings::getWebsiteURL() . 'orongo-media/flash',
+		'directory' => ROOT . '/orongo-media/flash',
 		'maxSize' => 0,
 		'allowedExtensions' => 'swf,flv',
 		'deniedExtensions' => '');
