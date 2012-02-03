@@ -23,7 +23,7 @@ $create = new AdminFrontend();
 switch($object){
     case "article":
         $create->main(array("time" => time(), "page_title" => "Create Article", "page_template" => "dashboard"));
-        $form = new AdminFrontendForm(100, "New Article", "POST", orongoURL("actions/action_CreateArticle.php"));
+        $form = new AdminFrontendForm(100, "New Article", "POST", orongoURL("actions/action_Create.php?article"));
         $form->addInput("Article Title", "title", "text", "", true);
         $form->addInput("Article Content", "content", "ckeditor", "", true);
         $form->addInput("Tags", "tags", "text", "tag1, tag2");
