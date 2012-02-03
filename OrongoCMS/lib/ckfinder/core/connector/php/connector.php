@@ -30,6 +30,10 @@
  */
 ob_start();
 
+//Start Orongo
+require '../../../../../startOrongo.php';
+startOrongo();
+
 /**
  * define required constants
  */

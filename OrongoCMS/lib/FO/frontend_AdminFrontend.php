@@ -318,10 +318,11 @@ class AdminFrontendForm extends AdminFrontendObject{
             $content .= "<fieldset>";
             $content .= "<label>" . $input['label'] . "</label>";
             if($input['type'] == "ckeditor"){
+                $content .= "<br/><br/>";
                 $ckeditor = new CKEditor();
-                $ckeditor->basePath  =  orongoURL('lib/ckeditor/');
+                $ckeditor->basePath  =  '../lib/ckeditor/';
                 $ckfinder = new CKFinder();
-                $ckfinder->BasePath = orongoURL('lib/ckfinder/'); 
+                $ckfinder->BasePath = '../lib/ckfinder/'; 
                 $ckfinder->SetupCKEditorObject($ckeditor);
                 $ckeditor->returnOutput = true;
                 $content .= $ckeditor->editor($input['name'], $input['value']);
