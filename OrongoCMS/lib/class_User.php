@@ -201,7 +201,7 @@ class User {
     public static function generateActivationURL($paramID){
         $websiteURL = Settings::getWebsiteURL();
         $activationCode = self::getRandomString();
-        getDatabase()->insert("activations", array(
+        getDatabase()->insert("user_activations", array(
             "userID" => $paramID,
             "code" => $activationCode
         ));
@@ -226,9 +226,8 @@ class User {
      * @return String Activation URL
      */
     public static function getActivationURL($paramID){
-        $row = getDatabase()->queryFirstRow("SELECT `code` FROM `activations` WHERE `userID` = %i", $paramID);
-        $url = Settings::getWebsiteURL() . $row['code'];
-        mysql_free_result($result);
+        $row = getDatabase()->queryFirstRow("SELECT `code` FROM `user_activations` WHERE `userID` = %i", $paramID);
+        $url = orongoURL("orongo-activation.php?code=" . $row['code']);
         return $url;
     }
     
@@ -248,7 +247,7 @@ class User {
      * @return boolean indicating if the activation code is good
      */
     public static function isGoodActivationCode($paramCode){
-        getDatabase()->query("SELECT `id` FROM `activations` WHERE `code` = %s", $paramCode);
+        getDatabase()->query("SELECT `id` FROM `user_activations` WHERE `code` = %s", $paramCode);
         $c = getDatabase()->count();
         return $c == 1;
     }
@@ -259,7 +258,7 @@ class User {
      * @return int User ID
      */
     public static function getUserIDByActivationCode($paramCode){
-        $row = getDatabase()->queryFirstRow("SELECT `userID` FROM `activations` WHERE `code` = %s", $paramCode);
+        $row = getDatabase()->queryFirstRow("SELECT `userID` FROM `user_activations` WHERE `code` = %s", $paramCode);
         return $row['userID'];
     }
     
@@ -268,7 +267,7 @@ class User {
      * @param String $paramCode Activation Code
      */
     public static function deleteActivationCode($paramCode){
-        getDatabase()->delete("activations", "`code`=%s", $paramCode);
+        getDatabase()->delete("user_activations", "`code`=%s", $paramCode);
         @mysql_query($q);
     }
     

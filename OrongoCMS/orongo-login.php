@@ -52,13 +52,13 @@ if(isset($_GET['msg'])){
 }
 
 $login = new AdminFrontend();
-$login->main(array("time" => time(), "page" => "login"));
+$login->main(array("time" => time(), "page_title" => "Login", "page_template" => "ndashboard"));
 $form = new AdminFrontendForm(75, "Login", "POST", orongoURL("actions/action_Login.php"));
 $form->addInput("Username", "username", "text");
 $form->addInput("Password", "password", "password");
 $form->addButton("Login", true);
 $login->addObject($form);
-$login->addObject(new AdminFrontendObject(25, "", '<h4>New here?</h4><p>Click <a href="{$website_url}orongo-register.php#">here</a> to register</p><br /><hr /><h4>Forgot password</h4><p>No worries! You can request a new one <a href="{$website_url}orongo-lost-pw.php#">here</a></p><br /><br />'));
+$login->addObject(new AdminFrontendObject(25, "", '<h4>New here?</h4><p>Click <a href="' . orongoURL("orongo-register.php#") . '">here</a> to register</p><br /><hr /><h4>Forgot password</h4><p>No worries! You can request a new one <a href="' . orongoURL("orongo-lost-pw.php#") . '">here</a></p><br /><br />'));
 if($msg != null) $login->addMessage($msg, $msgtype);
 $login->render();
 

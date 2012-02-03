@@ -8,8 +8,7 @@
 class AdminFrontend extends OrongoFrontendObject {
     
     private $body;
-    private $page;
-    private $statics;
+    private $pageTemplate;
     private $pageTitle;
     private $msgs;
     private $objects;
@@ -18,46 +17,30 @@ class AdminFrontend extends OrongoFrontendObject {
     
     public function main($args){
         getDisplay()->setTemplateDir(ROOT . "/orongo-admin/theme/");
-        if(!isset($args['page'])){
-            $msgbox = new MessageBox("Can't render admin frontend: missing argument 'page'!");
+        if(!isset($args['page_title'])){
+            $msgbox = new MessageBox("Can't render admin frontend: missing argument 'page_title'!");
             die($msgbox->getImports() . $msgbox->toHTML());
         }
-        if(!is_string($args['page'])){
-            $msgbox = new MessageBox("Can't render admin frontend: wrong argument 'page'!");
+        if(!isset($args['page_template'])){
+           $msgbox = new MessageBox("Can't render admin frontend: missing argument 'page_template!");
+           die($msgbox->getImports() . $msgbox->toHTML()); 
+        }
+        if(!is_string($args['page_template'])){
+            $msgbox = new MessageBox("Can't render admin frontend: wrong argument 'page_template'!");
+            die($msgbox->getImports() . $msgbox->toHTML());
+        }
+        if(!is_string($args['page_title'])){
+            $msgbox = new MessageBox("Can't render admin frontend: wrong argument 'page_title'!");
             die($msgbox->getImports() . $msgbox->toHTML());
         }
         $this->body = "<script src=\"" . Settings::getWebsiteURL() . "js/widget.prettyAlert.js\" type=\"text/javascript\" charset=\"utf-8\"></script>";
-        $this->page = $args['page'];
-        $this->generateStatistics();
+        $this->pageTemplate = $args['page_template'];
         $this->msgs = array();
         $this->objects = array();
-        switch($this->page){
-            case "index":
-                $this->pageTitle = "Dashboard";
-                break;
-            case "login":
-                $this->pageTitle = "Login";
-                break;
-            default:
-                $msgbox = new MessageBox("Can't render admin frontend: wrong argument 'page'!");
-                die($msgbox->getImports() . $msgbox->toHTML());
-        }
+        $this->pageTitle = $args['page_title'];
     }
     
-    private function generateStatistics(){
-        /**
-         *<p><b>Articles:</b> 2201</p>
-					<p><b>Comments:</b> 17092</p>
-					<p><b>Users:</b> 3788</p> 
-         */
-        $this->statics .= "<p><b>Users:</b>" . User::getUserCount() . "</p>";
-        $this->statics .= "<p><b>Articles:</b>" . Article::getArticleCount() . "</p>";
-        $this->statics .= "<p><b>Comments:</b>" . Comment::getCommentCount() ."</p>";
-        $this->statics .= "<p><b>Pages:</b>" . Page::getPageCount() . "</p>";
-        $this->statics .= "<p><b>Items in storage:</b>" . Storage::getStorageCount() ."</p>";
-        $this->statics .= "<p><b>Plugins:</b>" . Plugin::getPluginCount() ."</p>";
 
-    }
     
     /**
      * Adds a message to the admin board
@@ -119,14 +102,13 @@ class AdminFrontend extends OrongoFrontendObject {
         }
         
         getDisplay()->setTemplateVariable("objects", $objectshtml);
-        
-        getDisplay()->setTemplateVariable("statics", $this->statics);
+        getDisplay()->setTemplateVariable("current_page", $this->pageTitle);
         
         getDisplay()->setTemplateVariable("style_url", Settings::getWebsiteURL() ."orongo-admin/theme/");
         getStyle()->run();
 
         getDisplay()->add("header");
-        getDisplay()->add($this->page);
+        getDisplay()->add($this->pageTemplate);
         getDisplay()->render();
     }
 }
@@ -335,9 +317,19 @@ class AdminFrontendForm extends AdminFrontendObject{
         foreach($this->inputs as $input){
             $content .= "<fieldset>";
             $content .= "<label>" . $input['label'] . "</label>";
-            $content .= "<input type=\"" . $input['type'] . "\" name=\"" . $input['name'] . "\" value=\"" . $input['value'] . "\" ";
-            if($input['required']) $content .= " required>";
-            else $content .= ">";
+            if($input['type'] == "ckeditor"){
+                $ckeditor = new CKEditor();
+                $ckeditor->basePath  =  orongoURL('lib/ckeditor/');
+                $ckfinder = new CKFinder();
+                $ckfinder->BasePath = orongoURL('lib/ckfinder/'); 
+                $ckfinder->SetupCKEditorObject($ckeditor);
+                $ckeditor->returnOutput = true;
+                $content .= $ckeditor->editor($input['name'], $input['value']);
+            }else{
+                $content .= "<input type=\"" . $input['type'] . "\" name=\"" . $input['name'] . "\" value=\"" . $input['value'] . "\" ";
+                if($input['required']) $content .= " required>";
+                else $content .= ">";
+            }
             $content .= "</fieldset>";
         }
         parent::setContent($content);
