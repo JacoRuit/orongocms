@@ -35,7 +35,7 @@ function startOrongo(){
         die($msgbox->getImports() . $msgbox->toHTML());
     }
 
-
+    setMenu(new Menu());
     setStyle($style);
     setDisplay(new Display($style->getStylePath()));
     setUser(handleSessions());

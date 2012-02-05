@@ -1,0 +1,69 @@
+ARTICLE:Artikel
+ARTICLES:Artikels
+PAGE:Pagina
+PAGES:Pagina's
+COMMENT:Reactie
+COMMENTS:Reacties
+CATEGORY:Categorie
+CATEGORIES:Categorieën
+USER:Gebruiker
+USERS:Gebruikers
+FILE:Bestand
+FILES:Bestanden
+GALLERY:Gallerij
+MEDIA:Media
+
+HOME:Home
+ARCHIVE:Archief
+
+USERNAME:Gebruikersnaam
+PASSWORD:Wachtwoord
+
+LOGIN:Log in
+LOGOUT:Log uit
+REGISTER:Registreer
+
+
+FETCH_ERROR:Er is een fout opgetreden tijdens het ophalen van %s
+ARCHIVE_DATE_ERROR:Foute datum
+
+HIDE:Verbergen
+SHOW:Bekijken
+
+QUICK_SEARCH:Snel Zoeken
+ADMIN_PANEL:Admin Paneel
+DASHBOARD:Dashboard
+YOUR_PROFILE:Jouw Profiel
+VIEW_SITE:Bekijk Website
+SETTINGS:Instellingen
+POWERED_BY:Aangedreven door
+
+MANAGE:Beheer
+MANAGER:Beheerder
+
+NEW_ARTICLE:Nieuw Artikel
+NEW_PAGE:Nieuwe Pagina
+NEW_USER:Nieuwe Gebruiker
+
+CREATE_ARTICLE:Maak Artikel
+
+ARTICLE_CONTENT:Artikel Inhoud
+ARTICLE_TITLE:Artikel Titel
+TAGS:Sleutelwoorden
+
+POST:Versturen
+
+LOGIN_MSG_WRONG_DETAILS:Verkeerde gebruikersnaam en/of wachtwoord.
+LOGIN_MSG_LOGGED_OUT:Je bent succesvol uitgelogt.
+LOGIN_MSG_REG_SUCCESS:Registratie voltooid. We hebben je een activatie e-mail gestuurd.
+LOGIN_MSG_REG_INTERNAL_ERROR:Een interne fout is opgetreden tijdens het registreren. Probeer het a.u.b. opnieuw.
+LOGIN_MSG_INVALID_ACTIVATION_URL:Foute activatie URL.
+LOGIN_MSG_ALREADY_ACTIVATED:Je account is al geactiveerd. Je kan inloggen.
+LOGIN_MSG_ACTIVATION_OK:Activatie succesvol afgerond. Je kan nu inloggen.
+LOGIN_MSG_PROMPT_ACTIVATION:Je moet eerst je gebruikersnaam activeren voordat je mag inloggen.
+
+REG_MSG_PASS_NO_MATCH:Wachtwoorden komen niet overeen.
+REG_MSG_USERNAME_EXISTS:Deze gebruikersnaam bestaat al.
+REG_MSG_USERNAME_TOO_SHORT:Foute gebruikersnaam lengte. Gebruikers naam moet min. 4 characters en max. 20 characters lang zijn.
+REG_MSG_PASSWORD_TOO_SHORT:Foute wachtwoord lengte. Wachtwoord moet min. 6 characters lang zijn.
+REG_MSG_FILL_IN_USERNAME:Vul alstublieft een gebruikersnaam in.

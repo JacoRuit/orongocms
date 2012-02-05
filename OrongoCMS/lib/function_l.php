@@ -12,7 +12,8 @@
 function l($paramSentence, $paramArgs = null){
     if(!is_string($paramSentence)) throw new IllegalArgumentException("Invalid argument, string expected!");
     $LANG = Settings::getLangArray();
-    if(!array_key_exists($paramSentence, $LANG)) return $paramSentence;
+    $paramSentence = strtoupper(str_replace(" ", "_", $paramSentence));
+    if(!array_key_exists($paramSentence, $LANG)) return "?" . $paramSentence . "?";
     if($paramArgs == null) return $LANG[$paramSentence];
     if(is_array($paramArgs)){
         $return = call_user_func("sprintf", array($LANG[$paramSentence] + $paramArgs));

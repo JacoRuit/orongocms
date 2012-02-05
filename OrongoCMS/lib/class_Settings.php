@@ -101,6 +101,16 @@ class Settings {
        return $langArray;
     }
     
+    /**
+     * Checks if archive should be shown in Menu
+     * @return boolean indicating if it should 
+     */
+    public static function showArchive(){
+        if(Cache::isStored('show_archive')) return Cache::get('show_archive');
+        $row = getDatabase()->queryFirstRow("SELECT `value` FROM `settings` WHERE `setting` = 'show_archive'");
+        Cache::store('show_archive', $row['value']);
+        return $row['value'];
+    }
 }
 
 ?>

@@ -3,56 +3,59 @@
 	<header id="header">
 		<hgroup>
 			<h1 class="site_title"><a href="{$website_url}orongo-admin/index.php#">OrongoAdmin</a></h1>
-			<h2 class="section_title">Dashboard</h2><div class="btn_view_site"><a href="{$website_url}#">View Site</a></div>
+			<h2 class="section_title">{function="l("Dashboard")"}</h2><div class="btn_view_site"><a href="{$website_url}#">{function="l("View Site")"}</a></div>
 		</hgroup>
 	</header> <!-- end of header bar -->
 	
 	<section id="secondary_bar">
 		<div class="user">
 			<p>{$user->getName()}</p>
-			<a class="logout_user" href="{$website_url}orongo-logout.php#" title="Logout">Logout</a>
+			<a class="logout_user" href="{$website_url}orongo-logout.php#" title="{function="l("Logout")"}">{function="l("Logout")"}</a>
 		</div>
 		<div class="breadcrumbs_container">
-			<article class="breadcrumbs"><a href="{$website_url}orongo-admin/index.php#">{$website_name} Admin</a> <div class="breadcrumb_divider"></div> <a class="current">{$current_page}</a></article>
+			<article class="breadcrumbs"><a href="{$website_url}orongo-admin/index.php#">{$website_name} {function="l("Admin Panel")"}</a> <div class="breadcrumb_divider"></div> <a class="current">{$current_page}</a></article>
 		</div>
 	</section><!-- end of secondary bar -->
 	
 	<aside id="sidebar" class="column">
 		<form class="quick_search">
-			<input type="text" value="Quick Search" onfocus="if(!this._haschanged){this.value=''};this._haschanged=true;">
+			<input type="text" value="{function="l("Quick Search")"}..." onfocus="if(!this._haschanged){this.value=''};this._haschanged=true;">
 		</form>
 		<hr/>
-		<h3>Articles</h3>
+		<h3>{function="l("Articles")"}</h3>
 		<ul class="toggle">
-			<li class="icn_new_article"><a href="{$website_url}orongo-admin/create.php?article#">New Article</a></li>
-			<li class="icn_edit_article"><a href="{$website_url}orongo-admin/manage.php?articles#">Manage Articles</a></li>
-			<li class="icn_categories"><a href="{$website_url}orongo-admin/manage.php?categories#">Categories</a></li>
+			<li class="icn_new_article"><a href="{$website_url}orongo-admin/create.php?article#">{function="l("New Article")"}</a></li>
+			<li class="icn_edit_article"><a href="{$website_url}orongo-admin/manage.php?articles#">{function="l("Manage")"} {function="l("Articles")"}</a></li>
+			<li class="icn_categories"><a href="{$website_url}orongo-admin/manage.php?categories#">{function="l("Categories")"}</a></li>
 		</ul>
-                <h3>Pages</h3>
+                <h3>{function="l("Pages")"}</h3>
                 <ul class="toggle">
-                    <li class="icn_new_article"><a href="{$website_url}orongo-admin/create.php?page#">New Page</a></li>
-                    <li class="icn_edit_article"><a href="{$website_url}orongo-admin/manage.php?pages#">Manage Pages</a></li>
+                    <li class="icn_new_article"><a href="{$website_url}orongo-admin/create.php?page#">{function="l("New Page")"}</a></li>
+                    <li class="icn_edit_article"><a href="{$website_url}orongo-admin/manage.php?pages#">{function="l("Manage")"} {function="l("Pages")"}</a></li>
                 </ul>
-		<h3>Users</h3>
+		<h3>{function="l("Users")"}</h3>
 		<ul class="toggle">
-			<li class="icn_add_user"><a href="{$website_url}orongo-admin/create.php?user#">Add New User</a></li>
-			<li class="icn_view_users"><a href="{$website_url}orongo-admin/manage.php?users#">Manage Users</a></li>
-			<li class="icn_profile"><a href="{$website_url}orongo-admin/view.php?user.{$user->getID()}#">Your Profile</a></li>
+			<li class="icn_add_user"><a href="{$website_url}orongo-admin/create.php?user#">{function="l("New User")"}</a></li>
+			<li class="icn_view_users"><a href="{$website_url}orongo-admin/manage.php?users#">{function="l("Manage")"} {function="l("Users")"}</a></li>
+			<li class="icn_profile"><a href="{$website_url}orongo-admin/view.php?user.{$user->getID()}#">{function="l("Your Profile")"}</a></li>
 		</ul>
-		<h3>Media</h3>
+		<h3>{function="l("Media")"}</h3>
 		<ul class="toggle">
-			<li class="icn_folder"><a href="{$website_url}orongo-admin/media.php    ">File Manager</a></li>
-			<li class="icn_photo"><a href="{$website_url}orongo-admin/media.php?images">Gallery</a></li>
+			<li class="icn_folder"><a href="{$website_url}orongo-admin/media.php">{function="l("File")"} {function="l("Manager")"}</a></li>
+			<li class="icn_photo"><a href="{$website_url}orongo-admin/media.php?images">{function="l("Gallery")"}</a></li>
 		</ul>
-		<h3>Admin</h3>
+		<h3>{function="l("Software")"}</h3>
 		<ul class="toggle">
-			<li class="icn_settings"><a href="{$website_url}orongo-admin/settings.php#">Settings</a></li>
-			<li class="icn_jump_back"><a href="{$website_url}orongo-logout.php#">Logout</a></li>
+			<li class="icn_settings"><a href="{$website_url}orongo-admin/settings.php#">{function="l("Settings")"}</a></li>
+			
 		</ul>
-		
+                <br /><br />
+                <ul>
+                    <li style="margin: 10px 0 10px 6%;" class="icn_jump_back"><a href="{$website_url}orongo-logout.php#">{function="l("Logout")"}</a></li>
+                </ul>
 		<footer>
 			<hr />
-			<p><strong>{$website_name} Admin Panel - Powered by OrongoCMS {$version}</strong></p>
+			<p><strong>{$website_name} {function="l("Admin Panel")"} - {function="l("Powered by")"} OrongoCMS {$version}</strong></p>
 			<p>Theme by <a href="http://www.medialoot.com">MediaLoot</a></p>
 		</footer>
 	</aside><!-- end of sidebar -->

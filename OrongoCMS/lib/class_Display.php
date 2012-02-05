@@ -35,7 +35,6 @@ class Display {
         $this->head = "<meta name=\"generator\" content=\"OrongoCMS r" . REVISION . "\" />";
         $this->js = "";
         $this->generalhtml = "";
-        $this->setTemplateVariable("menu", HTMLFactory::getMenuCode());
     }
     
     /**
@@ -190,6 +189,7 @@ class Display {
         $this->setTemplateVariable("version", "r" . REVISION);
         $this->addToTemplateVariable("body", '<script type="text/javascript">' . $this->js . '</script>');
         $this->addToTemplateVariable("body", $this->generalhtml);
+        $this->setTemplateVariable("menu", getMenu()->toHTML());
         foreach($this->objects as $object){
             if($object == null) continue;
             if(($object instanceof OrongoDisplayableObject) == false) continue;

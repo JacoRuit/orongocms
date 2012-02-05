@@ -11,9 +11,10 @@
 */
 
 function setStyle($paramStyle){
+    if(function_exists('getStyle')) return;
     if(($paramStyle instanceof Style) == false) throw new IllegalArgumentException("Invalid argument, style object expected!");
     global $_orongo_style;
     $GLOBALS['_orongo_style'] = &$paramStyle;
-    @eval('function getStyle(){ return $GLOBALS[\'_orongo_style\']; }');
+    function getStyle(){ return $GLOBALS['_orongo_style']; };
 }
 ?>
