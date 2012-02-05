@@ -37,7 +37,7 @@ class AdminFrontend extends OrongoFrontendObject {
         $this->pageTemplate = $args['page_template'];
         $this->msgs = array();
         $this->objects = array();
-        $this->pageTitle = $args['page_title'];
+        $this->pageTitle = l($args['page_title']);
     }
     
 
@@ -283,10 +283,9 @@ class AdminFrontendForm extends AdminFrontendObject{
      * @param boolean $paramRequired indicating if this is required (default false)
      */
     public function addInput($paramLabel, $paramName, $paramType, $paramValue = "", $paramRequired = false){
-        $label = l(str_replace(" ", "_", strtoupper($paramLabel)));
         $input = array(
            "type" => $paramType,  
-           "label" => $label,
+           "label" => l($paramLabel),
            "name" => $paramName,
            "value" => $paramValue,
            "required" => $paramRequired
@@ -301,9 +300,8 @@ class AdminFrontendForm extends AdminFrontendObject{
      * @param boolean $paramBlue indicating if this buttons has to be blue
      */
     public function addButton($paramText, $paramBlue){
-        $text = l(str_replace(" ", "_",strtoupper($paramText)));
         $button = array(
-            "text" => $text,
+            "text" => l($paramText),
             "blue" => $paramBlue
         );
         $this->buttons[count($this->buttons)] = $button;

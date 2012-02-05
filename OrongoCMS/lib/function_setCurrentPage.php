@@ -13,6 +13,6 @@
 function setCurrentPage($paramPage){
     if(function_exists('getCurrentPage')) return;
     define("_orongo_current_page", $paramPage);
-    @eval('function getCurrentPage(){ return _orongo_current_page; }' );
+    function getCurrentPage(){ return _orongo_current_page; } 
 }
 ?>

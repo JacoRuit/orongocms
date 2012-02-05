@@ -23,7 +23,7 @@ $types = array(
 if($type != null){
     if(!in_array($type, $types)) $type = null;
     $type = strtoupper(substr($type,0,1)) . substr($type, 1);
-    $pageTitle = "Media - " . $type;
+    $pageTitle = "Gallery";
 }
 
 if($type == null){
@@ -36,6 +36,6 @@ $media->main(array("time" => time(), "page_title" => $pageTitle, "page_template"
 $ckfinder = new CKFinder(orongoURL("lib/ckfinder/"));
 if($type != null)
     $ckfinder->ResourceType = $type;
-$media->addObject(new AdminFrontendObject(100, "Media Manager - Powered by CKFinder", $ckfinder->CreateHTML()));
+$media->addObject(new AdminFrontendObject(100, l("Media") . " " .  l("Manager") . " - " . l("Powered by") . " CKFinder", $ckfinder->CreateHTML()));
 $media->render();
 ?>

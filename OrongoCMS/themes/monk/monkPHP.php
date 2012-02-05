@@ -12,24 +12,9 @@ class MonkStyle implements IOrongoStyle{
     
     public function run(){
         $settings = Style::getSettings();
-        try{
-           //reverse the menu because we have a righ float on menu
-           $pages = array_reverse(orongo_query('action=fetch&object=page&max=10000&order=page.id'));
-           $html="";
-           $websiteURL = Settings::getWebsiteURL();
-           if($settings['show_archive_in_menu']){ 
-               $html .= "<li><a href=\"" . $websiteURL . "archive.php\">Archive</a></li>";
-               $settings['show_archive_in_menu'] = null;
-           }
-           foreach($pages as $page){
-            if($page instanceof Page){
-                $html .= " <li><a href=\"". $websiteURL . "page.php?id=" . $page->getID() . "\">" . $page->getTitle() . "</a></li>";
-            }else continue;
-           }
-           
-           $html .= "<li><a href=\"" . $websiteURL . "index.php\">Home</a></li>";
-           getDisplay()->setTemplateVariable("menu", $html);           
-        }catch(Exception $e){}
+        
+        //Reverse the Menu, we've right float
+        getMenu()->flip();
         
         foreach($settings as $setting=>$value){
             if($value != null)

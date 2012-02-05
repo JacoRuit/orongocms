@@ -3,7 +3,7 @@
 	<header id="header">
 		<hgroup>
 			<h1 class="site_title"><a href="{$website_url}orongo-admin/index.php#">OrongoAdmin</a></h1>
-			<h2 class="section_title">Dashboard</h2><div class="btn_view_site"><a href="{$website_url}#">View Site</a></div>
+			<h2 class="section_title">{function="l("Dashboard")"}</h2><div class="btn_view_site"><a href="{$website_url}#">{function="l("View Site")"}</a></div>
 		</hgroup>
 	</header> <!-- end of header bar -->
 	
@@ -11,18 +11,18 @@
 		<div class="user">
 		</div>
 		<div class="breadcrumbs_container">
-			<article class="breadcrumbs"><a href="{$website_url}orongo-admin/index.php#">{$website_name} Admin</a> <div class="breadcrumb_divider"></div> <a class="current">{$current_page}</a></article>
+			<article class="breadcrumbs"><a href="{$website_url}orongo-admin/index.php#">{$website_name} {function="l("Admin Panel")"}</a> <div class="breadcrumb_divider"></div> <a class="current">{$current_page}</a></article>
 		</div>
 	</section><!-- end of secondary bar -->
 	
 	<aside id="sidebar" class="column">
 		<h3>User</h3>
 		<ul>
-			<li class="icn_view_users"><a href="{$website_url}orongo-register.php#">Register</a></li>
+			<li class="icn_view_users"><a href="{$website_url}orongo-register.php#">{function="l("Register")"}</a></li>
 		</ul>
 		<footer>
 			<hr />
-			<p><strong>{$website_name} Admin Panel - Powered by OrongoCMS {$version}</strong></p>
+			<p><strong>{$website_name} {function="l("Admin Panel")"} - {function="l("Powered by")"} OrongoCMS {$version}</strong></p>
 			<p>Theme by <a href="http://www.medialoot.com">MediaLoot</a></p>
 		</footer>
 	</aside>

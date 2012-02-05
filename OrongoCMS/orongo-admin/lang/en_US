@@ -4,19 +4,54 @@ PAGE:Page
 PAGES:Pages
 COMMENT:Comment
 COMMENTS:Comments
+CATEGORY:Category
+CATEGORIES:Categories
+USER:User
+USERS:Users
+FILE:File
+FILES:Files
+GALLERY:Gallery
+MEDIA:Media
 
 HOME:Home
 ARCHIVE:Archive
 
 USERNAME:Username
 PASSWORD:Password
+
 LOGIN:Login
+LOGOUT:Logout
+REGISTER:Register
+
 
 FETCH_ERROR:An error occured while fetching %s
-
-
 ARCHIVE_DATE_ERROR:Invalid date
 
+HIDE:Hide
+SHOW:Show
+
+QUICK_SEARCH:Quick Search
+ADMIN_PANEL:Admin Panel
+DASHBOARD:Dashboard
+YOUR_PROFILE:Your Profile
+VIEW_SITE:View Site
+SETTINGS:Settings
+POWERED_BY:Powered By
+
+MANAGE:Manage
+MANAGER:Manager
+
+NEW_ARTICLE:New Article
+NEW_PAGE:New Page
+NEW_USER:New User
+
+CREATE_ARTICLE:Create Article
+
+ARTICLE_CONTENT:Article Content
+ARTICLE_TITLE:Article Title
+TAGS:Tags
+
+POST:Post
 
 LOGIN_MSG_WRONG_DETAILS:Wrong username or password.
 LOGIN_MSG_LOGGED_OUT:You have been successfully logged out!
