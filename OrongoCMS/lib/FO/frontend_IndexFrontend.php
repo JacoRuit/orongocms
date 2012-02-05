@@ -52,7 +52,7 @@ class IndexFrontend extends OrongoFrontendObject {
     }
    
     public function render(){
-        getDisplay()->setTitle(Settings::getWebsiteName() . " - Home");
+        getDisplay()->setTitle(Settings::getWebsiteName() . " - " . l("HOME"));
         getDisplay()->setTemplateVariable("body", $this->body);
     
         getDisplay()->setTemplateVariable("articles", $this->articleHTML);

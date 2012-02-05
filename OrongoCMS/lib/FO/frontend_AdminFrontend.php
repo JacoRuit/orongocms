@@ -283,9 +283,10 @@ class AdminFrontendForm extends AdminFrontendObject{
      * @param boolean $paramRequired indicating if this is required (default false)
      */
     public function addInput($paramLabel, $paramName, $paramType, $paramValue = "", $paramRequired = false){
+        $label = l(str_replace(" ", "_", strtoupper($paramLabel)));
         $input = array(
            "type" => $paramType,  
-           "label" => $paramLabel,
+           "label" => $label,
            "name" => $paramName,
            "value" => $paramValue,
            "required" => $paramRequired
@@ -300,8 +301,9 @@ class AdminFrontendForm extends AdminFrontendObject{
      * @param boolean $paramBlue indicating if this buttons has to be blue
      */
     public function addButton($paramText, $paramBlue){
+        $text = l(str_replace(" ", "_",strtoupper($paramText)));
         $button = array(
-            "text" => $paramText,
+            "text" => $text,
             "blue" => $paramBlue
         );
         $this->buttons[count($this->buttons)] = $button;

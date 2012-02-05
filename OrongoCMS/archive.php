@@ -39,7 +39,7 @@ if($userid != false && is_numeric($userid)) $q .= "&where=author.id:" . $userid;
 try{
     $articles = orongo_query($q);
 }catch(Exception $e){
-    $msgbox = new MessageBox("An error occured while fetching articles.");
+    $msgbox = new MessageBox(l("FETCH_ERROR", strtolower(l("ARTICLES"))));
     $msgbox->bindException($e);
     getDisplay()->addObject($msgbox);
     $articles = null;

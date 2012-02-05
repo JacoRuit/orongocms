@@ -6,6 +6,11 @@
  *Starts Orongo! :) 
  */
 function startOrongo(){
+    //DEBUG LINE
+    //TODO change on release
+    
+    error_reporting(E_ALL);
+    //error_reporting
     session_start();
     
     define("ROOT", dirname(__FILE__));
