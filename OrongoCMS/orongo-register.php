@@ -13,23 +13,23 @@ if(isset($_GET['msg'])){
     $msgCode = Security::escape($_GET['msg']);
     switch($msgCode){
         case 0:
-            $msg = 'Passwords do not match.';
+            $msg = l("REG_MSG_PASS_NO_MATCH");
             $msgtype = "error";
             break; 
         case 1:
-            $msg = 'Username exists already.';
+            $msg = l("REG_MSG_USERNAME_EXISTS");
             $msgtype = "warning";
             break;
         case 2:
-            $msg = 'Invalid username length. Username must be min. 4 characters max. 20 characters long.';
+            $msg = l("REG_MSG_USERNAME_TOO_SHORT");
             $msgtype = "error";
             break;
         case 3:
-            $msg = 'Invalid password length. Password must be min. 6 characters long.';
+            $msg = l("REG_MSG_PASSWORD_TOO_SHORT");
             $msgtype = "error";
             break;
         case 4:
-            $msg = 'Please fill in an username!';
+            $msg = l("REG_MSG_FILL_IN_USERNAME");
             $msgtype = "error";
             break;
         default:

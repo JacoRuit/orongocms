@@ -1,0 +1,34 @@
+ARTICLE:Article
+ARTICLES:Articles
+PAGE:Page
+PAGES:Pages
+COMMENT:Comment
+COMMENTS:Comments
+
+HOME:Home
+ARCHIVE:Archive
+
+USERNAME:Username
+PASSWORD:Password
+LOGIN:Login
+
+FETCH_ERROR:An error occured while fetching %s
+
+
+ARCHIVE_DATE_ERROR:Invalid date
+
+
+LOGIN_MSG_WRONG_DETAILS:Wrong username or password.
+LOGIN_MSG_LOGGED_OUT:You have been successfully logged out!
+LOGIN_MSG_REG_SUCCESS:Registration succesful. We have sent you an activation email.
+LOGIN_MSG_REG_INTERNAL_ERROR:An error occured while processing your registration. Please try again.
+LOGIN_MSG_INVALID_ACTIVATION_URL:Malformed activation URL!
+LOGIN_MSG_ALREADY_ACTIVATED:Your account has already been activated! You may login now.
+LOGIN_MSG_ACTIVATION_OK:Activation succesful. You may login now.
+LOGIN_MSG_PROMPT_ACTIVATION:You need to activate your account first.
+
+REG_MSG_PASS_NO_MATCH:Passwords do not match.
+REG_MSG_USERNAME_EXISTS:Username exists already.
+REG_MSG_USERNAME_TOO_SHORT:Invalid username length. Username must be min. 4 characters max. 20 characters long.
+REG_MSG_PASSWORD_TOO_SHORT:Invalid password length. Password must be min. 6 characters long.
+REG_MSG_FILL_IN_USERNAME:Please fill in an username!

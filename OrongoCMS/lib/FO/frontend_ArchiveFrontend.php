@@ -44,7 +44,7 @@ class ArchiveFrontend extends OrongoFrontendObject {
     
    
     public function render(){
-        getDisplay()->setTitle(Settings::getWebsiteName() . " - Archive");
+        getDisplay()->setTitle(Settings::getWebsiteName() . " - " . l("ARCHIVE"));
         getDisplay()->setTemplateVariable("body", $this->body);
     
         getDisplay()->setTemplateVariable("articles", $this->articleHTML);

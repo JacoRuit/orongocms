@@ -15,35 +15,35 @@ if(isset($_GET['msg'])){
     $msgCode = Security::escape($_GET['msg']);
     switch($msgCode){
         case 0:
-            $msg = 'Wrong username or password.';
+            $msg = l("LOGIN_MSG_WRONG_DETAILS");
             $msgtype = "error";
             break;
         case 1:
-            $msg = 'You have been successfully logged out!';
+            $msg = l("LOGIN_MSG_LOGGED_OUT");
             $msgtype = "success";
             break;
         case 2:
-            $msg = 'Registration succesful. We have sent you an activation email.';
+            $msg = l("LOGIN_MSG_REG_SUCCESS");
             $msgtype = "info";
             break;
         case 3:
-            $msg = 'An error occured while processing your registration. Please try again.';
+            $msg = l("LOGIN_MSG_REG_INTERNAL_ERROR");
             $msgtype = "warning";
             break;
         case 4:
-            $msg = 'Malformed activation URL!';
+            $msg = l("LOGIN_MSG_INVALID_ACTIVATION_URL");
             $msgtype= "warning";
             break;
         case 5:
-            $msg = 'Your account has already been activated! You may login now.';
+            $msg = l('LOGIN_MSG_ALREADY_ACTIVATED');
             $msgtype = "info";
             break;
         case 6:
-            $msg = 'Activation succesful. You may login now.';
+            $msg = l('LOGIN_MSG_ACTIVATION_OK');
             $msgtype = "success";
             break;
         case 7:
-            $msg = 'You need to activate your account first.';
+            $msg = l("LOGIN_MSG_PROMPT_ACTIVATION");
             $msgtype = "warning";
             break;
         default:

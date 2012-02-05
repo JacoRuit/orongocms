@@ -15,13 +15,13 @@
 function load($paramLibFolder){
     define('REVISION', 61);
     //REGISTER NEW FUNCTIONS, INTERFACES, (ABSTRACT) CLASSES, EXCEPTIONS HERE! :D
-    $orongo_functions = array('orongo_query', 'handleSessions', 'setCurrentPage', 'setDatabase', 'setDisplay', 'setPlugins', 'setStyle', 'setUser');
+    $orongo_functions = array('orongo_query', 'handleSessions', 'l' , 'setCurrentPage', 'setDatabase', 'setDisplay', 'setPlugins', 'setStyle', 'setUser');
     $orongo_interfaces = array('IHTMLConvertable', 'IJSConvertable', 'IOrongoPlugin', 'IOrongoStyle', 'IOrongoTerminalPlugin', 'IStorable');
     $orongo_abstracts = array('OrongoDisplayableObject', 'OrongoPluggableObject', 'OrongoFrontendObject');
     $orongo_classes = array('AjaxLoadCommentsAction', 'AjaxPostCommentAction', 'Article', 'Cache', 'Comment', 'Database', 'Display', 'HTMLFactory', 'Image','Issue', 'IssueTracker', 'Mail', 'MailFactory', 'MenuBar', 'MessageBox', 'OrongoEvent', 'OrongoEventManager',  'OrongoQuery', 'OrongoQueryHandler', 'OrongoTerminal', 'Page', 'Plugin', 'Security', 'Session', 'Settings', 'Storage', 'Style', 'User');
     $orongo_exceptions = array('ClassLoadException', 'IllegalArgumentException', 'IllegalMemoryAccessException', 'OrongoScriptParseException', 'QueryException');
     $orongo_function_packages = array('Utils');
-    $orongo_frontend_objects = array('AdminFrontend', 'ArchiveFrontend', 'LoginFrontend', 'PageFrontend', 'IndexFrontend', 'ArticleFrontend');
+    $orongo_frontend_objects = array('AdminFrontend', 'ArchiveFrontend', 'PageFrontend', 'IndexFrontend', 'ArticleFrontend');
     $orongo_script_core = array('OrongoFunction', 'OrongoPackage', 'OrongoIfStatement', 'OrongoScriptParser', 'OrongoScriptRuntime', 'OrongoVariable');
     $raintpl_path = $paramLibFolder . '/rain.tpl.class.php';
     if(!file_exists($raintpl_path)) throw new Exception("Couldn't load RainTPL (" . $raintpl_path . " was missing!)");

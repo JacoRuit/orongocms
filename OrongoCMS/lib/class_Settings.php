@@ -77,6 +77,29 @@ class Settings {
         return $address;
     }
     
+    /**
+     * Returns the language array
+     * @return array language array
+     */
+    public static function getLangArray(){
+       if(Cache::isStored('website_lang')) return Cache::get('website_lang');
+       $row = getDatabase()->queryFirstRow("SELECT `value` FROM `settings` WHERE `setting` = 'website_lang'");
+       $lang = $row['value'];
+       $langPath = ROOT . "/orongo-admin/lang/" . $lang;
+       if(!file_exists($langPath)) throw new Exception("Cannot load language: " . $langPath);
+       $langFile = file_get_contents($langPath);
+       $lines = preg_split( '/\r\n|\r|\n/', $langFile);
+       $langArray = array();
+       foreach($lines as $line){
+           $exp = explode(":", $line,2);
+           if(empty($exp[0])) continue;
+           if(count($exp) <= 1) throw new Exception("Invalid language file: " . $langPath);
+           if(array_key_exists(trim($exp[0]), $langArray)) continue;
+           $langArray[trim($exp[0])] = trim($exp[1]);
+       }
+       Cache::store('website_lang', $langArray);
+       return $langArray;
+    }
     
 }
 
