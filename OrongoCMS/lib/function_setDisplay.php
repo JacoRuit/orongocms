@@ -15,6 +15,9 @@ function setDisplay($paramDisplay){
     if(($paramDisplay instanceof Display) == false) throw new IllegalArgumentException("Invalid argument, display object expected!");
     global $_orongo_display;
     $GLOBALS['_orongo_display'] = &$paramDisplay;
+    /**
+     * @return Display 
+     */
     function getDisplay(){ return $GLOBALS['_orongo_display']; }
 }
 ?>

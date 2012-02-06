@@ -83,9 +83,9 @@ class IssueTracker {
      */
     public static function getAuthSubRequestURL($paramNext){
         $url = "https://www.google.com/accounts/AuthSubRequest?";
-        $url .= "scope=https%3A%2F%2Fcode.google.com%2Ffeeds%2Fissues%2F&amp;";
-        $url .= "session=1&amp;";
-        $url .= "secure=0&amp;";
+        $url .= "scope=https%3A%2F%2Fcode.google.com%2Ffeeds%2Fissues%2F&";
+        $url .= "session=1&";
+        $url .= "secure=0&";
         $url .= "next=" . urlencode($paramNext) . "&amp;";
         return $url;
     }
