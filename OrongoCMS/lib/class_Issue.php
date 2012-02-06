@@ -12,7 +12,7 @@ class Issue {
     private $status;
     private $labels;
     
-    private static $status_opts = array ("New", "Accepted", "Dangerous");
+    private static $status_opts = array ("New", "Accepted", "Critical", "Fixed");
     
     /**
      * Create an issue object

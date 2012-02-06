@@ -180,6 +180,13 @@ class Display {
     }
     
     /**
+     * Closes the window 
+     */
+    public function closeWindow(){
+        die("<script type=\"text/javascript\">window.close();</script><p>My work here is done.</p>");
+    }
+    
+    /**
      * Renders the Display
      */
     public function render(){
