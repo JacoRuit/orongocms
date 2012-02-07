@@ -48,7 +48,9 @@ NEW_USER:New User
 CREATE_ARTICLE:Create Article
 
 ARTICLE_CONTENT:Article Content
+PAGE_CONTENT:Page Content
 ARTICLE_TITLE:Article Title
+PAGE_TITLE:Page Title
 TAGS:Tags
 
 POST:Post
@@ -67,3 +69,18 @@ REG_MSG_USERNAME_EXISTS:Username exists already.
 REG_MSG_USERNAME_TOO_SHORT:Invalid username length. Username must be min. 4 characters max. 20 characters long.
 REG_MSG_PASSWORD_TOO_SHORT:Invalid password length. Password must be min. 6 characters long.
 REG_MSG_FILL_IN_USERNAME:Please fill in an username!
+
+LOGIN_TO_GOOGLE:Login to Google
+LOGGING_IN_TO_GOOGLE:Logging in to Google
+WAITING_FOR_LOGIN:Waiting for you to login
+DO_NOT_SEE_POPUP:Can't see the popup window?
+ENABLE_POPUPS:Please allow this website to open popup windows in your webbrowser.
+
+POST_ISSUE:Post Issue
+ISSUE_TITLE:Issue Title
+ISSUE_AUTHOR:Issue Author
+ISSUE_DESCRIPTION:Description of the Issue (details)
+ISSUE_LABELS:Issue Labels
+
+OBJECT_POST_SUCCESS:Object created!
+OBJECT_POST_ERROR:An error occured while creating the object.

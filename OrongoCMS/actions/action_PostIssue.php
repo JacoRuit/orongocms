@@ -7,7 +7,7 @@
 require '../startOrongo.php';
 startOrongo();
 
-if(isset($_COOKIE['auth-sub-token']) || isset($_POST['issue_author']) || isset($_POST['issue_title']) || isset($_POST['issue_labels']) || isset($_POST['issue_content'])){
+if(isset($_SESSION['auth-sub-token']) || isset($_POST['issue_author']) || isset($_POST['issue_title']) || isset($_POST['issue_labels']) || isset($_POST['issue_content'])){
     $issue = new Issue($_POST['issue_title']);
     $issue->setStatus("New");
     $issue->setAuthor($_POST['issue_author']);
@@ -19,8 +19,8 @@ if(isset($_COOKIE['auth-sub-token']) || isset($_POST['issue_author']) || isset($
         }
         $issue->setLabels($labels);
     }
-    $issueTracker = new IssueTracker($_COOKIE['auth-sub-token']);
-    setcookie ("auth-sub-token", "", time() - 3600);
+    $issueTracker = new IssueTracker($_SESSION['auth-sub-token']);
+    unset($_SESSION['auth-sub-token']);
     try{
         $issueTracker->postIssue($issue);
         header("Location: " . orongoURL("orongo-admin/post-issue.php?msg=0"));
