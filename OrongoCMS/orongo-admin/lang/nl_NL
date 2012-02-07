@@ -48,7 +48,9 @@ NEW_USER:Nieuwe Gebruiker
 CREATE_ARTICLE:Maak Artikel
 
 ARTICLE_CONTENT:Artikel Inhoud
+PAGE_CONTENT:Pagina Inhoud
 ARTICLE_TITLE:Artikel Titel
+PAGE_TITLE:Pagina Titel
 TAGS:Sleutelwoorden
 
 POST:Versturen
@@ -67,3 +69,18 @@ REG_MSG_USERNAME_EXISTS:Deze gebruikersnaam bestaat al.
 REG_MSG_USERNAME_TOO_SHORT:Foute gebruikersnaam lengte. Gebruikers naam moet min. 4 characters en max. 20 characters lang zijn.
 REG_MSG_PASSWORD_TOO_SHORT:Foute wachtwoord lengte. Wachtwoord moet min. 6 characters lang zijn.
 REG_MSG_FILL_IN_USERNAME:Vul alstublieft een gebruikersnaam in.
+
+LOGIN_TO_GOOGLE:Log in op Google
+LOGGING_IN_TO_GOOGLE:Aan het inloggen op Google
+WAITING_FOR_LOGIN:Wachtend totdat je ingelogt bent...
+DO_NOT_SEE_POPUP:Kan je het popup scherm niet zien?
+ENABLE_POPUPS:Zorg dat deze website popup schermen mag openen in je webbrowser.
+
+POST_ISSUE:Verstuur Fout
+ISSUE_TITLE:Fout Titel
+ISSUE_AUTHOR:Fout Verstuurder
+ISSUE_DESCRIPTION:Beschrijving van de fout (details)
+ISSUE_LABELS:Fout Labels
+
+OBJECT_POST_SUCCESS:Object gemaakt!
+OBJECT_POST_ERROR:Er is een fout opgetreden bij het maken van het object.

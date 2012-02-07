@@ -12,39 +12,37 @@ setCurrentPage('admin_post-issue');
 Security::promptAuth();
 
 $postIssue = new AdminFrontend();
-
+getDisplay()->addHTML('<script src="' . orongoURL("js/ajax.boolean.js") . '" type="text/javascript"></script>');
 if(isset($_GET['token'])){
-    setcookie("auth-sub-token", $_GET['token'], time() + 1000);
-    $_GET['token'] = null;
+    $_SESSION["auth-sub-token"] = $_GET['token'];
     getDisplay()->closeWindow();
     exit;
 }
-if(!isset($_COOKIE['auth-sub-token'])){
+if(!isset($_SESSION["auth-sub-token"])){
     $postIssue->main(array("time" => time(), "page_title" => "Login to Google", "page_template" => "dashboard"));
    // $postIssue->addObject(new AdminFrontendObject(100, "Login to Google", "<iframe style='width:100%; height:100%;' scrolling='yes' src=\"" . IssueTracker::getAuthSubRequestUrl(orongoURL("orongo-admin/post-issue.php")) . "\"></iframe>"));
     
-    $windowJS = "var login = window.open('" . IssueTracker::getAuthSubRequestUrl(orongoURL("orongo-admin/post-issue.php")) . "');";
     
-    getDisplay()->addJS($windowJS, "document.ready");
 
-    $postIssue->addObject(new AdminFrontendObject(100, "Logging in to Google", "We're waiting for you to login.<br/><br/><br/><strong>Didn't see the popup window?</strong><br/>Please enable popups and refresh the page." ));
+    $postIssue->addObject(new AdminFrontendObject(100, "Logging in to Google", l("Waiting for login") . "<br/><br/><br/><strong>". l("Do not see popup") . "</strong><br/>" . l("Enable popups") ));
     
-    $js = 'setTimeout("cookieCheck()", 1000); ';
-    $js .= 'function cookieCheck(){ ';
-    $js .= '  if($.cookie("auth-sub-token") != null) ';
-    $js .= '  window.location("' . orongoURL('orongo-admin/post-issue.php') . '"); ';
-    $js .= '}';
+    $js = 'window.setInterval(function() {';
+    $js .= 'if(getAjaxBool("' . orongoURL("ajax/isGCSet.php") . '")) window.location="' . orongoURL("orongo-admin/post-issue.php") . '"; ';
+    $js .= '},2000);';
     getDisplay()->addJS($js, "document.ready");
     
     if(isset($_GET['error'])) $postIssue->addMessage($_GET['error'], "error");
     if(isset($_GET['msg'])){
         switch($_GET['msg']){
             case 0:
-                $postIssue->addMessage("Issue posted, thanks!", "success");
+                $postIssue->addMessage(l("Issue posted"), "success");
                 break;
             default:
                 break;
         }
+    }else{
+        $windowJS = "var login = window.open('" . IssueTracker::getAuthSubRequestUrl(orongoURL("orongo-admin/post-issue.php")) . "');";
+        getDisplay()->addJS($windowJS, "document.ready");
     }
     $postIssue->render();
 }else{
@@ -53,19 +51,9 @@ if(!isset($_COOKIE['auth-sub-token'])){
     $form->addInput("Issue Author", "issue_author", "text", "", true);
     $form->addInput("Issue Title", "issue_title", "text", "", true);
     $form->addInput("Issue Description", "issue_content", "textarea", "",true);
-    $form->addInput("Issue Labels", "issue_labels", "text", "label1, label2");
+    $form->addInput("Issue Labels", "issue_labels", "text", "");
     $form->addButton("Post", true);
     $postIssue->addObject($form);
-    if(isset($_GET['error'])) $postIssue->addMessage($_GET['error'], "error");
-    if(isset($_GET['msg'])){
-        switch($_GET['msg']){
-            case 0:
-                $postIssue->addMessage("Issue posted, thanks!", "success");
-                break;
-            default:
-                break;
-        }
-    }
     $postIssue->render();
 }
 ?>

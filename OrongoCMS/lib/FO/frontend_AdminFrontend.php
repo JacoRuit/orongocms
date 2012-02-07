@@ -15,6 +15,10 @@ class AdminFrontend extends OrongoFrontendObject {
     
     private static $msgTypes = array("warning","success","info","error");
     
+    public function __construct(){
+        $this->msgs = array();
+    }
+    
     public function main($args){
         getDisplay()->setTemplateDir(ROOT . "/orongo-admin/theme/");
         if(!isset($args['page_title'])){
@@ -35,7 +39,6 @@ class AdminFrontend extends OrongoFrontendObject {
         }
         $this->body = "<script src=\"" . Settings::getWebsiteURL() . "js/widget.prettyAlert.js\" type=\"text/javascript\" charset=\"utf-8\"></script>";
         $this->pageTemplate = $args['page_template'];
-        $this->msgs = array();
         $this->objects = array();
         $this->pageTitle = l($args['page_title']);
     }
@@ -131,7 +134,7 @@ class AdminFrontendObject implements IHTMLConvertable{
      */
     public function __construct($paramSize, $paramTitle, $paramContent, $paramFooter = null){
         if(!array_key_exists($paramSize, self::$sizes)) throw new IllegalArgumentException("Invalid size!");
-        $this->header = '<h3>' . $paramTitle . '</h3>';
+        $this->header = '<h3>' . l($paramTitle) . '</h3>';
         $this->content = '<div class="module_content">' . $paramContent . '</div><div class="clear"></div>';
         $this->footer =  $paramFooter;
         $this->size = self::$sizes[$paramSize];
@@ -154,7 +157,7 @@ class AdminFrontendObject implements IHTMLConvertable{
      * @param String $paramTitle new title 
      */
     public function setTitle($paramTitle){
-        $this->header = str_replace("<h3>" .$this->getTitle() ."</h3>", "<h3>" . $paramTitle . "</h3>", $this->header);
+        $this->header = str_replace("<h3>" .$this->getTitle() ."</h3>", "<h3>" . l($paramTitle) . "</h3>", $this->header);
     }
     
     /**
@@ -326,6 +329,8 @@ class AdminFrontendForm extends AdminFrontendObject{
                 $ckfinder->SetupCKEditorObject($ckeditor);
                 $ckeditor->returnOutput = true;
                 $content .= $ckeditor->editor($input['name'], $input['value']);
+            }else if($input['type'] == "textarea"){
+                $content .= "<textarea rows=\"20\" name=\"" . $input['name'] ."\">" . $input['value'] ."</textarea>";
             }else{
                 $content .= "<input type=\"" . $input['type'] . "\" name=\"" . $input['name'] . "\" value=\"" . $input['value'] . "\" ";
                 if($input['required']) $content .= " required>";
