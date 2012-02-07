@@ -356,4 +356,109 @@ class AdminFrontendForm extends AdminFrontendObject{
     }
 }
 
+class AdminFrontendContentManager extends AdminFrontendObject{
+    
+    private $tabs;
+    private $tabheads;
+    
+    /**
+     * Init the Content Manager
+     * @param int $paramSize 25,50,75 or 100
+     * @param String $paramTitle title of content manager  
+     */
+    public function __construct($paramSize, $paramTitle){
+        $this->tabs = array();
+        $this->tabheads = array();
+        parent::__construct($paramSize, $paramTitle, "");
+        $this->updateHTML();
+    }
+    
+    /**
+     * Creates a tab
+     * @param String $paramName name of the tab
+     * @param array $paramHead Things on head of tab 
+     */
+    public function createTab($paramName, $paramHead){
+        $this->tabs[$paramName] = array();
+        $this->tabheads[$paramName] = $paramHead + array("Actions");
+        $this->updateHTML();
+    }
+    
+    /**
+     * Deletes a tab
+     * @para, String $paramName name of the tab
+     * @return boolean indicating if it was deleted
+     */
+    public function deleteTab($paramName){
+        if(!isset($this->tabs[$paramName])) return false;
+        unset($this->tabs[$paramName]);
+        if(isset($this->tabheads[$paramName])) unset($this->tabheads[$paramName]);      
+        $this->updateHTML();
+        return true;
+    }
+    
+    /**
+     * Add item to tab
+     * @param String $paramName name of the tab
+     * @param array  $paramItems Items to add
+     * @param String $paramDeleteURL Delete URL
+     * @param String $paramEditURL Edit URL
+     * @return boolean indicating if was added
+     */
+    public function addItem($paramName, $paramItems, $paramDeleteURL, $paramEditURL){
+        if(!isset($this->tabs[$paramName])) return false;
+        if(!is_array($paramItems)) return false;
+        $goodaction = array(
+            "__actions" => array(
+                "delete" => $paramDeleteURL,
+                "edit" => $paramEditURL
+            )
+        );
+        $this->tabs[$paramName][count($this->tabs[$paramName])] = $paramItems + $goodaction;
+        $this->updateHTML();
+        return true;
+    }
+    
+    /**
+     * Updates the AdminFrontendObject 
+     */
+    public function updateHTML(){
+        $head = "<ul class=\"tabs\">";
+        $content = "<div class=\"tab_container\">";
+        $currentTab = 1;
+        foreach($this->tabs as $name=>$items){
+            if(!is_array($items)) continue;
+            $head .= '<li><a href="#tab' . $currentTab . '">' . $name . '</a></li>';
+            $content .= '<div id="tab'  . $currentTab . '" class="tab_content">';
+            $content .= '<table class="tablesorter" cellspacing="0"> <thead><tr> ';
+            if(isset($this->tabheads[$name])){
+                if(is_array($this->tabheads[$name])){
+                    foreach($this->tabheads[$name] as $tabhead){
+                        $content .= '<th>'  . $tabhead . '</th>';
+                    }
+                }
+            }
+            $content .= '</tr> </thead><tbody>';
+            foreach($items as $item){
+                if(!is_array($item)) continue;
+                $content .= '<tr>';
+                foreach($item as $name=>$row){
+                    if($name == '__actions'){
+                        $content .= '<td><a href="' . $row['edit'] . '"><input type="image" src="images/icn_edit.png" title="Edit"></a><a href="' . $row['delete'] . '"><input type="image" src="images/icn_trash.png" title="Trash"></a></td>';
+                    }else{
+                        $content .= '<td>' . $row . '</td>';
+                    }
+                }
+                $content .= '</tr>';
+            }
+            $content .= '</tbody></table></div>';
+            $currentTab++;
+        }
+        $head .= "</ul>";
+        $content .= "</div>";
+        parent::setRawContent($content);
+        parent::setHeader(parent::getHeader() . $head);
+    }
+}
+
 ?>

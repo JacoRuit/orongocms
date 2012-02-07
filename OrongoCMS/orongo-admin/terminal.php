@@ -1,4 +1,9 @@
 <?php
+
+//FRIKKIN OUTDATED > UPDATE <
+
+//FIXME
+
 /**
  * Using the great terminal jQuery plugin: http://terminal.jcubic.pl. Also credits for the guy(s) who made it, it rocks!
  * @author Jaco Ruit
