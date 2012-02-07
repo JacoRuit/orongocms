@@ -11,6 +11,8 @@ setCurrentPage('admin_post-issue');
 
 Security::promptAuth();
 
+if(getUser()->getRank() < RANK_ADMIN){ header("Location: index.php"); exit; }
+
 $postIssue = new AdminFrontend();
 getDisplay()->addHTML('<script src="' . orongoURL("js/ajax.boolean.js") . '" type="text/javascript"></script>');
 if(isset($_GET['token'])){
