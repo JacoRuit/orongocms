@@ -7,7 +7,7 @@ require '../startOrongo.php';
 startOrongo();
 
 if(isset($_GET['code']) && !isset($_SESSION['orongo-id']) && !(isset($_SESSION['orongo-session-id']))){
-    $code = Security::escapeSQL($_GET['code']);
+    $code = $_GET['code'];
     if(User::isGoodActivationCode($code)){
         $uid = User::getUserIDByActivationCode($code);
         if(!User::userIsActivated($uid)){

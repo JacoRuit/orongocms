@@ -12,6 +12,7 @@ FILE:Bestand
 FILES:Bestanden
 GALLERY:Gallerij
 MEDIA:Media
+SOFTWARE:Software
 
 HOME:Home
 ARCHIVE:Archief
@@ -37,15 +38,40 @@ YOUR_PROFILE:Jouw Profiel
 VIEW_SITE:Bekijk Website
 SETTINGS:Instellingen
 POWERED_BY:Aangedreven door
+THEME_BY:Thema door
 
-MANAGE:Beheer
-MANAGER:Beheerder
+MANAGE_ARTICLES:Beheer Artikels
+MANAGE_COMMENTS:Beheer Reacties
+MANAGE_PAGES:Beheer Pagina's
+MANAGE_USERS:Beheer Gebruikers
+
+FILE_MANAGER:Bestand Beheerder
+MEDIA_MANAGER:Media Beheerder
 
 NEW_ARTICLE:Nieuw Artikel
 NEW_PAGE:Nieuwe Pagina
 NEW_USER:Nieuwe Gebruiker
 
 CREATE_ARTICLE:Maak Artikel
+CREATE_PAGE:Maak Pagina
+CREATE_USER:Maak Gebruiker
+
+ID:ID
+ACTIONS:Acties
+
+EMAIL:E-mail
+RANK:Rank
+ADMIN:Administrator
+WRITER:Schrijver
+USER:Gebruiker
+BANNED:Verbannen
+ACTIVATED:Geactiveerd
+YES:Ja
+NO:Nee
+
+TITLE:Titel
+DATE:Datum
+AUTHOR:Auteur
 
 ARTICLE_CONTENT:Artikel Inhoud
 PAGE_CONTENT:Pagina Inhoud
@@ -54,6 +80,7 @@ PAGE_TITLE:Pagina Titel
 TAGS:Sleutelwoorden
 
 POST:Versturen
+CREATE:Aanmaken
 
 LOGIN_MSG_WRONG_DETAILS:Verkeerde gebruikersnaam en/of wachtwoord.
 LOGIN_MSG_LOGGED_OUT:Je bent succesvol uitgelogt.

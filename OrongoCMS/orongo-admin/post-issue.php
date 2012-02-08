@@ -11,7 +11,7 @@ setCurrentPage('admin_post-issue');
 
 Security::promptAuth();
 
-if(getUser()->getRank() < RANK_ADMIN){ header("Location: index.php"); exit; }
+if(getUser()->getRank() < RANK_ADMIN){ header("Location: " . orongoURL("orongo-admin/index.php?msg=0")); exit; }
 
 $postIssue = new AdminFrontend();
 getDisplay()->addHTML('<script src="' . orongoURL("js/ajax.boolean.js") . '" type="text/javascript"></script>');
@@ -22,10 +22,6 @@ if(isset($_GET['token'])){
 }
 if(!isset($_SESSION["auth-sub-token"])){
     $postIssue->main(array("time" => time(), "page_title" => "Login to Google", "page_template" => "dashboard"));
-   // $postIssue->addObject(new AdminFrontendObject(100, "Login to Google", "<iframe style='width:100%; height:100%;' scrolling='yes' src=\"" . IssueTracker::getAuthSubRequestUrl(orongoURL("orongo-admin/post-issue.php")) . "\"></iframe>"));
-    
-    
-
     $postIssue->addObject(new AdminFrontendObject(100, "Logging in to Google", l("Waiting for login") . "<br/><br/><br/><strong>". l("Do not see popup") . "</strong><br/>" . l("Enable popups") ));
     
     $js = 'window.setInterval(function() {';

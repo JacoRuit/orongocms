@@ -41,7 +41,7 @@ function loadComments(turl, articleID, lastCommentID, offset ){
            }
        },
        error: function(jqXHR, textStatus, errorThrown){
-           alert("An error occured while loading new comments. ");
+           alert("An error occured while loading new comments. " + textStatus + errorThrown);
        },
        async: false
     });

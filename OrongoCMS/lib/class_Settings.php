@@ -41,7 +41,6 @@ class Settings {
     
     /**
      * Returns the default style as a Style object -> class_Style.php
-     * @param String $paramPrefix prefix for folder (starting from themes/)
      * @return Style Style Object
      */
     public static function getStyle(){

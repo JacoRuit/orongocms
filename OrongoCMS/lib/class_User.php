@@ -159,10 +159,11 @@ class User {
      * @param String $paramEmail Email Address of new user
      * @param String $paramPassword Hashed password of new user
      * @param int    $paramRank Rank of new user
-     * @return boolean true if registration was succesful else false
+     * @return User new User object
      */
     public static function registerUser ($paramName, $paramEmail, $paramPassword, $paramRank){
         $newID = self::getLastUserID() + 1;
+        if($paramRank != 1 && $paramRank != 2 && $paramRank != 3) throw new IllegalArgumentException("Invalid rank!");
         getDatabase()->insert("users", array(
             "id" => $newID,
             "name" => $paramName,
@@ -171,7 +172,8 @@ class User {
             "rank" => $paramRank,
             "activated" => 0
         ));
-        return $newID == self::getLastUserID();
+        if($newID != self::getLastUserID()) throw new Exception("Account not created!");
+        return new User($newID);
     }
     
     /**
