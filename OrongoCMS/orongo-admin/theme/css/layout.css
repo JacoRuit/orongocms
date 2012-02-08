@@ -51,7 +51,7 @@ text-align: left;
 text-indent: 1.8%;
 line-height: 55px;
 color: #fff;
-text-shadow: 0 -1px 0 #000;
+text-shadow: 0 -1px 0 #bb5200;
 }
 
 header#header h1.site_title a {
@@ -73,19 +73,17 @@ width: 9%;
 
 .btn_view_site a {
 display: block;
-margin-top: 12px;
-width: 91px;
-height: 27px;
+margin-top: 10px;
+width: 135px;
+height: 36px;
 background: url(../images/btn_view_site.png) no-repeat;
 text-align: center;
-line-height: 29px;
+line-height: 36px;
 color: #fff;
 text-decoration: none;
-text-shadow: 0 -1px 0 #000;}
+text-shadow: 0 -1px 0 #bb5200;}
 
-.btn_view_site a:hover {
-background-position: 0 -27px;
-}
+
 
 /* Secondary Header Bar */
 
@@ -236,10 +234,10 @@ background-position: 10px 6px;
 .quick_search input[type=text]:focus {
 outline: none;
 color: #666666;
-border: 1px solid #77BACE;
--webkit-box-shadow: inset 0 2px 2px #ccc, 0 0 10px #ADDCE6;
--moz-box-shadow: inset 0 2px 2px #ccc, 0 0 10px #ADDCE6;
-box-shadow: inset 0 2px 2px #ccc, 0 0 10px #ADDCE6;
+border: 1px solid #E54C0B;
+-webkit-box-shadow: inset 0 2px 2px #ccc, 0 0 10px #E54C0B;
+-moz-box-shadow: inset 0 2px 2px #ccc, 0 0 10px #E54C0B;
+box-shadow: inset 0 2px 2px #ccc, 0 0 10px #E54C0B;
 }
 
 /* Sidebar Menu */
@@ -265,7 +263,7 @@ margin-right: 2%
 }
 
 #sidebar .toggleLink:hover {
-color: #77BACE;
+color: #E54C0B;
 text-decoration: none;
 }
 
@@ -666,9 +664,9 @@ margin: 0 3.5%;
 .post_message input[type=text]:focus {
 outline: none;
 border: 1px solid #77BACE;
--webkit-box-shadow: inset 0 2px 2px #ccc, 0 0 10px #ADDCE6;
--moz-box-shadow: inset 0 2px 2px #ccc, 0 0 10px #ADDCE6;
-box-shadow: inset 0 2px 2px #ccc, 0 0 10px #ADDCE6;
+-webkit-box-shadow: inset 0 2px 2px #ccc, 0 0 10px #E54C0B;
+-moz-box-shadow: inset 0 2px 2px #ccc, 0 0 10px #E54C0B;
+box-shadow: inset 0 2px 2px #ccc, 0 0 10px #E54C0B;
 color: #666666;
 }
 
@@ -817,10 +815,10 @@ margin: 0 10px;
 
 fieldset textarea:focus {
 outline: none;
-border: 1px solid #77BACE;
--webkit-box-shadow: inset 0 2px 2px #ccc, 0 0 10px #ADDCE6;
--moz-box-shadow: inset 0 2px 2px #ccc, 0 0 10px #ADDCE6;
-box-shadow: inset 0 2px 2px #ccc, 0 0 10px #ADDCE6;
+border: 1px solid #E54C0B;
+-webkit-box-shadow: inset 0 2px 2px #ccc, 0 0 10px #E54C0B;
+-moz-box-shadow: inset 0 2px 2px #ccc, 0 0 10px #E54C0B;
+box-shadow: inset 0 2px 2px #ccc, 0 0 10px #E54C0B;
 }
 
 .submit_link {

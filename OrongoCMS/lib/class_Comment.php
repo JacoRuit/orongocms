@@ -133,7 +133,7 @@ class Comment implements IHTMLConvertable {
            "content" => "not_set_error",
            "authorID" => $author_id,
            "articleID" => $paramArticleID,
-           "timestamp" => getDatabase()->sqleval("UNIX_TIMESTAMP()")
+           "timestamp" => time()
         ));
         return new Comment($newID);
     }

@@ -8,7 +8,6 @@
 require '../startOrongo.php';
 startOrongo();
 
-//TODO IP check or some kinda spam prevention thing
 define("NO_ARTICLE", 1);
 
 define("NO_OFFSET", 11);
@@ -73,7 +72,7 @@ $newComments = array_reverse($newComments);
 $html = "";
 $style = null;
 try{
-    $style = Settings::getStyle('../');
+    $style = Settings::getStyle();
 }catch(Exception $e){
     die("500");
 }

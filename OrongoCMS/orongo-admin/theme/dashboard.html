@@ -25,23 +25,24 @@
 		<h3>{function="l("Articles")"}</h3>
 		<ul class="toggle">
 			<li class="icn_new_article"><a href="{$website_url}orongo-admin/create.php?article#">{function="l("New Article")"}</a></li>
-			<li class="icn_edit_article"><a href="{$website_url}orongo-admin/manage.php?articles#">{function="l("Manage")"} {function="l("Articles")"}</a></li>
+			<li class="icn_edit_article"><a href="{$website_url}orongo-admin/manage.php?articles#">{function="l("Manage Articles")"}</a></li>
 			<li class="icn_categories"><a href="{$website_url}orongo-admin/manage.php?categories#">{function="l("Categories")"}</a></li>
+                        <li class="icn_edit_article"><a href="{$website_url}orongo-admin/manage.php?comments#">{function="l("Manage Comments")"}</a></li>
 		</ul>
                 <h3>{function="l("Pages")"}</h3>
                 <ul class="toggle">
                     <li class="icn_new_article"><a href="{$website_url}orongo-admin/create.php?page#">{function="l("New Page")"}</a></li>
-                    <li class="icn_edit_article"><a href="{$website_url}orongo-admin/manage.php?pages#">{function="l("Manage")"} {function="l("Pages")"}</a></li>
+                    <li class="icn_edit_article"><a href="{$website_url}orongo-admin/manage.php?pages#">{function="l("Manage Pages")"}</a></li>
                 </ul>
 		<h3>{function="l("Users")"}</h3>
 		<ul class="toggle">
 			<li class="icn_add_user"><a href="{$website_url}orongo-admin/create.php?user#">{function="l("New User")"}</a></li>
-			<li class="icn_view_users"><a href="{$website_url}orongo-admin/manage.php?users#">{function="l("Manage")"} {function="l("Users")"}</a></li>
+			<li class="icn_view_users"><a href="{$website_url}orongo-admin/manage.php?users#">{function="l("Manage Users")"}</a></li>
 			<li class="icn_profile"><a href="{$website_url}orongo-admin/view.php?user.{$user->getID()}#">{function="l("Your Profile")"}</a></li>
 		</ul>
 		<h3>{function="l("Media")"}</h3>
 		<ul class="toggle">
-			<li class="icn_folder"><a href="{$website_url}orongo-admin/media.php">{function="l("File")"} {function="l("Manager")"}</a></li>
+			<li class="icn_folder"><a href="{$website_url}orongo-admin/media.php">{function="l("File Manager")"}</a></li>
 			<li class="icn_photo"><a href="{$website_url}orongo-admin/media.php?images">{function="l("Gallery")"}</a></li>
 		</ul>
 		<h3>{function="l("Software")"}</h3>
@@ -56,7 +57,7 @@
 		<footer>
 			<hr />
 			<p><strong>{$website_name} {function="l("Admin Panel")"} - {function="l("Powered by")"} OrongoCMS {$version}</strong></p>
-			<p>Theme by <a href="http://www.medialoot.com">MediaLoot</a></p>
+			<p>{function="l("Theme by")"} <a href="http://www.medialoot.com">MediaLoot</a> and <a href="http://www.rockweb.nl">Sjors Snoeren</a></p>
 		</footer>
 	</aside><!-- end of sidebar -->
 	

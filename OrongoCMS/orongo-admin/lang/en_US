@@ -12,6 +12,7 @@ FILE:File
 FILES:Files
 GALLERY:Gallery
 MEDIA:Media
+SOFTWARE:Software
 
 HOME:Home
 ARCHIVE:Archive
@@ -37,15 +38,40 @@ YOUR_PROFILE:Your Profile
 VIEW_SITE:View Site
 SETTINGS:Settings
 POWERED_BY:Powered By
+THEME_BY:Theme by
 
-MANAGE:Manage
-MANAGER:Manager
+MANAGE_ARTICLES:Manage Articles
+MANAGE_COMMENTS:Manage Comments
+MANAGE_PAGES:Manage Pages
+MANAGE_USERS:Manage Users
+
+FILE_MANAGER:File Manager
+MEDIA_MANAGER:Media Manager
 
 NEW_ARTICLE:New Article
 NEW_PAGE:New Page
 NEW_USER:New User
 
 CREATE_ARTICLE:Create Article
+CREATE_PAGE:Create Page
+CREATE_USER:Create User
+
+ID:ID
+ACTIONS:Actions
+
+EMAIL:Email
+RANK:Rank
+ADMIN:Admin
+WRITER:Writer
+USER:User
+BANNED:Banned
+ACTIVATED:Activated
+YES:Yes
+NO:No
+
+TITLE:Title
+DATE:Date
+AUTHOR:Author
 
 ARTICLE_CONTENT:Article Content
 PAGE_CONTENT:Page Content
@@ -54,6 +80,7 @@ PAGE_TITLE:Page Title
 TAGS:Tags
 
 POST:Post
+CREATE:Create
 
 LOGIN_MSG_WRONG_DETAILS:Wrong username or password.
 LOGIN_MSG_LOGGED_OUT:You have been successfully logged out!

@@ -84,6 +84,14 @@ class AdminFrontend extends OrongoFrontendObject {
         return false;
     }
     
+    /**
+     * Set page title
+     * @param String $paramTitle new title 
+     */
+    public function setTitle($paramTitle){
+        $this->pageTitle = l($paramTitle);
+    }
+    
     
     public function render(){
         getDisplay()->setTitle(Settings::getWebsiteName() . " - " . $this->pageTitle );
@@ -131,10 +139,12 @@ class AdminFrontendObject implements IHTMLConvertable{
      * @param String $paramTitle Title of object
      * @param String $paramContent Content of object
      * @param String $paramFooter footer of object (optional)
+     * @param boolean $paramTranslate indicating if title should be translated (Default true)
      */
-    public function __construct($paramSize, $paramTitle, $paramContent, $paramFooter = null){
+    public function __construct($paramSize, $paramTitle, $paramContent, $paramFooter = null, $paramTranslate = true){
         if(!array_key_exists($paramSize, self::$sizes)) throw new IllegalArgumentException("Invalid size!");
-        $this->header = '<h3>' . l($paramTitle) . '</h3>';
+        if($paramTranslate) $paramTitle = l($paramTitle);
+        $this->header = '<h3>' . $paramTitle . '</h3>';
         $this->content = '<div class="module_content">' . $paramContent . '</div><div class="clear"></div>';
         $this->footer =  $paramFooter;
         $this->size = self::$sizes[$paramSize];
@@ -240,7 +250,8 @@ class AdminFrontendForm extends AdminFrontendObject{
     private $action;
     private $buttons;
     private $inputs;
-   
+    private $selects;
+    
     private static $methods = array("get", "post");
     
     /**
@@ -255,6 +266,7 @@ class AdminFrontendForm extends AdminFrontendObject{
         $this->action = $paramAction;
         $this->buttons = array();
         $this->inputs = array();
+        $this->selects = array();
         if(!in_array($this->method, self::$methods)) throw new IllegalArgumentException("Invalid method!");
         parent::__construct($paramSize, $paramTitle, "");
     }
@@ -311,6 +323,15 @@ class AdminFrontendForm extends AdminFrontendObject{
         $this->updateHTML();
     }
     
+    /**
+     * Adds a select dropdown box
+     * @param String $paramName name of the select (name attr)
+     * @param array $paramThings Things to add (KEY = option name, STR=option value) 
+     */
+    public function addSelect($paramName, $paramThings){
+        $this->selects[$paramName] = $paramThings;
+        $this->updateHTML();
+    }
 
     /**
      * Updates the AdminFrontendObject 
@@ -342,11 +363,20 @@ class AdminFrontendForm extends AdminFrontendObject{
         
         if(count($this->buttons) > 0){
             $footer = "<div class=\"submit_link\">";
+            foreach($this->selects as $name=>$items){
+                if(!is_array($items)) continue;
+                $footer .= '<select name="' . $name . '">';
+                foreach($items as $optionname=>$optionvalue){
+                    $footer .= '<option value="' . $optionvalue . '">' . $optionname . '</option>';
+                }
+                $footer .= '</select>';
+            }
             foreach($this->buttons as $button){
                 $footer .= "<input type=\"submit\" value=\"" . $button['text'] . "\" ";
                 if($button['blue']) $footer .= 'class="alt_btn" >';
                 else $footer .= ">";
             }
+            
             $footer .= "</div></form>";
             parent::setFooter($footer);
         }else{
@@ -360,6 +390,7 @@ class AdminFrontendContentManager extends AdminFrontendObject{
     
     private $tabs;
     private $tabheads;
+    private $title;
     
     /**
      * Init the Content Manager
@@ -369,8 +400,25 @@ class AdminFrontendContentManager extends AdminFrontendObject{
     public function __construct($paramSize, $paramTitle){
         $this->tabs = array();
         $this->tabheads = array();
+        $this->title = l($paramTitle);
         parent::__construct($paramSize, $paramTitle, "");
         $this->updateHTML();
+    }
+    
+    /**
+     * setTitle override
+     * @param String $paramTitle new Title 
+     */
+    public function setTitle($paramTitle){
+        $this->title = l($paramTitle);
+    }
+    
+    /**
+     * geTitle override
+     * @return String title of content manager 
+     */
+    public function getTitle(){
+        return $this->title;
     }
     
     /**
@@ -380,7 +428,8 @@ class AdminFrontendContentManager extends AdminFrontendObject{
      */
     public function createTab($paramName, $paramHead){
         $this->tabs[$paramName] = array();
-        $this->tabheads[$paramName] = $paramHead + array("Actions");
+        $paramHead[count($paramHead) + 1] = "Actions";
+        $this->tabheads[$paramName] = $paramHead ;
         $this->updateHTML();
     }
     
@@ -428,28 +477,27 @@ class AdminFrontendContentManager extends AdminFrontendObject{
         $currentTab = 1;
         foreach($this->tabs as $name=>$items){
             if(!is_array($items)) continue;
-            $head .= '<li><a href="#tab' . $currentTab . '">' . $name . '</a></li>';
+            $head .= '<li><a href="#tab' . $currentTab . '">' . l($name) . '</a></li>';
             $content .= '<div id="tab'  . $currentTab . '" class="tab_content">';
             $content .= '<table class="tablesorter" cellspacing="0"> <thead><tr> ';
             if(isset($this->tabheads[$name])){
                 if(is_array($this->tabheads[$name])){
                     foreach($this->tabheads[$name] as $tabhead){
-                        $content .= '<th>'  . $tabhead . '</th>';
+                        $content .= '<th>'  . l($tabhead) . '</th>';
                     }
                 }
             }
             $content .= '</tr> </thead><tbody>';
-            foreach($items as $item){
-                if(!is_array($item)) continue;
-                $content .= '<tr>';
-                foreach($item as $name=>$row){
-                    if($name == '__actions'){
-                        $content .= '<td><a href="' . $row['edit'] . '"><input type="image" src="images/icn_edit.png" title="Edit"></a><a href="' . $row['delete'] . '"><input type="image" src="images/icn_trash.png" title="Trash"></a></td>';
-                    }else{
-                        $content .= '<td>' . $row . '</td>';
+            if(is_array($items)){
+                foreach($items as $itemarray){
+                    $content .= '<tr>';
+                    foreach($itemarray as $itemname => $item){
+                        if(is_array($item) && $itemname == '__actions'){
+                            $content .= '<td><a href="' . $item['edit'] . '"><input type="image" src="' . orongoURL('orongo-admin/theme/images/icn_edit.png') . '" title="Edit"></a><a href="' . $item['delete'] . '"><input type="image" src="' . orongoURL('orongo-admin/theme/images/icn_trash.png') . '" title="Trash"></a></td> ';
+                        }else $content .= '<td>' . $item . '</td>';  
                     }
+                    $content .= '</tr>';
                 }
-                $content .= '</tr>';
             }
             $content .= '</tbody></table></div>';
             $currentTab++;
@@ -457,7 +505,7 @@ class AdminFrontendContentManager extends AdminFrontendObject{
         $head .= "</ul>";
         $content .= "</div>";
         parent::setRawContent($content);
-        parent::setHeader(parent::getHeader() . $head);
+        parent::setHeader('<h3 class="tabs_involved">' . $this->title .'</h3>' . $head);
     }
 }
 
