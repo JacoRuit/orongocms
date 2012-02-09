@@ -50,7 +50,7 @@ class ExampleClass extends OrongoPluggableObject{
     
     public function onArticleEdit($eventArgs){
         $msgBox = new MessageBox($eventArgs['by']);
-        $this->htmlArray['html']['body'] = $msgBox->toHTML();
+        getDisplay()->addObject($msgBox);
     }
     
 }

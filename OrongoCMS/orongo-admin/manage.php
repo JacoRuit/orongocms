@@ -74,28 +74,11 @@ switch($object){
             if(($obj instanceof User) == false) continue;
             $name = $obj->getName() == getUser()->getName() ? '<strong>' . $obj->getName() . '</strong>' : $obj->getName();
             $activated = $obj->isActivated() ? l("Yes") : l("No");
-            switch($obj->getRank()){
-                case 0:
-                    $rank = l("Banned");
-                    break;
-                case 1:
-                    $rank = l("User");
-                    break;
-                case 2:
-                    $rank = l("Writer");
-                    break;
-                case 3:
-                    $rank = l("Admin");
-                    break;
-                default:
-                    $rank = "Unkown";
-                    break;
-            }
             $manager->addItem("Users", array(
                 $obj->getID(), 
                 '<a href="' . orongoURL("orongo-admin/view.php?user." . $obj->getID()) . '">' . $name . '</a>', 
                 $obj->getEmail(), 
-                $rank, 
+                $obj->getRankString(), 
                 $activated
             ), "","");
         }

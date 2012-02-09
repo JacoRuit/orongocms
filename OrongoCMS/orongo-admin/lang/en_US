@@ -19,7 +19,7 @@ ARCHIVE:Archive
 
 USERNAME:Username
 PASSWORD:Password
-
+PASSWORD_AGAIN:Password (again)
 LOGIN:Login
 LOGOUT:Logout
 REGISTER:Register

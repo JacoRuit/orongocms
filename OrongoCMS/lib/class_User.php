@@ -60,6 +60,30 @@ class User {
     }
     
     /**
+     * @return String User Rank 
+     */
+    public function getRankString(){
+        switch($this->getRank()){
+                case 0:
+                    $rank = l("Banned");
+                    break;
+                case 1:
+                    $rank = l("User");
+                    break;
+                case 2:
+                    $rank = l("Writer");
+                    break;
+                case 3:
+                    $rank = l("Admin");
+                    break;
+                default:
+                    $rank = "Unknown";
+                    break;
+       }
+       return $rank;
+    }
+    
+    /**
      * Set User Rank
      * @param int $paramRank new User Rank
      */
