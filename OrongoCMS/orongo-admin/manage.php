@@ -20,6 +20,15 @@ if(!isset($_SERVER['QUERY_STRING'])){ header("Location: " . orongoURL("orongo-ad
 
 $object = $_SERVER['QUERY_STRING'];
 
+if(isset($_GET['msg']) && isset($_GET['obj'])){
+    switch($_GET['msg']){
+        case 0:
+            $manage->addMessage(l("Object not exists"), "error");
+            $object = $_GET['obj'];
+            break;
+    }
+}
+
 switch($object){  
     case "articles":
         $objs = null;
@@ -35,7 +44,13 @@ switch($object){
         $manager->createTab("Articles", array("ID", "Title", "Date", "Author", "Comments"));
         foreach($objs as $obj){
             if(($obj instanceof Article) == false) continue;
-            $manager->addItem("Articles", array($obj->getID(), $obj->getTitle(), $obj->getDate(), $obj->getAuthorName(), $obj->getCommentCount()), "","");
+            $manager->addItem("Articles", array(
+                $obj->getID(), 
+                '<a href="' . orongoURL('orongo-admin/view.php?article.'. $obj->getID()) . '">' . $obj->getTitle() . '</a>', 
+                $obj->getDate(), 
+                '<a href="' . orongoURL("orongo-admin/view.php?user." . $obj->getAuthorID()) . '">' . $obj->getAuthorName() . '</a>', 
+                $obj->getCommentCount()
+            ), "", "");
         }
         $manage->addObject($manager);
         $manage->render();
@@ -76,7 +91,13 @@ switch($object){
                     $rank = "Unkown";
                     break;
             }
-            $manager->addItem("Users", array($obj->getID(), $name, $obj->getEmail(), $rank, $activated), "","");
+            $manager->addItem("Users", array(
+                $obj->getID(), 
+                '<a href="' . orongoURL("orongo-admin/view.php?user." . $obj->getID()) . '">' . $name . '</a>', 
+                $obj->getEmail(), 
+                $rank, 
+                $activated
+            ), "","");
         }
         $manage->addObject($manager);
         $manage->render();
@@ -97,7 +118,10 @@ switch($object){
         $manager->createTab("Pages", array("ID", "Title"));
         foreach($objs as $obj){
             if(($obj instanceof Page) == false) continue;
-            $manager->addItem("Pages", array($obj->getID(), $obj->getTitle()), "","");
+            $manager->addItem("Pages", array(
+                $obj->getID(), 
+                '<a href="' . orongoURL("orongo-admin/view.php?page." . $obj->getID()) . '">' . $obj->getTitle() . '</a>'
+            ), "","");
         }
         $manage->addObject($manager);
         $manage->render();
@@ -115,7 +139,7 @@ switch($object){
             exit;
         }
         $manager = new AdminFrontendContentManager(100, "Comments");
-        $manager->createTab("Comments", array("ID", "Commenter", "Date", "Article ID", "Article Name"));
+        $manager->createTab("Comments", array("ID", "Comment", "Commenter", "Date", "Article ID", "Article Title"));
         foreach($objs as $obj){
             if(($obj instanceof Comment) == false) continue;
             $articleName = "?";
@@ -127,7 +151,15 @@ switch($object){
                     $articleName = $article->getTitle();
                 }catch(Exception $e){ }
             }
-            $manager->addItem("Comments", array($obj->getID(), $obj->getAuthorName(), date("Y-m-d H:i:s", $obj->getTimestamp()), $obj->getArticleID(), $articleName), "","");
+            $commentText = strlen($obj->getContent()) > 20 ? substr($obj->getContent(), 0, 20) . "..." : $obj->getContent();
+            $manager->addItem("Comments", array(
+                $obj->getID(), 
+                '<a href="' . orongoURL('orongo-admin/view.php?comment.'. $obj->getID()) . '">'  . $commentText . '</a>',
+                '<a href="' . orongoURL("orongo-admin/view.php?user." . $obj->getAuthorID()) . '">' . $obj->getAuthorName() . '</a>', 
+                date("Y-m-d H:i:s", $obj->getTimestamp()), 
+                $obj->getArticleID(), 
+                '<a href="' . orongoURL('orongo-admin/view.php?article.'. $obj->getArticleID()) . '">' . $articleName . '</a>'
+            ), "","");
         }
         $manage->addObject($manager);
         $manage->render();

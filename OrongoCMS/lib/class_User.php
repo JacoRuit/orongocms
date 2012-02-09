@@ -27,12 +27,13 @@ class User {
      */
     public function __construct($paramID){
         $this->id = $paramID;
-        $row = getDatabase()->queryFirstRow("SELECT `rank`,`email`,`name`,`activated`  FROM `users` WHERE `id` = %i", $this->id);
+        $row = getDatabase()->queryFirstRow("SELECT `id`,`rank`,`email`,`name`,`activated`  FROM `users` WHERE `id` = %i", $this->id);
         if($row == null){
             throw new Exception('User doesnot exist!', USER_NOT_EXIST);
         }
         $this->rank = $row['rank'];
         $this->email = $row['email'];
+        $this->id = $row['id'];
         $this->name = stripslashes($row['name']);
         $this->activateStatus = $row['activated'];
     }

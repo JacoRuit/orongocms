@@ -23,7 +23,7 @@ class Comment implements IHTMLConvertable {
      */
     public function __construct($paramID){
         $this->id = $paramID;
-        $row = getDatabase()->queryFirstRow("SELECT `content`,`authorID`,`articleID`,`timestamp` FROM `comments` WHERE `id` = %i", $this->id);
+        $row = getDatabase()->queryFirstRow("SELECT `id`,`content`,`authorID`,`articleID`,`timestamp` FROM `comments` WHERE `id` = %i", $this->id);
         if($row == null){
             throw new Exception('Comment does not exist', COMMENT_NOT_EXIST);
         }
@@ -31,6 +31,7 @@ class Comment implements IHTMLConvertable {
         $this->authorID = $row['authorID'];
         $this->timestamp = $row['timestamp'];
         $this->articleID = $row['articleID'];
+        $this->id = $row['id'];
     }
     
     #   id

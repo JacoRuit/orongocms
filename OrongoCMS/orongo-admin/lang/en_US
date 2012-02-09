@@ -23,7 +23,10 @@ PASSWORD:Password
 LOGIN:Login
 LOGOUT:Logout
 REGISTER:Register
-
+NEW_HERE:New here?
+REGISTER_TEXT:Click %shere%s to register
+FORGOT_PASSWORD:Lost your password?
+FORGOT_PASSWORD_TEXT:Don't worry! Simply click %shere%s to request a new one.
 
 FETCH_ERROR:An error occured while fetching %s
 ARCHIVE_DATE_ERROR:Invalid date

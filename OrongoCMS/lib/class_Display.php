@@ -203,13 +203,7 @@ class Display {
             $this->addToTemplateVariable("body", $object->toHTML());
         }
         $this->addToTemplateVariable("head", $this->head);
-        if(getUser() != null){
-            $this->setTemplateVariable("user", getUser());
-            $mb = new MenuBar(getUser());
-            $this->setTemplateVariable("menu_bar", $mb->toHTML());
-        }else{
-            $this->setTemplateVariable("menu_bar", "");
-        }
+        if(getUser() != null) $this->setTemplateVariable("user", getUser());
         foreach($this->tpls as $tpl){
             if(empty($tpl)) continue;
             $this->raintpl->draw($tpl);

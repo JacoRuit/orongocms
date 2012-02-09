@@ -19,7 +19,7 @@ class AjaxLoadCommentsAction implements IHTMLConvertable, IJSConvertable{
      * @param int $paramOffset Offset (count of loaded comments)
      * @param int $paramRefreshInterval refresh interval (default=10000)
      */
-    public function __construct($paramArticleID, $paramLastCommentID, $paramOffset, $paramRefreshInterval = 10000){
+    public function __construct($paramArticleID, $paramLastCommentID, $paramOffset, $paramRefreshInterval = 7000){
         $this->offset = $paramOffset;
         $this->lastCommentID  = $paramLastCommentID;
         $this->articleID = $paramArticleID;

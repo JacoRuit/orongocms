@@ -20,16 +20,16 @@ if(isset($_GET['msg'])){
             $index->addMessage(l("No Permission"), "error");
             break;
         case 1:
-            $index->addMessage(l("No Query Arg"), "warning");
+            $index->addMessage(l("Invalid Query Arg"), "warning");
+            break;
+        case 2:
+            $index->addMessage(l("Internal Error"), "warning");
             break;
     }
 }
 
 
-$form = new AdminFrontendForm(100, "test", "POST", "bla.php");
-$form->addInput("Test", "blaname", "text");
-$form->addButton("hoi", true);
-$index->addObject($form);
+
 $index->addObject(new AdminFrontendObject(100, "test", "lol",null));
 $index->render();
 ?>

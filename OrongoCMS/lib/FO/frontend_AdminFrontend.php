@@ -143,7 +143,7 @@ class AdminFrontendObject implements IHTMLConvertable{
      */
     public function __construct($paramSize, $paramTitle, $paramContent, $paramFooter = null, $paramTranslate = true){
         if(!array_key_exists($paramSize, self::$sizes)) throw new IllegalArgumentException("Invalid size!");
-        if($paramTranslate) $paramTitle = l($paramTitle);
+        if($paramTranslate && !empty($paramTitle)) $paramTitle = l($paramTitle);
         $this->header = '<h3>' . $paramTitle . '</h3>';
         $this->content = '<div class="module_content">' . $paramContent . '</div><div class="clear"></div>';
         $this->footer =  $paramFooter;
@@ -260,15 +260,16 @@ class AdminFrontendForm extends AdminFrontendObject{
      * @param String $paramTitle title of form
      * @param String $paramMethod POST or GET
      * @param String $paramAction action of the form
+     * @param boolean $paramTranslate indicating if title should be translated (default true)
      */
-    public function __construct($paramSize, $paramTitle, $paramMethod, $paramAction){
+    public function __construct($paramSize, $paramTitle, $paramMethod, $paramAction, $paramTranslate=true){
         $this->method = strtolower($paramMethod);
         $this->action = $paramAction;
         $this->buttons = array();
         $this->inputs = array();
         $this->selects = array();
         if(!in_array($this->method, self::$methods)) throw new IllegalArgumentException("Invalid method!");
-        parent::__construct($paramSize, $paramTitle, "");
+        parent::__construct($paramSize, $paramTitle, "", null, $paramTranslate);
     }
     
     /**
@@ -296,14 +297,16 @@ class AdminFrontendForm extends AdminFrontendObject{
      * @param String $paramType HTML form type
      * @param String $paramValue value of the form (default nothing)
      * @param boolean $paramRequired indicating if this is required (default false)
+     * @param boolean $paramReadOnly indicating if input should be read only
      */
-    public function addInput($paramLabel, $paramName, $paramType, $paramValue = "", $paramRequired = false){
+    public function addInput($paramLabel, $paramName, $paramType, $paramValue = "", $paramRequired = false, $paramReadOnly = false){
         $input = array(
            "type" => $paramType,  
            "label" => l($paramLabel),
            "name" => $paramName,
            "value" => $paramValue,
-           "required" => $paramRequired
+           "required" => $paramRequired,
+           "readonly" => $paramReadOnly
         );
         $this->inputs[count($this->inputs)] = $input;
         $this->updateHTML();
@@ -313,11 +316,13 @@ class AdminFrontendForm extends AdminFrontendObject{
      * Adds a button
      * @param String $paramText text of the button
      * @param boolean $paramBlue indicating if this buttons has to be blue
+     * @param String $paramURL the location the button should redirect to (default: act as submit button)
      */
-    public function addButton($paramText, $paramBlue){
+    public function addButton($paramText, $paramBlue, $paramURL = null){
         $button = array(
             "text" => l($paramText),
-            "blue" => $paramBlue
+            "blue" => $paramBlue,
+            "url" => $paramURL
         );
         $this->buttons[count($this->buttons)] = $button;
         $this->updateHTML();
@@ -344,6 +349,7 @@ class AdminFrontendForm extends AdminFrontendObject{
             if($input['type'] == "ckeditor"){
                 $content .= "<br/><br/>";
                 $ckeditor = new CKEditor();
+                if($input['readonly']) $ckeditor->config['readOnly'] = true;
                 $ckeditor->basePath  =  '../lib/ckeditor/';
                 $ckfinder = new CKFinder();
                 $ckfinder->BasePath = '../lib/ckfinder/'; 
@@ -351,11 +357,15 @@ class AdminFrontendForm extends AdminFrontendObject{
                 $ckeditor->returnOutput = true;
                 $content .= $ckeditor->editor($input['name'], $input['value']);
             }else if($input['type'] == "textarea"){
-                $content .= "<textarea rows=\"20\" name=\"" . $input['name'] ."\">" . $input['value'] ."</textarea>";
+                $content .= "<textarea rows=\"20\" name=\"" . $input['name'] ."\" ";
+                if($input['readonly']) $content.= 'disabled="disabled" ';
+                if($input['required']) $content .= 'required="required" ';
+                $content .= ">" . $input['value'] ."</textarea>";
             }else{
                 $content .= "<input type=\"" . $input['type'] . "\" name=\"" . $input['name'] . "\" value=\"" . $input['value'] . "\" ";
-                if($input['required']) $content .= " required>";
-                else $content .= ">";
+                if($input['required']) $content .= " required=\"required\" ";
+                if($input['readonly']) $content.= 'disabled="disabled" ';
+                $content .= '>';
             }
             $content .= "</fieldset>";
         }
@@ -372,9 +382,11 @@ class AdminFrontendForm extends AdminFrontendObject{
                 $footer .= '</select>';
             }
             foreach($this->buttons as $button){
+                if($button['url'] != null) $footer .= '<a href="' . $button['url'] . '">';
                 $footer .= "<input type=\"submit\" value=\"" . $button['text'] . "\" ";
                 if($button['blue']) $footer .= 'class="alt_btn" >';
                 else $footer .= ">";
+                if($button['url'] != null) $footer .= '</a>';
             }
             
             $footer .= "</div></form>";

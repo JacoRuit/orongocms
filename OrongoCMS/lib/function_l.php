@@ -16,7 +16,7 @@ function l($paramSentence, $paramArgs = null){
     if(!array_key_exists($paramSentence, $LANG)) return "?" . $paramSentence . "?";
     if($paramArgs == null) return $LANG[$paramSentence];
     if(is_array($paramArgs)){
-        $return = call_user_func("sprintf", array($LANG[$paramSentence] + $paramArgs));
+        $return = vsprintf($LANG[$paramSentence], $paramArgs);
         if(!$return) return $paramSentence;
         return $return;
     }
