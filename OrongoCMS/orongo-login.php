@@ -58,7 +58,7 @@ $form->addInput("Username", "username", "text");
 $form->addInput("Password", "password", "password");
 $form->addButton("Login", true);
 $login->addObject($form);
-$login->addObject(new AdminFrontendObject(25, "", '<h4>New here?</h4><p>Click <a href="' . orongoURL("orongo-register.php#") . '">here</a> to register</p><br /><hr /><h4>Forgot password</h4><p>No worries! You can request a new one <a href="' . orongoURL("orongo-lost-pw.php#") . '">here</a></p><br /><br />'));
+$login->addObject(new AdminFrontendObject(25, "", '<h4>' . l("New here") . '</h4><p>' . l("Register text",array('<a href="' . orongoURL("orongo-register.php#") . '">', '</a>') ) . '</p><br /><hr /><h4>' . l("Forgot password") . '</h4><p>' . l("Forgot password text",array('<a href="' . orongoURL("orongo-lost-pw.php#") . '">', '</a>')) . '</p><br /><br />'));
 if($msg != null) $login->addMessage($msg, $msgtype);
 $login->render();
 

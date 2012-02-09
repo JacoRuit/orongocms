@@ -19,7 +19,7 @@ class Menu implements IHTMLConvertable{
         $this->URLs = array();
         $this->hookURL(orongoURL("index.php"), l("Home"), 0);
         if(Settings::showArchive()){
-            $this->hookURL(orongoURL("archive.php"), l("Archive"), 10000000);
+            $this->hookURL(orongoURL("archive.php"), l("Archive"), 10000) ;
         }
         $pages = @orongo_query('action=fetch&object=page&max=10000&order=page.id');
         if($pages != false){
@@ -128,12 +128,13 @@ class Menu implements IHTMLConvertable{
             if(isset($goodOrder[$url['url_place']])) continue;
             $goodOrder[$url['url_place']] = $url;
         }
+        ksort($goodOrder, SORT_NUMERIC);
         if($this->flip){
             $goodOrder = array_reverse($goodOrder);
         }
         $html = "";
         foreach($goodOrder as $url){
-            $html .= "<li><a href=\"" . $url['url_place'] . "\">" . $url['url_name'] . "</a></li>";
+            $html .= "<li><a href=\"" . $url['url'] . "\">" . $url['url_name'] . "</a></li>";
         }
         return $html;
     }

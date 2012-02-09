@@ -20,12 +20,13 @@ class Page {
      */
     public function __construct($paramID){
         $this->id = $paramID;
-        $row = getDatabase()->queryFirstRow("SELECT `title`,`content` FROM `pages` WHERE `id` = %i", $this->id);
+        $row = getDatabase()->queryFirstRow("SELECT `id`, `title`,`content` FROM `pages` WHERE `id` = %i", $this->id);
         if($row == null){
             throw new Exception('Page does not exist', PAGE_NOT_EXIST);
         }
         $this->title = $row['title'];
         $this->content = $row['content'];
+        $this->id = $row['id'];
     }
     
     #   id

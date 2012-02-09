@@ -53,11 +53,11 @@ function startOrongo(){
     define('RANK_ADMIN', 3);
     define('RANK_WRITER', 2);
     define('RANK_USER', 1);
-
-    define('ARTICLE_NOT_EXIST', 200);
-    define('PAGE_NOT_EXIST', 300);
-    define('USER_NOT_EXIST', 400);
-    define('COMMENT_NOT_EXIST', 500);
+    
+    define('ARTICLE_NOT_EXIST', 2100);
+    define('PAGE_NOT_EXIST', 3100);
+    define('USER_NOT_EXIST', 4100);
+    define('COMMENT_NOT_EXIST', 5100);
 }
 
 

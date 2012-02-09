@@ -70,16 +70,11 @@ try{
 $newComments = array_reverse($newComments);
 
 $html = "";
-$style = null;
-try{
-    $style = Settings::getStyle();
-}catch(Exception $e){
-    die("500");
-}
 
-if($style->doCommentHTML()){
+
+if(getStyle()->doCommentHTML()){
     try{
-        $html = $style->getCommentsHTML($newComments);
+        $html = getStyle()->getCommentsHTML($newComments);
     }catch(Exception $e){
         foreach($newComments as $comment){
             $html .= $comment->toHTML();

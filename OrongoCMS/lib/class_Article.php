@@ -24,7 +24,7 @@ class Article implements IHTMLConvertable {
     public function __construct($paramID){
         $this->id = $paramID;
         //$q = "SELECT `title`,`content`,`authorID`,`date` FROM `articles` WHERE `id` = '" . $this->id . "'";
-        $row = getDatabase()->queryFirstRow("SELECT `title`,`content`,`authorID`,`date` FROM `articles` WHERE `id` = %i", $paramID);
+        $row = getDatabase()->queryFirstRow("SELECT `title`,`id`, `content`,`authorID`,`date` FROM `articles` WHERE `id` = %i", $paramID);
         if($row == null){
             throw new Exception('Article does not exist', ARTICLE_NOT_EXIST);
         }
@@ -32,6 +32,7 @@ class Article implements IHTMLConvertable {
         $this->content = $row['content'];
         $this->authorID = $row['authorID'];
         $this->date = $row['date'];
+        $this->id = $row['id'];
         try{
             $this->author = new User($this->authorID);
         }catch(Exception $e){ $this->author = null; }
