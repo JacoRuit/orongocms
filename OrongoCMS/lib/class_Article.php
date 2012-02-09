@@ -13,7 +13,7 @@ class Article implements IHTMLConvertable {
     private $authorID;
     private $author;
     private $date;
-    
+    private $tags;
 
     /**
      * Construct Article Object
@@ -24,7 +24,7 @@ class Article implements IHTMLConvertable {
     public function __construct($paramID){
         $this->id = $paramID;
         //$q = "SELECT `title`,`content`,`authorID`,`date` FROM `articles` WHERE `id` = '" . $this->id . "'";
-        $row = getDatabase()->queryFirstRow("SELECT `title`,`id`, `content`,`authorID`,`date` FROM `articles` WHERE `id` = %i", $paramID);
+        $row = getDatabase()->queryFirstRow("SELECT `tags`,`title`,`id`, `content`,`authorID`,`date` FROM `articles` WHERE `id` = %i", $paramID);
         if($row == null){
             throw new Exception('Article does not exist', ARTICLE_NOT_EXIST);
         }
@@ -33,6 +33,10 @@ class Article implements IHTMLConvertable {
         $this->authorID = $row['authorID'];
         $this->date = $row['date'];
         $this->id = $row['id'];
+        $this->tags = explode(",", trim($row['tags']));
+        foreach($this->tags as &$tag){
+            trim($tag);
+        }
         try{
             $this->author = new User($this->authorID);
         }catch(Exception $e){ $this->author = null; }
@@ -69,6 +73,29 @@ class Article implements IHTMLConvertable {
         $this->raiseArticleEvent('article_edit');
     }
     
+    #tags
+    /**
+     * @return array Article Tags 
+     */
+    public function getTags(){
+        return $this->tags;
+    }
+    
+    /**
+     * @param String $paramTags new tags 
+     */
+    public function setTags($paramTags){
+        $tags = explode(",", trim($paramTags));
+        foreach($tags as &$tag){
+            trim($tag);
+        }
+        $this->tags = $tags;
+        $tagsForDB = implode(",", $tags);
+        getDatabase()->update("articles", array(
+            "tags" => $tagsForDB
+        ), "`id` = %i", $this->id);
+        $this->raiseArticleEvent('article_edit');
+    }
     
     
     #   contents

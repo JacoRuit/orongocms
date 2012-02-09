@@ -240,7 +240,7 @@ class AdminFrontendObject implements IHTMLConvertable{
     public function toHTML() {
         $rt = "<header>". $this->header . "</header>" . $this->content;
         if($this->footer != null) $rt .= "<footer>" . $this->footer . "</footer>";
-        return "<article class=\"module width_". $this->size . "\">" . $rt . "</article>";
+        return "<article class=\"module width_". $this->size . "\">" . $rt . "</article><div class=\"clear\"></div>";
     }
 }
 

@@ -29,7 +29,8 @@ if(isset($_GET['msg'])){
 }
 
 
-
-$index->addObject(new AdminFrontendObject(100, "test", "lol",null));
+for($i = 0; $i < 10; $i++){
+    $index->addObject(new AdminFrontendObject(100,"test", "blabala<br/>sdfsdf<br/>"));
+}
 $index->render();
 ?>
