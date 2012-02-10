@@ -132,6 +132,7 @@ switch($object){
         if($article->getCommentCount() > 0){
             $comments = new AdminFrontendContentManager(100, "Comments");
             $comments->createTab("Comments", array("ID", "Comment", "Commenter", "Date"));
+            $comments->hideEditButton();
             foreach($article->getComments() as $comment){
                 $commentText = strlen($comment->getContent()) > 20 ? substr($comment->getContent(), 0, 20) . "..." : $comment->getContent();
                 $comments->addItem("Comments", array(
@@ -139,10 +140,11 @@ switch($object){
                     '<a href="' . orongoURL('orongo-admin/view.php?comment.'. $comment->getID()) . '">'  . $commentText . '</a>',
                     '<a href="' . orongoURL("orongo-admin/view.php?user." . $comment->getAuthorID()) . '">' . $comment->getAuthorName() . '</a>', 
                     date("Y-m-d H:i:s", $comment->getTimestamp())
-                ), "","");
+                ), orongoURL("orongo-admin/delete.php?comment." . $comment->getID()) ,"");
             }
             $view->addObject($comments);
         }
+        if(getUser()->getRank() < RANK_ADMIN) $comments->hideTrashButton();
         $view->render();
         break;
         

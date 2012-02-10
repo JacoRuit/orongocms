@@ -50,7 +50,7 @@ switch($object){
                 $obj->getDate(), 
                 '<a href="' . orongoURL("orongo-admin/view.php?user." . $obj->getAuthorID()) . '">' . $obj->getAuthorName() . '</a>', 
                 $obj->getCommentCount()
-            ), "", "");
+            ), orongoURL("orongo-admin/delete.php?article." . $obj->getID()) , orongoURL("orongo-admin/edit.php?article." . $obj->getID()));
         }
         $manage->addObject($manager);
         $manage->render();
@@ -80,7 +80,7 @@ switch($object){
                 $obj->getEmail(), 
                 $obj->getRankString(), 
                 $activated
-            ), "","");
+            ), orongoURL("orongo-admin/delete.php?user." . $obj->getID()) , orongoURL("orongo-admin/edit.php?user." . $obj->getID()));
         }
         $manage->addObject($manager);
         $manage->render();
@@ -104,7 +104,7 @@ switch($object){
             $manager->addItem("Pages", array(
                 $obj->getID(), 
                 '<a href="' . orongoURL("orongo-admin/view.php?page." . $obj->getID()) . '">' . $obj->getTitle() . '</a>'
-            ), "","");
+            ), orongoURL("orongo-admin/delete.php?page." . $obj->getID()) , orongoURL("orongo-admin/edit.php?page." . $obj->getID()));
         }
         $manage->addObject($manager);
         $manage->render();
@@ -123,6 +123,7 @@ switch($object){
         }
         $manager = new AdminFrontendContentManager(100, "Comments");
         $manager->createTab("Comments", array("ID", "Comment", "Commenter", "Date", "Article ID", "Article Title"));
+        $manager->hideEditButton();
         foreach($objs as $obj){
             if(($obj instanceof Comment) == false) continue;
             $articleName = "?";
@@ -142,8 +143,9 @@ switch($object){
                 date("Y-m-d H:i:s", $obj->getTimestamp()), 
                 $obj->getArticleID(), 
                 '<a href="' . orongoURL('orongo-admin/view.php?article.'. $obj->getArticleID()) . '">' . $articleName . '</a>'
-            ), "","");
+            ), orongoURL("orongo-admin/delete.php?comment." . $obj->getID()) ,"");
         }
+        if(getUser()->getRank() < RANK_ADMIN) $manager->hideTrashButton();
         $manage->addObject($manager);
         $manage->render();
         break;
