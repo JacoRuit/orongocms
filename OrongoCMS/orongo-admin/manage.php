@@ -7,7 +7,7 @@ require '../startOrongo.php';
 startOrongo();
 
 
-setCurrentPage('admin_view');
+setCurrentPage('admin_manage');
 
 Security::promptAuth();
 

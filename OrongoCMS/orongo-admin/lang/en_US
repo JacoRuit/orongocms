@@ -42,6 +42,7 @@ VIEW_SITE:View Site
 SETTINGS:Settings
 POWERED_BY:Powered By
 THEME_BY:Theme by
+YOU:You
 
 MANAGE_ARTICLES:Manage Articles
 MANAGE_COMMENTS:Manage Comments
@@ -54,7 +55,9 @@ MEDIA_MANAGER:Media Manager
 NEW_ARTICLE:New Article
 NEW_PAGE:New Page
 NEW_USER:New User
-
+EDIT_ARTICLE:Edit Article
+EDIT_PAGE:Edit Page
+EDIT_USER:Edit User
 CREATE_ARTICLE:Create Article
 CREATE_PAGE:Create Page
 CREATE_USER:Create User

@@ -7,11 +7,10 @@ require '../startOrongo.php';
 startOrongo();
 
 
-setCurrentPage('admin_create');
+setCurrentPage('admin_edit');
 
 Security::promptAuth();
 
-if(getUser()->getRank() < RANK_WRITER){ header("Location: " . orongoURL("orongo-admin/index.php?msg=0")); exit; }
 
 if(!isset($_SERVER['QUERY_STRING'])){ header("Location: " . orongoURL("orongo-admin/index.php?msg=1")); exit; }
 
@@ -27,27 +26,15 @@ $id = trim($query[1]);
 $create = new AdminFrontend();
 $create->main(array("time" => time(), "page_title" => "Edit", "page_template" => "dashboard"));
 
-if(isset($_GET['msg'])){
-    if(isset($_GET['obj'])) $object = $_GET['obj'];
-    switch($_GET['msg']){
-        case 0:
-            $create->addMessage(l("Object edit error"), "error");
-            break;
-        case 1:
-            $create->addMessage(l("Object edit success"), "success");
-            break;
-        default:
-            break;
-    }
-}
 
 switch($object){
     case "article":
+        if(getUser()->getRank() < RANK_WRITER){ header("Location: " . orongoURL("orongo-admin/index.php?msg=0")); exit; }
         $create->setTitle("Edit Article");
         try{
             $article = new Article($id);
         }catch(Exception $e){
-            if($e->getCode() == PAGE_NOT_EXIST){
+            if($e->getCode() == ARTICLE_NOT_EXIST){
                 header("Location: " . orongoURL("orongo-admin/manage.php?msg=0&obj=articles"));
                 exit;
             }else{
@@ -55,32 +42,66 @@ switch($object){
                 exit;
             }
         }
-        $form = new AdminFrontendForm(100, "Edit Article", "POST", orongoURL("actions/action_Edit.php?article"));
-        $form->addInput("Article Title", "title", "text", "", true);
-        $form->addInput("Article Content", "content", "ckeditor", "", true);
-        $form->addInput("Tags", "tags", "text", "tag1, tag2");
-        $form->addButton("Post", true);
+        $form = new AdminFrontendForm(100, l("Edit Article") ." (" . $article->getID() . ")", "POST", orongoURL("actions/action_Edit.php?article." . $article->getID()), false);
+        $form->addInput("Article Title", "title", "text", $article->getTitle(), true);
+        $form->addInput("Article Content", "content", "ckeditor", $article->getContent(), true);
+        $form->addInput("Tags", "tags", "text", $article->getTagsString());
+        $form->addButton("Edit", true);
         $create->addObject($form);
         $create->render();
         break;
     case "user":
-        if(getUser()->getRank() < RANK_ADMIN){ header("Location: " . orongoURL("orongo-admin/index.php?msg=0")); exit; }
-        $create->setTitle("Create User");
-        $form = new AdminFrontendForm(100, "New User", "POST", orongoURL("actions/action_Create.php?user"));
-        $form->addInput("Username", "name", "text","",true);
-        $form->addInput("Password", "password", "password", "blaat123", true);
-        $form->addInput("Email", "email", "email", "email@address.com", true);
-        $form->addSelect("rank", array(l("User") => 1, l("Writer") => 2, l("Admin") => 3));
-        $form->addButton("Create", true);
+        $create->setTitle("Edit User");
+        try{
+            $user = new User($id);
+        }catch(Exception $e){
+            if($e->getCode() == USER_NOT_EXIST){
+                header("Location: " . orongoURL("orongo-admin/manage.php?msg=0&obj=users"));
+                exit;
+            }else{
+                header("Location: " . orongoURL("orongo-admin/index.php?msg=2"));
+                exit;
+            }
+        }
+        if($user->getID() != getUser()->getID() && getUser()->getRank() != RANK_ADMIN){
+            header("Location: " . orongoURL("orongo-admin/index.php?msg=0")); 
+            exit; 
+        }
+        $titletext = getUser()->getID() == $user->getID() ? l("You") : $user->getID();
+        $form = new AdminFrontendForm(100, l("Edit User") . " (" . $titletext . ")" , "POST", orongoURL("actions/action_Edit.php?user." . $user->getID()), false);
+        if(getUser()->getRank() == RANK_ADMIN)
+            $form->addInput("Username", "new_name", "text", $user->getName(),true);
+        $form->addInput("Password", "new_password", "password", "", true);
+        $form->addInput("Email", "new_email", "email", $user->getEmail(), true);
+        if(getUser()->getRank() < RANK_ADMIN)
+            $form->addInput("Current Password", "password", "password", "blaat123", true);
+        if(getUser()->getRank() >= RANK_ADMIN){
+            if($user->getRank() == RANK_ADMIN) $form->addSelect("rank", array(l("Admin") => 3, l("User") => 1, l("Writer") => 2));
+            if($user->getRank() == RANK_WRITER) $form->addSelect("rank", array(l("Writer") => 2, l("User") => 1, l("Admin") => 3));
+            if($user->getRank() == RANK_USER) $form->addSelect("rank", array(l("User") => 1, l("Writer") => 2, l("Admin") => 3));
+        }
+        $form->addButton("Edit", true);
         $create->addObject($form);
         $create->render();
         break;
     case "page":
-        $create->setTitle("Create Page");
-        $form = new AdminFrontendForm(100, "New Page", "POST", orongoURL("actions/action_Create.php?page"));
-        $form->addInput("Page Title", "title", "text", "", true);
-        $form->addInput("Page Content", "content", "ckeditor", "", true);
-        $form->addButton("Post", true);
+        if(getUser()->getRank() < RANK_WRITER){ header("Location: " . orongoURL("orongo-admin/index.php?msg=0")); exit; }
+        $create->setTitle("Edit Page");
+        try{
+            $page = new Page($id);
+        }catch(Exception $e){
+            if($e->getCode() == PAGE_NOT_EXIST){
+                header("Location: " . orongoURL("orongo-admin/manage.php?msg=0&obj=pages"));
+                exit;
+            }else{
+                header("Location: " . orongoURL("orongo-admin/index.php?msg=2"));
+                exit;
+            }
+        } 
+        $form = new AdminFrontendForm(100, l("Edit Page") . " (" . $page->getID() . ")", "POST", orongoURL("actions/action_Edit.php?page." . $page->getID()), false);
+        $form->addInput("Page Title", "title", "text", $page->getTitle(), true);
+        $form->addInput("Page Content", "content", "ckeditor", $page->getContent(), true);
+        $form->addButton("Edit", true);
         $create->addObject($form);
         $create->render();
         break;

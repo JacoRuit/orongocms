@@ -157,6 +157,17 @@ class User {
     }
     
     /**
+     * Set Password of User
+     * @param int $paramID ID of User to set password 
+     * @param String $paramPassword new hashed password
+     */
+    public static function setPassword($paramID, $paramPassword){
+        getDatabase()->update("users", array(
+            "password" => $paramPassword
+        ), "id=%i", $paramID);
+    }
+    
+    /**
      * Compares arguments with database
      * @param int    $paramID User ID to compare the password
      * @param String $paramPassword Hashed user password to compare 

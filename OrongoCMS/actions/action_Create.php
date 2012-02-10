@@ -1,4 +1,7 @@
 <?php
+/**
+ * @author Jaco Ruit 
+ */
 require '../startOrongo.php';
 startOrongo();
 

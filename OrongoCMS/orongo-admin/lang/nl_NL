@@ -42,6 +42,7 @@ VIEW_SITE:Bekijk Website
 SETTINGS:Instellingen
 POWERED_BY:Aangedreven door
 THEME_BY:Thema door
+YOU:Jij
 
 MANAGE_ARTICLES:Beheer Artikels
 MANAGE_COMMENTS:Beheer Reacties
@@ -54,7 +55,9 @@ MEDIA_MANAGER:Media Beheerder
 NEW_ARTICLE:Nieuw Artikel
 NEW_PAGE:Nieuwe Pagina
 NEW_USER:Nieuwe Gebruiker
-
+EDIT_ARTICLE:Wijzig Artikel
+EDIT_PAGE:Wijzig Pagina
+EDIT_USER:Wijzig Gebruiker
 CREATE_ARTICLE:Maak Artikel
 CREATE_PAGE:Maak Pagina
 CREATE_USER:Maak Gebruiker

@@ -64,7 +64,7 @@ class ArticleFrontend extends OrongoFrontendObject {
         getDisplay()->setTitle(Settings::getWebsiteName() . " - " . $this->article->getTitle());
         getDisplay()->setTemplateVariable("body", $this->body);
     
-
+        getDisplay()->addHTML('<meta name="keywords" content="' . $this->article->getTagsString() .'"/>', 'head');
         getDisplay()->setTemplateVariable("article", $this->article);
         getDisplay()->setTemplateVariable("comments", $this->commentHTML);
     
