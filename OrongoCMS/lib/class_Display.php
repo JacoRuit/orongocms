@@ -118,11 +118,19 @@ class Display {
     
     /**
      * Add HTML to display
-     * @param String $paramHTML HTML Code (This is added where style has $body var)
+     * @param String $paramHTML HTML Code 
+     * @param String $paramField Field to add the code default body.
      */
-    public function addHTML($paramHTML){
+    public function addHTML($paramHTML, $paramField = null){
         if(!is_string($paramHTML)) throw new IllegalArgumentException("Invalid argument, string expected.");
-        $this->generalhtml .= $paramHTML;
+        switch($paramField){
+            case "head":
+                $this->head .= $paramHTML;
+                break;
+            default:
+                $this->generalhtml .= $paramHTML;
+                break;
+        }
     }
     
     /**

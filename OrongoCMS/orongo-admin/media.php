@@ -4,7 +4,7 @@ require '../startOrongo.php';
 startOrongo();
 
 
-setCurrentPage('admin_create');
+setCurrentPage('admin_media');
 
 Security::promptAuth();
 

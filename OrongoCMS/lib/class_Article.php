@@ -82,6 +82,14 @@ class Article implements IHTMLConvertable {
     }
     
     /**
+     * @return String Article Tags as string (imploded with ',') 
+     */
+    public function getTagsString(){
+        if(count($this->getTags()) > 0) return implode(",", $this->getTags());
+        else return "";
+    }
+    
+    /**
      * @param String $paramTags new tags 
      */
     public function setTags($paramTags){

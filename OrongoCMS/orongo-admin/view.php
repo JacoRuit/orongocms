@@ -11,17 +11,39 @@ setCurrentPage('admin_view');
 
 Security::promptAuth();
 
+$view = new AdminFrontend();
 
-$query = explode(".", trim($_SERVER['QUERY_STRING']));
-if(count($query) != 2){
-    header("Location: " . orongoURL("orongo-admin/index.php?msg=1"));
-    exit;
+if(isset($_GET['msg'])){
+    if(!isset($_GET['id']) || !isset($_GET['obj'])){
+       header("Location: " . orongoURL("orongo-admin/index.php?msg=1"));
+       exit; 
+    }
+    $id = trim($_GET['id']);
+    $object = trim($_GET['obj']);
+    switch($_GET['msg']){
+        case 1:
+            $view->addMessage(l("Object edit success"), "success");
+            break;
+        case 0:
+            $view->addMessage(l("Object edit error"), "error");
+            break;  
+        default:
+            break;
+    }
+}else{
+    $query = explode(".", trim($_SERVER['QUERY_STRING']));
+    if(count($query) != 2){
+        header("Location: " . orongoURL("orongo-admin/index.php?msg=1"));
+        exit;
+    }
+    $object = trim($query[0]);
+    $id = trim($query[1]);
 }
 
-$object = trim($query[0]);
-$id = trim($query[1]);
 
-$view = new AdminFrontend();
+
+
+
 $view->main(array("time" => time(), "page_template" => "dashboard", "page_title" => "Viewing"));
 
 switch($object){
@@ -103,8 +125,9 @@ switch($object){
         $form->addInput("Author", "author", "text", $article->getAuthorName() , false, true);
         $form->addInput("Article Title", "title", "text", $article->getTitle(), false, true);
         $form->addInput("Article Content", "content", "ckeditor", $article->getContent() , false, true);
-        $form->addButton("Delete", false, orongoURL("orongo-admin/delete.php?page." . $id));
-        $form->addButton("Edit", false, orongoURL("orongo-admin/edit.php?page." . $id));
+        $form->addInput("Keywords", "keywords", "text", $article->getTagsString(), false, true);
+        $form->addButton("Delete", false, orongoURL("orongo-admin/delete.php?article." . $id));
+        $form->addButton("Edit", false, orongoURL("orongo-admin/edit.php?article." . $id));
         $view->addObject($form);
         if($article->getCommentCount() > 0){
             $comments = new AdminFrontendContentManager(100, "Comments");
