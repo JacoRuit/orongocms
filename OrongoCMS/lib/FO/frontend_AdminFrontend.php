@@ -403,6 +403,8 @@ class AdminFrontendContentManager extends AdminFrontendObject{
     private $tabs;
     private $tabheads;
     private $title;
+    private $hideEditButton;
+    private $hideTrashButton;
     
     /**
      * Init the Content Manager
@@ -415,6 +417,8 @@ class AdminFrontendContentManager extends AdminFrontendObject{
         $this->title = l($paramTitle);
         parent::__construct($paramSize, $paramTitle, "");
         $this->updateHTML();
+        $this->hideEditButton = false;
+        $this->hideTrashButton = false;
     }
     
     /**
@@ -481,6 +485,22 @@ class AdminFrontendContentManager extends AdminFrontendObject{
     }
     
     /**
+     * Hides the edit button 
+     */
+    public function hideEditButton(){
+        $this->hideEditButton = true;
+        $this->updateHTML();
+    }
+    
+    /**
+     * Hides the trash button 
+     */
+    public function hideTrashButton(){
+        $this->hideTrashButton = true;
+        $this->updateHTML();
+    }
+    
+    /**
      * Updates the AdminFrontendObject 
      */
     public function updateHTML(){
@@ -505,7 +525,12 @@ class AdminFrontendContentManager extends AdminFrontendObject{
                     $content .= '<tr>';
                     foreach($itemarray as $itemname => $item){
                         if(is_array($item) && $itemname == '__actions'){
-                            $content .= '<td><a href="' . $item['edit'] . '"><input type="image" src="' . orongoURL('orongo-admin/theme/images/icn_edit.png') . '" title="Edit"></a><a href="' . $item['delete'] . '"><input type="image" src="' . orongoURL('orongo-admin/theme/images/icn_trash.png') . '" title="Trash"></a></td> ';
+                            $content .= '<td>';
+                            if(!$this->hideEditButton) 
+                                $content .= '<a href="' . $item['edit'] . '"><input type="image" src="' . orongoURL('orongo-admin/theme/images/icn_edit.png') . '" title="Edit"></a>';
+                            if(!$this->hideTrashButton)
+                                $content .= '<a href="' . $item['delete'] . '"><input type="image" src="' . orongoURL('orongo-admin/theme/images/icn_trash.png') . '" title="Trash"></a>';
+                            $content .= '</td>';
                         }else $content .= '<td>' . $item . '</td>';  
                     }
                     $content .= '</tr>';

@@ -71,14 +71,14 @@ switch($object){
         $form = new AdminFrontendForm(100, l("Edit User") . " (" . $titletext . ")" , "POST", orongoURL("actions/action_Edit.php?user." . $user->getID()), false);
         if(getUser()->getRank() == RANK_ADMIN)
             $form->addInput("Username", "new_name", "text", $user->getName(),true);
-        $form->addInput("Password", "new_password", "password", "", true);
+        $form->addInput("Password", "new_password", "password", "", false);
         $form->addInput("Email", "new_email", "email", $user->getEmail(), true);
         if(getUser()->getRank() < RANK_ADMIN)
-            $form->addInput("Current Password", "password", "password", "blaat123", true);
+            $form->addInput("Current Password", "password", "password", "", true);
         if(getUser()->getRank() >= RANK_ADMIN){
-            if($user->getRank() == RANK_ADMIN) $form->addSelect("rank", array(l("Admin") => 3, l("User") => 1, l("Writer") => 2));
-            if($user->getRank() == RANK_WRITER) $form->addSelect("rank", array(l("Writer") => 2, l("User") => 1, l("Admin") => 3));
-            if($user->getRank() == RANK_USER) $form->addSelect("rank", array(l("User") => 1, l("Writer") => 2, l("Admin") => 3));
+            if($user->getRank() == RANK_ADMIN) $form->addSelect("new_rank", array(l("Admin") => 3, l("User") => 1, l("Writer") => 2));
+            if($user->getRank() == RANK_WRITER) $form->addSelect("new_rank", array(l("Writer") => 2, l("User") => 1, l("Admin") => 3));
+            if($user->getRank() == RANK_USER) $form->addSelect("new_rank", array(l("User") => 1, l("Writer") => 2, l("Admin") => 3));
         }
         $form->addButton("Edit", true);
         $create->addObject($form);

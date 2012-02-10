@@ -90,15 +90,11 @@ class Article implements IHTMLConvertable {
     }
     
     /**
-     * @param String $paramTags new tags 
+     * @param array $paramTags new tags 
      */
     public function setTags($paramTags){
-        $tags = explode(",", trim($paramTags));
-        foreach($tags as &$tag){
-            trim($tag);
-        }
-        $this->tags = $tags;
-        $tagsForDB = implode(",", $tags);
+        $this->tags = $paramTags;
+        $tagsForDB = implode(",", $paramTags);
         getDatabase()->update("articles", array(
             "tags" => $tagsForDB
         ), "`id` = %i", $this->id);

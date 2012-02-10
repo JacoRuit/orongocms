@@ -110,7 +110,7 @@ class User {
      */
     public function setEmail($paramEmail){
         getDatabase()->update("users", array(
-           "email" => $paramRank 
+           "email" => $paramEmail
         ), "`id`=%i", $this->id);
         $this->email = $paramEmail;
     }
