@@ -18,7 +18,7 @@ class OrongoAuthUpdater {
         
         $fp = @fopen(dirname(__FILE__) . '/update.zip', 'w+');
         
-        if($fp == false)
+        if(!$fp)
             throw new Exception("Couldn't open a write (w+) stream for " . __FILE__ . '/update.zip');
         
     }

@@ -25,6 +25,10 @@ class OrongoAuthMain extends OrongoPluggableObject{
                 throw new Exception("Terminal plugin missing!");
             Plugin::hookTerminalPlugin(new OrongoAuthTerminal($this->settings));
         }
+        
+        if(getCurrentPage() == "orongo-login" && isset($_SERVER['orongo-auth-app-name']) && isset($_SERVER['orongo-auth-app-desc']) && isset($_SERVER['orongo-auth-app-website']) && isset($_SERVER['orongo-auth-time'])){
+ 
+        }
     }
    
 
@@ -33,7 +37,7 @@ class OrongoAuthMain extends OrongoPluggableObject{
     }
     
     public function onInstall(){
-        //TODO create database
+        getDatbase()->query("CREATE TABLE `orongo_auth_keys` IF NOT EXISTS");
     }
     
 
