@@ -26,6 +26,14 @@ if(isset($_GET['msg']) && isset($_GET['obj'])){
             $manage->addMessage(l("Object not exists"), "error");
             $object = $_GET['obj'];
             break;
+        case 1:
+            $manage->addMessage(l("Object delete success"), "success");
+            $object = $_GET['obj'];
+            break;
+        case 2:
+            $manage->addMessage(l("Object delete error"), "error");
+            $object = $_GET['obj'];
+            break;
     }
 }
 
@@ -146,6 +154,53 @@ switch($object){
             ), orongoURL("orongo-admin/delete.php?comment." . $obj->getID()) ,"");
         }
         if(getUser()->getRank() < RANK_ADMIN) $manager->hideTrashButton();
+        $manage->addObject($manager);
+        $manage->render();
+        break;
+    
+        
+    case "plugins":
+        if(getUser()->getRank() < RANK_ADMIN){ header("Location: " . orongoURL("orongo-admin/index.php?msg=0")); exit; }
+        $manage->setTitle("Manage Plugins");
+        $manager = new AdminFrontendContentManager(100, "Plugins");
+        $manager->hideTrashButton();
+        $manager->hideEditButton();
+        $manager->createTab("Installed Plugins", array("Name", "Description", "Author", "Author Website", "Version"));
+        foreach(getPlugins() as $plugin){
+            if(($plugin instanceof OrongoPluggableObject) == false) continue;
+            $manager->addItem("Installed Plugins", array(
+               $plugin->getName(),
+               $plugin->getDescription(),
+               $plugin->getAuthorInfo('name'),
+               '<a href="' . $plugin->getAuthorInfo('website') . '">' . $plugin->getAuthorInfo('website') . '</a>',
+               $plugin->getVersionString()
+            ), "","");
+        }
+        $manager->createTab("Not installed plugins", array("Name", "Description", "Author", "Author Website"));
+        $files = @scandir(ADMIN . '/plugins');
+        if(is_array($files))
+        {
+            foreach($files as $file){
+                if(is_dir(ADMIN . '/plugins/' . $file)){
+                    $xmlFile = ADMIN . '/plugins/' . $file . '/info.xml';
+                    if(!file_exists($xmlFile)) continue;
+                    $exists = false;   
+                    foreach(getPlugins() as $plugin){
+                            if($plugin->getInfoPath() == $xmlFile) $exists = true;
+                    }
+                    if($exists) continue;
+                    $ainfo = Plugin::getAuthorInfo($xmlFile);
+                    if(file_exists($xmlFile)){
+                        $manager->addItem("Not installed plugins", array(
+                            Plugin::getName($xmlFile),
+                            Plugin::getDescription($xmlFile),
+                            $ainfo['name'],
+                            '<a href="' . $ainfo['website'] . '">' . $ainfo['website'] . '</a>',
+                        ), "","");
+                    }
+                }else continue;
+            }
+        }
         $manage->addObject($manager);
         $manage->render();
         break;

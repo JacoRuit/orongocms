@@ -74,6 +74,13 @@ class Page {
     }
     
     /**
+     * Deletes the page from database.
+     */
+    public function delete(){
+        getDatabase()->delete("pages", "id=%i", $this->id);
+    }
+    
+    /**
      * Gets page count
      * @return int page count
      */

@@ -209,6 +209,7 @@ class Plugin {
                self::$authKeys[$authKey] = $accessKey;
                $plugin = new $className(array("time" => time(), "auth_key" => $authKey));
                if($plugin instanceof OrongoPluggableObject) $plugins[$count] = $plugin; 
+               $plugin->setXMLFile($infoXML);
                $count++;
             }catch(IllegalMemoryAccessException $ie){
                 throw new ClassLoadException("Plugin tried to access illegal memory. Unable to load plugin: <br /> " . $phpFile);

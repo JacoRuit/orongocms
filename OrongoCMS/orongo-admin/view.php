@@ -26,7 +26,7 @@ if(isset($_GET['msg'])){
             break;
         case 0:
             $view->addMessage(l("Object edit error"), "error");
-            break;  
+            break;
         default:
             break;
     }
