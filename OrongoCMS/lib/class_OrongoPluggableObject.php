@@ -6,6 +6,8 @@
  */
 abstract class OrongoPluggableObject{
     
+    private $__XML_FILE__;
+    
     abstract public function __construct($paramArgs);
     
     /**
@@ -19,12 +21,18 @@ abstract class OrongoPluggableObject{
     abstract public function getVersionString();
     
     /**
+     * Sets XML FIle
+     * @param String $paramXMLFile path to info.xml 
+     */
+    final public function setXMLFile($paramXMLFile){
+        $this->__XML_FILE__ = $paramXMLFile;
+    }
+    
+    /**
      * @return String path of info.xml
      */
     final public function getInfoPath(){
-        $path = dirname(__FILE__) . 'info.xml';
-        if(!file_exists($path)) return null;
-        return $path;
+        return $this->__XML_FILE__;
     }
     
     

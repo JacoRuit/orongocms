@@ -143,6 +143,12 @@ class User {
         return $this->activateStatus == 1;
     }
     
+    /**
+     * Deletes the user from database.
+     */
+    public function delete(){
+        getDatabase()->delete("users", "id=%i", $this->id);
+    }
     
     
     #   General Functions

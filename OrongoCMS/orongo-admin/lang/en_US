@@ -43,6 +43,7 @@ SETTINGS:Settings
 POWERED_BY:Powered By
 THEME_BY:Theme by
 YOU:You
+AND:and
 
 MANAGE_ARTICLES:Manage Articles
 MANAGE_COMMENTS:Manage Comments
@@ -61,6 +62,10 @@ EDIT_USER:Edit User
 CREATE_ARTICLE:Create Article
 CREATE_PAGE:Create Page
 CREATE_USER:Create User
+DELETE_ARTICLE:Delete Article
+DELETE_PAGE:Delete Page
+DELETE_USER:Delete User
+DELETE_COMMENT:Delete Comment
 
 ID:ID
 ACTIONS:Actions
@@ -74,6 +79,9 @@ BANNED:Banned
 ACTIVATED:Activated
 YES:Yes
 NO:No
+
+EDIT:Edit
+DELETE:Delete
 
 TITLE:Title
 DATE:Date
@@ -117,3 +125,16 @@ ISSUE_LABELS:Issue Labels
 
 OBJECT_POST_SUCCESS:Object created!
 OBJECT_POST_ERROR:An error occured while creating the object.
+OBJECT_EDIT_SUCCESS:Object edited!
+OBJECT_EDIT_ERROR:An error occured while editing the object.
+OBJECT_DELETE_SUCCESS:Object deleted!
+OBJECT_DELETE_ERROR:An error occured while deleting the object.
+OBJECT_NOT_EXISTS:The object doesn't exist. 
+CAN_NOT_DELETE_YOURSELF:You can't delete yourself.
+
+SURE_DELETE_ARTICLE:Are you sure you want to delete the article with the title '%s'?
+SURE_DELETE_COMMENT:Are you sure you want to delete the comment from %s?
+SURE_DELETE_PAGE:Are you sure you want to delete the page with the title '%s'?
+SURE_DELETE_USER:Are you sure you want to delete the user with the name '%s'?
+
+INVALID_QUERY_ARG:The page which you wanted to view is not here.
