@@ -13,10 +13,12 @@ FILES:Bestanden
 GALLERY:Gallerij
 MEDIA:Media
 SOFTWARE:Software
+PLUGIN:Plugin
+PLUGINS:Plugins
 
 HOME:Home
 ARCHIVE:Archief
-
+VERSION:Versie
 USERNAME:Gebruikersnaam
 PASSWORD:Wachtwoord
 PASSWORD_AGAIN:Wachtwoord (opnieuw)
@@ -49,6 +51,7 @@ MANAGE_ARTICLES:Beheer Artikelen
 MANAGE_COMMENTS:Beheer Reacties
 MANAGE_PAGES:Beheer Pagina's
 MANAGE_USERS:Beheer Gebruikers
+MANAGE_PLUGINS:Beheer Plugins
 
 FILE_MANAGER:Bestand Beheerder
 MEDIA_MANAGER:Media Beheerder
@@ -86,6 +89,7 @@ DELETE:Verwijderen
 TITLE:Titel
 DATE:Datum
 AUTHOR:Auteur
+AUTHOR_WEBSITE:Auteur's Website
 
 ARTICLE_CONTENT:Artikel Inhoud
 PAGE_CONTENT:Pagina Inhoud
@@ -138,3 +142,10 @@ SURE_DELETE_PAGE:Weet je het zeker dat je de pagina met de titel '%s' wilt verwi
 SURE_DELETE_USER:Weet je het zeker dat je de gebruiker met de naam '%s' wilt verwijderen?
 
 INVALID_QUERY_ARG:Deze pagina bestaat niet.
+
+INSTALLED_PLUGINS:Geïnstalleerde plugins
+NOT_INSTALLED_PLUGINS:Niet geïnstalleerde plugins
+PLUGIN_NAME:Plugin Naam
+PLUGIN_DESCRIPTION:Plugin Beschrijving
+UNINSTALL:Deïnstalleren
+INSTALL:Installeren

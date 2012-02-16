@@ -165,7 +165,7 @@ switch($object){
         $manager = new AdminFrontendContentManager(100, "Plugins");
         $manager->hideTrashButton();
         $manager->hideEditButton();
-        $manager->createTab("Installed Plugins", array("Name", "Description", "Author", "Author Website", "Version"));
+        $manager->createTab("Installed Plugins", array("Plugin Name", "Plugin Description", "Author", "Author Website", "Version"));
         foreach(getPlugins() as $plugin){
             if(($plugin instanceof OrongoPluggableObject) == false) continue;
             $manager->addItem("Installed Plugins", array(
@@ -173,10 +173,13 @@ switch($object){
                $plugin->getDescription(),
                $plugin->getAuthorInfo('name'),
                '<a href="' . $plugin->getAuthorInfo('website') . '">' . $plugin->getAuthorInfo('website') . '</a>',
-               $plugin->getVersionString()
+               $plugin->getVersionString(),
+               "override_actions" => array(
+                   "<a href='" . orongoURL("orongo-admin/plugin-uninstall.php?xml_path=" . urlencode(str_replace(ADMIN . '/plugins', "",$plugin->getInfoPath()))) . "'>" . l("Uninstall") . "</a>"
+               )
             ), "","");
         }
-        $manager->createTab("Not installed plugins", array("Name", "Description", "Author", "Author Website"));
+        $manager->createTab("Not installed plugins", array("Plugin Name", "Plugin Description", "Author", "Author Website"));
         $files = @scandir(ADMIN . '/plugins');
         if(is_array($files))
         {
@@ -189,13 +192,16 @@ switch($object){
                             if($plugin->getInfoPath() == $xmlFile) $exists = true;
                     }
                     if($exists) continue;
-                    $ainfo = Plugin::getAuthorInfo($xmlFile);
                     if(file_exists($xmlFile)){
+                        $ainfo = Plugin::getAuthorInfo($xmlFile);
                         $manager->addItem("Not installed plugins", array(
                             Plugin::getName($xmlFile),
                             Plugin::getDescription($xmlFile),
                             $ainfo['name'],
                             '<a href="' . $ainfo['website'] . '">' . $ainfo['website'] . '</a>',
+                            "override_actions" => array(
+                                "<a href='" . orongoURL("orongo-admin/plugin-install.php?xml_path=" . urlencode(str_replace(ADMIN . '/plugins', "",$xmlFile))) . "'>" . l("Install") . "</a>"
+                            )
                         ), "","");
                     }
                 }else continue;

@@ -13,10 +13,12 @@ FILES:Files
 GALLERY:Gallery
 MEDIA:Media
 SOFTWARE:Software
+PLUGIN:Plugin
+PLUGINS:Plugins
 
 HOME:Home
 ARCHIVE:Archive
-
+VERSION:Version
 USERNAME:Username
 PASSWORD:Password
 PASSWORD_AGAIN:Password (again)
@@ -49,6 +51,7 @@ MANAGE_ARTICLES:Manage Articles
 MANAGE_COMMENTS:Manage Comments
 MANAGE_PAGES:Manage Pages
 MANAGE_USERS:Manage Users
+MANAGE_PLUGINS:Manage Plugins
 
 FILE_MANAGER:File Manager
 MEDIA_MANAGER:Media Manager
@@ -86,6 +89,7 @@ DELETE:Delete
 TITLE:Title
 DATE:Date
 AUTHOR:Author
+AUTHOR_WEBSITE:Author Website
 
 ARTICLE_CONTENT:Article Content
 PAGE_CONTENT:Page Content
@@ -138,3 +142,10 @@ SURE_DELETE_PAGE:Are you sure you want to delete the page with the title '%s'?
 SURE_DELETE_USER:Are you sure you want to delete the user with the name '%s'?
 
 INVALID_QUERY_ARG:The page which you wanted to view is not here.
+
+INSTALLED_PLUGINS:Installed plugins
+NOT_INSTALLED_PLUGINS:Not installed plugins
+PLUGIN_NAME:Plugin Name
+PLUGIN_DESCRIPTION:Plugin Description
+UNINSTALL:Uninstall
+INSTALL:Install
