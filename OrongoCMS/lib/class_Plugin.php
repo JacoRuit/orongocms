@@ -182,6 +182,7 @@ class Plugin {
      * @return array containing plugins
      */
     public static function getActivatedPlugins(){
+        $loadedPluginNames = array();
         if(self::$requiresDone) throw new Exception();
         self::$requiresDone = true;
         self::$authKeys = array();
@@ -208,8 +209,13 @@ class Plugin {
                $authKey = md5(rand() . microtime() . rand());
                self::$authKeys[$authKey] = $accessKey;
                $plugin = new $className(array("time" => time(), "auth_key" => $authKey));
-               if($plugin instanceof OrongoPluggableObject) $plugins[$count] = $plugin; 
+               if(($plugin instanceof OrongoPluggableObject) == false){
+                   throw new ClassLoadException("Invalid plugin object!");
+               }
                $plugin->setXMLFile($infoXML);
+               if(in_array($plugin->getName(), $loadedPluginNames))
+                       throw new ClassLoadException("There is already a plugin loaded with this name: " . $plugin->getName());
+               $plugins[$count] = $plugin; 
                $count++;
             }catch(IllegalMemoryAccessException $ie){
                 throw new ClassLoadException("Plugin tried to access illegal memory. Unable to load plugin: <br /> " . $phpFile);

@@ -479,7 +479,10 @@ class AdminFrontendContentManager extends AdminFrontendObject{
                 "edit" => $paramEditURL
             )
         );
-        $this->tabs[$paramName][count($this->tabs[$paramName])] = $paramItems + $goodaction;
+        if(isset($paramItems['override_actions']))
+            $this->tabs[$paramName][count($this->tabs[$paramName])] = $paramItems;
+        else
+            $this->tabs[$paramName][count($this->tabs[$paramName])] = $paramItems + $goodaction;
         $this->updateHTML();
         return true;
     }
@@ -499,6 +502,8 @@ class AdminFrontendContentManager extends AdminFrontendObject{
         $this->hideTrashButton = true;
         $this->updateHTML();
     }
+    
+
     
     /**
      * Updates the AdminFrontendObject 
@@ -524,14 +529,22 @@ class AdminFrontendContentManager extends AdminFrontendObject{
                 foreach($items as $itemarray){
                     $content .= '<tr>';
                     foreach($itemarray as $itemname => $item){
-                        if(is_array($item) && $itemname == '__actions'){
+                        if(is_array($item) && $itemname == '__actions' && !isset($itemarray['override_actions'])){ 
                             $content .= '<td>';
                             if(!$this->hideEditButton) 
                                 $content .= '<a href="' . $item['edit'] . '"><input type="image" src="' . orongoURL('orongo-admin/theme/images/icn_edit.png') . '" title="Edit"></a>';
                             if(!$this->hideTrashButton)
                                 $content .= '<a href="' . $item['delete'] . '"><input type="image" src="' . orongoURL('orongo-admin/theme/images/icn_trash.png') . '" title="Trash"></a>';
                             $content .= '</td>';
-                        }else $content .= '<td>' . $item . '</td>';  
+                        }else if(is_array($item) && $itemname == 'override_actions'){
+                            $content .= '<td>';
+                            foreach($item as $html){
+                                if(!is_string($html)) continue;
+                                $content .= $html;
+                            }
+                            $content .= '</td>';
+                        }
+                        else $content .= '<td>' . $item . '</td>';  
                     }
                     $content .= '</tr>';
                 }
