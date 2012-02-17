@@ -87,8 +87,13 @@ class AdminFrontend extends OrongoFrontendObject {
     /**
      * Set page title
      * @param String $paramTitle new title 
+     * @param boolean $paramTranslate indicating if title should be translated (default true)
      */
-    public function setTitle($paramTitle){
+    public function setTitle($paramTitle, $paramTranslate = true){
+        if(!$paramTranslate){
+            $this->pageTitle = $paramTitle;
+            return;
+        }
         $this->pageTitle = l($paramTitle);
     }
     
@@ -298,11 +303,13 @@ class AdminFrontendForm extends AdminFrontendObject{
      * @param String $paramValue value of the form (default nothing)
      * @param boolean $paramRequired indicating if this is required (default false)
      * @param boolean $paramReadOnly indicating if input should be read only
+     * @param boolean $paramTranslate indicating if label should be translated (default true)
      */
-    public function addInput($paramLabel, $paramName, $paramType, $paramValue = "", $paramRequired = false, $paramReadOnly = false){
+    public function addInput($paramLabel, $paramName, $paramType, $paramValue = "", $paramRequired = false, $paramReadOnly = false, $paramTranslate = true){
+        $label = $paramTranslate ? l($paramLabel) : $paramLabel;
         $input = array(
            "type" => $paramType,  
-           "label" => l($paramLabel),
+           "label" => $label,
            "name" => $paramName,
            "value" => $paramValue,
            "required" => $paramRequired,
@@ -540,7 +547,7 @@ class AdminFrontendContentManager extends AdminFrontendObject{
                             $content .= '<td>';
                             foreach($item as $html){
                                 if(!is_string($html)) continue;
-                                $content .= $html;
+                                $content .= $html . "  ";
                             }
                             $content .= '</td>';
                         }

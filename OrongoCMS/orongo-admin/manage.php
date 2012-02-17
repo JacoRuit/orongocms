@@ -21,18 +21,22 @@ if(!isset($_SERVER['QUERY_STRING'])){ header("Location: " . orongoURL("orongo-ad
 $object = $_SERVER['QUERY_STRING'];
 
 if(isset($_GET['msg']) && isset($_GET['obj'])){
+    $object = $_GET['obj'];
     switch($_GET['msg']){
         case 0:
             $manage->addMessage(l("Object not exists"), "error");
-            $object = $_GET['obj'];
             break;
         case 1:
             $manage->addMessage(l("Object delete success"), "success");
-            $object = $_GET['obj'];
             break;
         case 2:
             $manage->addMessage(l("Object delete error"), "error");
-            $object = $_GET['obj'];
+            break;
+        case 3:
+            $manage->addMessage(l("Plugin installed"), "success");
+            break;
+        case 4:
+            $manage->addMessage(l("Plugin deinstalled"), "success");
             break;
     }
 }
@@ -175,7 +179,8 @@ switch($object){
                '<a href="' . $plugin->getAuthorInfo('website') . '">' . $plugin->getAuthorInfo('website') . '</a>',
                $plugin->getVersionString(),
                "override_actions" => array(
-                   "<a href='" . orongoURL("orongo-admin/plugin-uninstall.php?xml_path=" . urlencode(str_replace(ADMIN . '/plugins', "",$plugin->getInfoPath()))) . "'>" . l("Uninstall") . "</a>"
+                   "<a href='" . orongoURL("orongo-admin/plugin-uninstall.php?xml_path=" . urlencode(str_replace(ADMIN . '/plugins', "",$plugin->getInfoPath()))) . "'>" . l("Uninstall") . "</a>",
+                   "<a href='" . orongoURL("orongo-admin/plugin-settings.php?xml_path=" . urlencode(str_replace(ADMIN . '/plugins', "",$plugin->getInfoPath()))) . "'>" . l("Settings") . "</a>"
                )
             ), "","");
         }
