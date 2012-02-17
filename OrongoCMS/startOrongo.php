@@ -40,15 +40,16 @@ function startOrongo(){
     setDisplay(new Display($style->getStylePath()));
     setUser(handleSessions());
 
+    if(defined('HACK_PLUGINS') && HACK_PLUGINS == true)
+        Plugin::hackKeys();
     try{
         setPlugins(Plugin::getActivatedPlugins('orongo-admin/'));
     }catch(Exception $e){
         $msgbox = new MessageBox();
         $msgbox->bindException($e);
-        die($msgbox->getImports() . $msgbox->toHTML());
+        getDisplay()->addObject($msgbox);
     }
-
-
+    
 
     define('RANK_ADMIN', 3);
     define('RANK_WRITER', 2);

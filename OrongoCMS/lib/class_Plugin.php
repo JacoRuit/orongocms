@@ -9,6 +9,7 @@ class Plugin {
     private static $tPlugins = array();
     private static $requiresDone = false;
     private static $authKeys;
+    private static $publicAuthKeys = false;
     
     /**
      * Installs database for the plugin
@@ -21,19 +22,23 @@ class Plugin {
         $info = @json_decode($json, true);
         $setting = '';
         $typeSetting= '';
+        if(!file_exists(dirname($paramInfoXML) . '/' . $info['plugin']['php_file'] . '.php'))
+                 throw new Exception("Couldn't find the PHP file (info.xml: " . $paramInfoXML . ")");
         if(!isset($info['plugin']['access_key'])) throw new Exception("The plugin's access key wasn't found");
         $accessKey = $info['plugin']['access_key'];
         getDatabase()->delete("plugin_data", "access_key =  %s", $accessKey);
-        foreach($info['plugin']['settings'] as $key=>$value){
-            $setting = $key;
-            foreach($info['plugin']['settings'][$key] as $key=>$value){
-                if($key == 'type'){
-                    $typeSetting = $value;
-                    self::installSetting($accessKey , $setting, $typeSetting);
-                }else if($key == 'default'){
-                    getDatabase()->update("plugin_data",array(
-                        "setting_value" => $value
-                    ),"`access_key`=%s AND `setting`=%s", $accessKey, $setting);
+        if(is_array($info['plugin']['settings'])){
+            foreach($info['plugin']['settings'] as $key=>$value){
+                $setting = $key;
+                foreach($info['plugin']['settings'][$key] as $key=>$value){
+                    if($key == 'type'){
+                        $typeSetting = $value;
+                        self::installSetting($accessKey , $setting, $typeSetting);
+                    }else if($key == 'default'){
+                        getDatabase()->update("plugin_data",array(
+                            "setting_value" => $value
+                        ),"`access_key`=%s AND `setting`=%s", $accessKey, $setting);
+                    }
                 }
             }
         }
@@ -41,6 +46,21 @@ class Plugin {
         getDatabase()->insert("activated_plugins", array(
             "plugin_xml_path" => $paramInfoXML
         ));
+    }
+    
+    /**
+     * Deinstalls plugin
+     * @param String $paramInfoXML path of info.xml 
+     */
+    public static function deinstall($paramInfoXML){
+        if(file_exists($paramInfoXML) == false) throw new Exception("The plugin's info.xml doesn't exist!");
+        $xml = @simplexml_load_file($paramInfoXML);
+        $json = @json_encode($xml);
+        $info = @json_decode($json, true);
+        if(!isset($info['plugin']['access_key'])) throw new Exception("The plugin's access key wasn't found");
+        $accessKey = $info['plugin']['access_key'];
+        getDatabase()->delete("plugin_data", "access_key =  %s", $accessKey);
+        getDatabase()->delete("activated_plugins", "plugin_xml_path=%s", $paramInfoXML);
     }
     
     /**
@@ -262,6 +282,26 @@ class Plugin {
      */
     public static function getHookedTerminalPlugins(){
         return self::$tPlugins;
+    }
+    
+    /**
+     * Makes the Plugin auth keys public 
+     */
+    public static function hackKeys(){
+        if(self::$requiresDone) return;
+        self::$publicAuthKeys = true;
+    }
+    
+    /**
+     * Get the all the plugin auth keys
+     * Can only be fetched when Plugin::hack() was called 
+     * @return array All the auth keys
+     */
+    public static function getAuthKeys(){
+        if(self::$publicAuthKeys)
+            return self::$authKeys;
+        else
+            return array();
     }
 }
 

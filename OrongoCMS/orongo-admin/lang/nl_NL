@@ -149,3 +149,8 @@ PLUGIN_NAME:Plugin Naam
 PLUGIN_DESCRIPTION:Plugin Beschrijving
 UNINSTALL:Deïnstalleren
 INSTALL:Installeren
+PLUGIN_INSTALLED:Plugin geïnstalleerd
+PLUGIN_DEINSTALLED:Plugin gedeïnstalleerd
+PLUGIN_NOT_FOUND:Plugin niet gevonden
+PLUGIN_NOT_INSTALLED:Plugin is niet geïnstalleerd
+PLUGIN_ALREADY_INSTALLED:Plugin is al geïnstalleerd

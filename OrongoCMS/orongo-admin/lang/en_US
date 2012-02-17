@@ -149,3 +149,8 @@ PLUGIN_NAME:Plugin Name
 PLUGIN_DESCRIPTION:Plugin Description
 UNINSTALL:Uninstall
 INSTALL:Install
+PLUGIN_INSTALLED:Plugin installed
+PLUGIN_DEINSTALLED:Plugin deinstalled
+PLUGIN_NOT_FOUND:Plugin not found
+PLUGIN_NOT_INSTALLED:Plugin is not installed
+PLUGIN_ALREADY_INSTALLED:Plugin has already been installed
