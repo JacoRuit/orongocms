@@ -11,8 +11,7 @@ class OrongoNotification {
     private $text;
     private $image;
     private $time;
-    private $user;
-    
+
     /**
      * Init the object
      * @param String $paramTitle title of notification
@@ -21,19 +20,19 @@ class OrongoNotification {
      * @param String $paramImage image url for notification [optional]
      * @param int $paramTime duration of notification (default = 10000 ms)
      */
-    public function __construct($paramTitle, $paramText, $paramUser, $paramImage = null , $paramTime = 10000){
+    public function __construct($paramTitle, $paramText, $paramImage = null , $paramTime = 10000){
         $this->title = $paramTitle;
         $this->text = $paramText;
         $this->image = $paramImage;
         $this->time = $paramTime;
-        $this->user = $paramUser;
     }
     
     /**
      * Dispatches the Notification 
+     * @param User User to notify
      */
-    public function dispatch(){
-        OrongoNotifier::dispatchNotification($this);
+    public function dispatch($paramUser){
+        OrongoNotifier::dispatchNotification($this, $paramUser);
     }
     
     /**
@@ -92,12 +91,6 @@ class OrongoNotification {
         return $this->time;
     }
     
-    /**
-     * @return User user target of notification 
-     */
-    public function getUser(){
-        return $this->user;
-    }
 }
 
 ?>

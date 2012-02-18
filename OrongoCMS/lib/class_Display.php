@@ -246,6 +246,10 @@ class Display {
             $type = strrev($import);
             $type = explode(".", $type);
             $type = strrev($type[0]);
+            if(stristr($type, "?")){
+                $type = explode("?", $type);
+                $type = $type[0];
+            }
             switch($type){
                 case "css":
                     $this->addHTML('<link rel="stylesheet" href="' . $import . '" type="text/css" media="screen" />', "head");

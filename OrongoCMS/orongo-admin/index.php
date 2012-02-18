@@ -9,7 +9,8 @@ startOrongo();
 setCurrentPage('admin_index');
 
 Security::promptAuth();
-
+$n = new OrongoNotification("This is notification", "Hello World!", "http://code.google.com/p/orongocms/logo?cct=1325506665");
+$n->dispatch(getUser());
 $index = new AdminFrontend();
 $index->main(array("time" => time(), "page_title" => "Dashboard", "page_template" => "dashboard"));
 

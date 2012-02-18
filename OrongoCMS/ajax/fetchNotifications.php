@@ -24,13 +24,14 @@ $arrayToJs = array();
 $arrayToJs["notifications"] = array();
 $count = 0;
 foreach(getUser()->getNotifications() as $notification){
-    if(($notification instanceof OrongoNotification) == false) continue;
+    if(($notification["notification"] instanceof OrongoNotification) == false) continue;
     $arrayToJs["notifications"][$count] = array(
-        "title" => $notification->getTitle(),
-        "text" => $notification->getText(),
-        "time" => $notification->getTime(),
-        "image" => $notification->getImage()
+        "title" => $notification["notification"]->getTitle(),
+        "text" => $notification["notification"]->getText(),
+        "time" => $notification["notification"]->getTime(),
+        "image" => $notification["notification"]->getImage()
     );
+    OrongoNotifier::deleteNotification($notification["id"]);
     $count++;
 }
 $arrayToJs["newNotifications"] = $count > 0 ? true : false;

@@ -11,39 +11,43 @@ class OrongoNotifier extends AjaxAction {
     /**
      * Dispatch a notification
      * @param OrongoNotification $paramNotification OrongoNotification 
+     * @param User $paramUser User to notify
      */
-    public static function dispatchNotification($paramNotification){
+    public static function dispatchNotification($paramNotification, $paramUser){
         if(($paramNotification instanceof OrongoNotification) == false) throw new IllegalArgumentException("Invalid argument, OrongoNotification expected.");
+        if(($paramUser instanceof User) == false) throw new IllegalArgumentException("Invalid argument, User object expected.");
         getDatabase()->insert("notifications", array(
            "id" => self::getLastNotificationID() + 1,
            "title" => $paramNotification->getTitle(),
            "text" => $paramNotification->getText(),
            "image" => $paramNotification->getImage(),
            "time" => $paramNotification->getTime(),
-           "userID" => $paramNotification->getUser()->getID()
+           "userID" => $paramUser->getID()
         ));
-        
     }
     
     /**
      * Deletes a notification from database
-     * @param User $paramUser User object to delete the notifications from
+     * @param int $paramID notification ID
      */
-    public static function deleteNotificationsByUser($paramUser){
-       if(($paramUser instanceof User) == false) throw new IllegalArgumentException("Invalid argument, User object expected.");
-       getDatabase()->delete("notifications", "userID=%i", $paramUser->getID());
+    public static function deleteNotification($paramID){
+       getDatabase()->delete("notifications", "id=%i", $paramID);
     }
     
     /**
      * Fetch notifications for User
      * @param User $paramUser User object 
+     * @return array Array with Notification & ID
      */
     public static function fetchNotificationsByUser($paramUser){
         if(($paramUser instanceof User) == false) throw new IllegalArgumentException("Invalid argument, User object expected.");
         $notifications = array();
         $rows = getDatabase()->query("SELECT `id`, `title`, `text`, `image`, `time` FROM `notifications` WHERE `userID` = %i", $paramUser->getID());
         foreach($rows as $row){
-            $notifications[count($notifications)] = new OrongoNotification($row['title'], $row['text'], $paramUser, $row['image'], $row['time']);
+            $notifications[count($notifications)] = array(
+                "notification" => new OrongoNotification($row['title'], $row['text'], $row['image'], $row['time']),
+                "id" => $row['id']
+            );
         }  
         return $notifications;
     }
@@ -65,7 +69,8 @@ class OrongoNotifier extends AjaxAction {
         $this->refreshInterval = $paramRefreshInterval;
     }
 
-    public function doImports() {
+    public function doImports(){
+        getDisplay()->addHTML("<link href='http://fonts.googleapis.com/css?family=Ubuntu' rel='stylesheet' type='text/css'>");
         if(!getDisplay()->isImported(orongoURL('orongo-admin/theme/gritter/css/jquery.gritter.css')))
             getDisplay()->import(orongoURL('orongo-admin/theme/gritter/css/jquery.gritter.css'));
         if(!getDisplay()->isImported(orongoURL('js/jquery.gritter.min.js')))
@@ -76,9 +81,9 @@ class OrongoNotifier extends AjaxAction {
 
     public function toJS() {
         $generatedJS = " window.setInterval(function() {";
-        $generatedJS .= " try{";
+        //$generatedJS .= " try{";
         $generatedJS .= "   fetchNotifications('" . orongoURL("ajax/fetchNotifications.php") . "'); ";
-        $generatedJS .= "}catch(err){ alert(err); }";
+        //$generatedJS .= "}catch(err){ alert(err); }";
         $generatedJS .= " }, " . $this->refreshInterval . "); ";
         return $generatedJS;
     }
