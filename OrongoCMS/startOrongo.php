@@ -50,6 +50,8 @@ function startOrongo(){
         getDisplay()->addObject($msgbox);
     }
     
+    
+    
 
     define('RANK_ADMIN', 3);
     define('RANK_WRITER', 2);
