@@ -150,6 +150,20 @@ class User {
         getDatabase()->delete("users", "id=%i", $this->id);
     }
     
+    /**
+     * Get notifications for user 
+     */
+    public function getNotifications(){
+        return OrongoNotifier::fetchNotificationsByUser($this);
+    }
+    
+    /**
+     * Deletes the notifications for user 
+     */
+    public function deleteNotifications(){
+        OrongoNotifier::deleteNotificationsByUser($this);
+    }
+    
     
     #   General Functions
     /**
@@ -172,6 +186,8 @@ class User {
             "password" => $paramPassword
         ), "id=%i", $paramID);
     }
+    
+    
     
     /**
      * Compares arguments with database

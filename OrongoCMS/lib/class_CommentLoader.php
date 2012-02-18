@@ -1,11 +1,11 @@
 <?php
 
 /**
- * AjaxLoadCommentsAction Class
+ * CommentLoader Class
  *
  * @author Jaco Ruit
  */
-class AjaxLoadCommentsAction implements IHTMLConvertable, IJSConvertable{
+class CommentLoader extends AjaxAction{
 
     private $offset;
     private $lastCommentID;
@@ -25,10 +25,7 @@ class AjaxLoadCommentsAction implements IHTMLConvertable, IJSConvertable{
         $this->articleID = $paramArticleID;
         $this->refreshInterval = $paramRefreshInterval;
     }
-    
-    public function toHTML() {
-        return '<script type="text/javascript" src="'. Settings::getWebsiteURL(). 'js/ajax.loadComments.js"></script>';
-    }
+
     
     public function toJS() {
         $generatedJS = " offset = " . $this->offset . "; ";
@@ -41,6 +38,12 @@ class AjaxLoadCommentsAction implements IHTMLConvertable, IJSConvertable{
         //$generatedJS .= "}catch(err){ alert(err); }";
         $generatedJS .= " }, " . $this->refreshInterval . "); ";
         return $generatedJS;
+    }
+    
+
+    public function doImports() {
+        if(!getDisplay()->isImported(orongoURL('js/ajax.comments.js')))
+            getDisplay()->import(orongoURL('js/ajax.comments.js'));
     }
 }
 

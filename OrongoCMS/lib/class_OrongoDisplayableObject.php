@@ -7,9 +7,8 @@
  */
 abstract class OrongoDisplayableObject implements IHTMLConvertable {
     
-    //abstract public function toHTML();
     
-    final public function addToDisplay(){
+    public function addToDisplay(){
         getDisplay()->addHTML($this->toHTML());
     }
     

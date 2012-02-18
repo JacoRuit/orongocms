@@ -14,6 +14,7 @@ class Display {
     private $head;
     private $js;
     private $generalhtml;
+    private $imports;
     
     private static $jQueryIgnoreQuotes = array('document', 'window');
     
@@ -35,6 +36,10 @@ class Display {
         $this->head = "<meta name=\"generator\" content=\"OrongoCMS r" . REVISION . "\" />";
         $this->js = "";
         $this->generalhtml = "";
+        $this->imports = array();
+        $this->import(orongoURL("js/widget.prettyAlert.js"));
+        //
+        //$this->addHTML('<script type="text/javascript" src="' . orongoURL("js/widget.prettyAlert.js") . '"></script>');
     }
     
     /**
@@ -134,6 +139,25 @@ class Display {
     }
     
     /**
+     * Import a JS/CSS file
+     * @param String $paramURL URL to the file
+     */
+    public function import($paramURL){
+        $this->imports[count($this->imports)] = $paramURL;
+    }
+    
+    /**
+     * Checks if file is imported
+     * @param String $paramURL URL to the file 
+     */
+    public function isImported($paramURL){
+        foreach($this->imports as $import){
+            if($paramURL == $import) return true;
+        }
+        return false;
+    }
+    
+    /**
      * Set CSS using jQuery(like http://api.jquery.com/css/)
      * @param String $paramElement HTML Element
      * @param String $paramProperty CSS property 
@@ -194,6 +218,7 @@ class Display {
         die("<script type=\"text/javascript\">window.close();</script><p>My work here is done.</p>");
     }
     
+    
     /**
      * Renders the Display
      */
@@ -202,16 +227,39 @@ class Display {
         $this->setTemplateVariable("website_name", Settings::getWebsiteName());
         $this->setTemplateVariable("website_url", Settings::getWebsiteURL());
         $this->setTemplateVariable("version", "r" . REVISION);
-        $this->addToTemplateVariable("body", '<script type="text/javascript">' . $this->js . '</script>');
-        $this->addToTemplateVariable("body", $this->generalhtml);
         $this->setTemplateVariable("menu", getMenu()->toHTML());
+        if(getUser() != null){
+            $this->setTemplateVariable("user", getUser());
+            $on = new OrongoNotifier();
+            $on->start();
+        }
+        if(!$this->isImported(orongoURL('orongo-admin/theme/smoothness/jquery-ui-1.8.16.custom.css')))
+            $this->import(orongoURL('orongo-admin/theme/smoothness/jquery-ui-1.8.16.custom.css'));
+        if(!$this->isImported('https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js'))
+            $this->import('https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js');
         foreach($this->objects as $object){
             if($object == null) continue;
             if(($object instanceof OrongoDisplayableObject) == false) continue;
             $this->addToTemplateVariable("body", $object->toHTML());
         }
+        foreach($this->imports as $import){
+            $type = strrev($import);
+            $type = explode(".", $type);
+            $type = strrev($type[0]);
+            switch($type){
+                case "css":
+                    $this->addHTML('<link rel="stylesheet" href="' . $import . '" type="text/css" media="screen" />', "head");
+                    break;
+                case "js":
+                    $this->addHTML('<script type="text/javascript" src="' . $import . '"></script>', "head");
+                    break;
+                default:
+                    break;
+            }
+        }
         $this->addToTemplateVariable("head", $this->head);
-        if(getUser() != null) $this->setTemplateVariable("user", getUser());
+        $this->addToTemplateVariable("body", $this->generalhtml);
+        $this->addToTemplateVariable("body", '<script type="text/javascript">' . $this->js . '</script>');
         foreach($this->tpls as $tpl){
             if(empty($tpl)) continue;
             $this->raintpl->draw($tpl);

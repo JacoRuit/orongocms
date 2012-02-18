@@ -17,7 +17,6 @@ class PageFrontend extends OrongoFrontendObject {
             $msgbox = new MessageBox("Can't render page frontend: wrong argument 'page'!");
             die($msgbox->getImports() . $msgbox->toHTML());
         }
-        $this->body = "<script src=\"" . Settings::getWebsiteURL() . "js/widget.prettyAlert.js\" type=\"text/javascript\" charset=\"utf-8\"></script>";
         $this->page = $args['page'];
     }
 

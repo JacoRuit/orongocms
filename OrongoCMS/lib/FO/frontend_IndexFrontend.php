@@ -10,7 +10,6 @@ class IndexFrontend extends OrongoFrontendObject {
     private $articleHTML;
     
     public function main($args){
-        $this->body = "<script src=\"" . Settings::getWebsiteURL() . "js/widget.prettyAlert.js\" type=\"text/javascript\" charset=\"utf-8\"></script>";
         $this->articleHTML = "";  
         $this->generateArticlesHTML();
     }
