@@ -18,7 +18,6 @@ class ArchiveFrontend extends OrongoFrontendObject {
         if($args['articles'] != null)
             $this->articles = &$args['articles'];
         $this->articleHTML = "";
-        $this->body = "<script src=\"" . Settings::getWebsiteURL() . "js/widget.prettyAlert.js\" type=\"text/javascript\" charset=\"utf-8\"></script>";
         $this->generateArticleHTML();
     }
     

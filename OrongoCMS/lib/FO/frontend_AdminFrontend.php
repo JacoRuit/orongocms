@@ -37,7 +37,6 @@ class AdminFrontend extends OrongoFrontendObject {
             $msgbox = new MessageBox("Can't render admin frontend: wrong argument 'page_title'!");
             die($msgbox->getImports() . $msgbox->toHTML());
         }
-        $this->body = "<script src=\"" . Settings::getWebsiteURL() . "js/widget.prettyAlert.js\" type=\"text/javascript\" charset=\"utf-8\"></script>";
         $this->pageTemplate = $args['page_template'];
         $this->objects = array();
         $this->pageTitle = l($args['page_title']);

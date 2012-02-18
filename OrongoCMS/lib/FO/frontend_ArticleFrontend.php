@@ -20,7 +20,6 @@ class ArticleFrontend extends OrongoFrontendObject {
             die($msgbox->getImports() . $msgbox->toHTML());
         }
         $this->article = &$args['article'];
-        $this->body = "<script src=\"" . Settings::getWebsiteURL() . "js/widget.prettyAlert.js\" type=\"text/javascript\" charset=\"utf-8\"></script>";
         $this->commentsHTML = "";  
         $this->generateCommentsHTML();
     }
@@ -51,13 +50,11 @@ class ArticleFrontend extends OrongoFrontendObject {
             $LCID = $comments[0]->getID();
         }
 
-        $ajaxPC = new AjaxPostCommentAction($this->article->getID());
-        getDisplay()->addJS($ajaxPC->toJS(), "document.ready");
-        $this->body .= $ajaxPC->toHTML();
+        $ajaxPC = new CommentPoster($this->article->getID());
+        $ajaxPC->start();
 
-        $ajaxLC = new AjaxLoadCommentsAction($this->article->getID(), $LCID, count($comments));
-        getDisplay()->addJS($ajaxLC->toJS(), "document.ready");
-        $this->body .= $ajaxLC->toHTML();
+        $ajaxLC = new CommentLoader($this->article->getID(), $LCID, count($comments));
+        $ajaxLC->start();
     }
    
     public function render(){

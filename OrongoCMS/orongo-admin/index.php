@@ -6,7 +6,6 @@
 require '../startOrongo.php';
 startOrongo();
 
-
 setCurrentPage('admin_index');
 
 Security::promptAuth();
@@ -28,6 +27,7 @@ if(isset($_GET['msg'])){
     }
 }
 
+$form = new AdminFrontendForm(100, "test", "POST", orongoURL("ajax/fetchNotifications.php"));
 
 for($i = 0; $i < 10; $i++){
     $index->addObject(new AdminFrontendObject(100,"test", "blabala<br/>sdfsdf<br/>"));

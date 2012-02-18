@@ -1,11 +1,11 @@
 <?php
 
 /**
- * AjaxPostCommentAction Class
+ * CommentPoster Class
  *
  * @author Jaco Ruit
  */
-class AjaxPostCommentAction implements IHTMLConvertable, IJSConvertable{
+class CommentPoster extends AjaxAction{
     
     private $articleID;
     
@@ -21,10 +21,6 @@ class AjaxPostCommentAction implements IHTMLConvertable, IJSConvertable{
     }
     
 
-    public function toHTML() {
-        return '<script type="text/javascript" src="'. Settings::getWebsiteURL(). 'js/ajax.postComment.js"></script><div id="_orongo_ajax_response"></div>';
-    }
-
     public function toJS() {
         $generatedJS = ' $("#_orongo_ajax_comment_form").submit(function(event) {';
         $generatedJS .= " event.preventDefault(); ";
@@ -33,6 +29,12 @@ class AjaxPostCommentAction implements IHTMLConvertable, IJSConvertable{
         $generatedJS .= " return false; ";
         $generatedJS .= ' });';
         return $generatedJS;
+    }
+    
+    public function doImports(){
+        if(!getDisplay()->isImported(orongoURL('js/ajax.comments.js')))
+            getDisplay()->import(orongoURL('js/ajax.comments.js'));
+        
     }
 }
 
