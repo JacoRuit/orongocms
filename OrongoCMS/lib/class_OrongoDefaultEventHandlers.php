@@ -39,12 +39,10 @@ class OrongoDefaultEventHandlers {
     
     public function onArticleEdit(){
         $admins = orongo_query("action=fetch&object=user&max=100000&where=user.rank:admin");
-        var_dump($admins);
         foreach($admins as $user){
             if(($user instanceof User) == false) continue;
             $user->notify(l("Article has been edited!"), l("Was edit by"));
         }
-
     }
     
     public function onArticleDeleted(){

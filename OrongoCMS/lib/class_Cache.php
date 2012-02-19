@@ -38,11 +38,11 @@ class Cache {
     /**
      * Gets the value of the key
      * @param String $paramKey Cache key
-     * @param boolean $paramShared Boolean indicating if the value you are trying to access was stored private
+     * @param boolean $paramPrivate Boolean indicating if the value you are trying to access was stored private
      * @return var The value
      */
-    public static function get($paramKey, $paramShared = true){
-        if($paramShared){
+    public static function get($paramKey, $paramPrivate = true){
+        if($paramPrivate){
             $backtrace = debug_backtrace();
             if(!is_array($backtrace)) throw new Exception ("Couldn't get array from debug_backtrace function.");
             if(!isset($backtrace[0]['file'])) throw new IllegalMemoryAccessException ("Debug backtrace provided false information.");
@@ -56,9 +56,9 @@ class Cache {
     /**
      * Checks if variable with specified key was stored
      * @param String $paramKey Cache key
-     * @param boolean $paramShared Boolean indicating if the value you are trying to access was stored private
+     * @param boolean $paramPrivate Boolean indicating if the value you are trying to access was stored private
      */
-    public static function isStored($paramKey, $paramShared = true){
+    public static function isStored($paramKey, $paramPrivate = true){
         if($paramShared){
             $backtrace = debug_backtrace();
             if(!is_array($backtrace)) throw new Exception ("Couldn't get array from debug_backtrace function.");
