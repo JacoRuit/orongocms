@@ -13,6 +13,15 @@ function startOrongo(){
     //error_reporting
     session_start();
     
+    
+    /**Fix query string  (Firefox)
+    $encoding = mb_detect_encoding($_SERVER['QUERY_STRING'], 'auto');
+    if ($encoding != 'UTF-8') {
+        echo "hey";
+        $_SERVER['QUERY_STRING'] = iconv($encoding, 'UTF-8', $_SERVER['QUERY_STRING']);
+    }**/
+    
+    
     define("ROOT", dirname(__FILE__));
     define("LIB", ROOT . "/lib");
     define("ADMIN", ROOT . "/orongo-admin");
