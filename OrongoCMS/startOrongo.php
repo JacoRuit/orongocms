@@ -17,6 +17,14 @@ function startOrongo(){
     define("LIB", ROOT . "/lib");
     define("ADMIN", ROOT . "/orongo-admin");
     define("CONFIG", ROOT . "/config.php");
+    define('RANK_ADMIN', 3);
+    define('RANK_WRITER', 2);
+    define('RANK_USER', 1);
+    
+    define('ARTICLE_NOT_EXIST', 2100);
+    define('PAGE_NOT_EXIST', 3100);
+    define('USER_NOT_EXIST', 4100);
+    define('COMMENT_NOT_EXIST', 5100);
     
     require_once(CONFIG);
     
@@ -50,17 +58,8 @@ function startOrongo(){
         getDisplay()->addObject($msgbox);
     }
     
-    
-    
 
-    define('RANK_ADMIN', 3);
-    define('RANK_WRITER', 2);
-    define('RANK_USER', 1);
-    
-    define('ARTICLE_NOT_EXIST', 2100);
-    define('PAGE_NOT_EXIST', 3100);
-    define('USER_NOT_EXIST', 4100);
-    define('COMMENT_NOT_EXIST', 5100);
+    OrongoDefaultEventHandlers::init();
 }
 
 
