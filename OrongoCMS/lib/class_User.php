@@ -158,6 +158,18 @@ class User {
     }
     
     /**
+     * Shortcut for notifying user 
+     * @param String $paramTitle title of notification
+     * @param String $paramText text of notification
+     * @param String $paramImage image url for notification [optional]
+     * @param int $paramTime duration of notification (default = 10000 ms)
+     */
+    public function notify($paramTitle, $paramText, $paramImage = null, $paramTime = 10000){
+        $n = new OrongoNotification($paramTitle, $paramText, $paramImage, $paramTime);
+        $n->dispatch($this);
+    }
+    
+    /**
      * Deletes the notifications for user 
      */
     public function deleteNotifications(){

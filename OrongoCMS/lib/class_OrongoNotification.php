@@ -16,7 +16,6 @@ class OrongoNotification {
      * Init the object
      * @param String $paramTitle title of notification
      * @param String $paramText text of notification
-     * @param User $paramUser User to who the notification has to be send
      * @param String $paramImage image url for notification [optional]
      * @param int $paramTime duration of notification (default = 10000 ms)
      */
