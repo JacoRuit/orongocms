@@ -92,6 +92,8 @@ class User {
            "rank" => $paramRank 
         ), "id = %i", $this->id);
         $this->rank = $paramRank;
+        $by = getUser() == null ? -1 : getUser()->getID();
+        raiseEvent('user_edit', array("user_id" => $this->id, "by" => $by));
     }
     
     
@@ -113,6 +115,8 @@ class User {
            "email" => $paramEmail
         ), "`id`=%i", $this->id);
         $this->email = $paramEmail;
+        $by = getUser() == null ? -1 : getUser()->getID();
+        raiseEvent('user_edit', array("user_id" => $this->id, "by" => $by));
     }
     
     
@@ -133,6 +137,8 @@ class User {
            "name" => addslashes($paramName) 
         ), "`id`=%i", $this->id);
         $this->name = $paramName;
+        $by = getUser() == null ? -1 : getUser()->getID();
+        raiseEvent('user_edit', array("user_id" => $this->id, "by" => $by));
     }
     
     #   activateStatus
@@ -148,6 +154,8 @@ class User {
      */
     public function delete(){
         getDatabase()->delete("users", "id=%i", $this->id);
+        $by = getUser() == null ? -1 : getUser()->getID();
+        raiseEvent('user_deleted', array("user_id" => $this->id, "by" => $by));
     }
     
     /**
@@ -243,6 +251,8 @@ class User {
             "activated" => 0
         ));
         if($newID != self::getLastUserID()) throw new Exception("Account not created!");
+        $by = getUser() == null ? -1 : getUser()->getID();
+        raiseEvent('user_created', array("user_id" => $this->id, "by" => $by));
         return new User($newID);
     }
     

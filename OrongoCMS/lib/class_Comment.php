@@ -97,6 +97,8 @@ class Comment implements IHTMLConvertable {
      */
     public function delete(){
         getDatabase()->delete("comments","id=%i", $this->id);
+        $by = getUser() == null ? -1 : getUser()->getID();
+        raiseEvent('comment_deleted', array("comment_id" => $this->id, "by" => $by));
     }
     
     /**
@@ -136,6 +138,8 @@ class Comment implements IHTMLConvertable {
            "articleID" => $paramArticleID,
            "timestamp" => time()
         ));
+        $by = getUser() == null ? -1 : getUser()->getID();
+        raiseEvent('comment_created', array("comment_id" => $this->id, "by" => $by));
         return new Comment($newID);
     }
     
@@ -147,6 +151,8 @@ class Comment implements IHTMLConvertable {
         getDatabase()->query("SELECT `id` FROM `comments`");
         return getDatabase()->count();
     }
+    
+
 }
 
 ?>

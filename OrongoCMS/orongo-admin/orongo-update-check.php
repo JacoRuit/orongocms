@@ -31,14 +31,17 @@ if($isUpdateAvailable){
     try{
         $info = OrongoUpdateChecker::getLatestVersionInfo();
     }catch(Exception $e){
-        $msgbox = new MessageBox(l("Error update check"));
+        $msgbox = new MessageBox("Error occured while checking for update");
         $msgbox->bindException($e);
         getDisplay()->addObject($msgbox);
         break;
     }
-    $updater->addObject(new AdminFrontendObject(100, "How to update", l("Ready to update to", $info['latest_version']) . '<br/>' . l("Visit website for update information", $info['update_url'])));
+    if($info->critical)
+        $updater->addMessage(l("Critical update"), "warning");
+    
+    $updater->addObject(new AdminFrontendObject(100, "How to update", l("Ready to update to", "r" . $info->latest_version) . '<br/>' . l("Visit for update information", "<a href='" .$info->update_url . "'>" . str_replace("http://", "", $info->update_url) . "</a>")));
 }else
-    $updater->addMessage(l("No update"), "success");
+    $updater->addMessage(l("No update"), "info");
 
 $updater->render();
 
