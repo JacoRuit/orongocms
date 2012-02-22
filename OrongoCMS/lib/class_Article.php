@@ -23,7 +23,6 @@ class Article implements IHTMLConvertable {
      */
     public function __construct($paramID){
         $this->id = $paramID;
-        //$q = "SELECT `title`,`content`,`authorID`,`date` FROM `articles` WHERE `id` = '" . $this->id . "'";
         $row = getDatabase()->queryFirstRow("SELECT `tags`,`title`,`id`, `content`,`authorID`,`date` FROM `articles` WHERE `id` = %i", $paramID);
         if($row == null){
             throw new Exception('Article does not exist', ARTICLE_NOT_EXIST);
@@ -70,7 +69,8 @@ class Article implements IHTMLConvertable {
             "title" => $paramTitle
         ), "`id` = %i", $this->id);
         $this->title = $paramTitle;
-        $this->raiseArticleEvent('article_edit');
+        $by = getUser() == null ? -1 : getUser()->getID();
+        raiseEvent('article_edit', array("article_id" => $this->id, "by" => $by));
     }
     
     #tags
@@ -98,7 +98,8 @@ class Article implements IHTMLConvertable {
         getDatabase()->update("articles", array(
             "tags" => $tagsForDB
         ), "`id` = %i", $this->id);
-        $this->raiseArticleEvent('article_edit');
+        $by = getUser() == null ? -1 : getUser()->getID();
+        raiseEvent('article_edit', array("article_id" => $this->id, "by" => $by));
     }
     
     
@@ -116,7 +117,8 @@ class Article implements IHTMLConvertable {
     public function setContent($paramContent){
         getDatabase()->update("articles", array("content" => $paramContent), "id=%i", $this->id);
         $this->content = $paramContent;
-        $this->raiseArticleEvent('article_edit');
+        $by = getUser() == null ? -1 : getUser()->getID();
+        raiseEvent('article_edit', array("article_id" => $this->id, "by" => $by));
     }
     
     
@@ -156,32 +158,11 @@ class Article implements IHTMLConvertable {
      */
     public function delete(){
         getDatabase()->delete("articles", "id=%i", $this->id);
-        $this->raiseArticleEvent('article_deleted');
+        $by = getUser() == null ? -1 : getUser()->getID();
+        raiseEvent('article_deleted', array("article_id" => $this->id, "by" => $by));
     }
     
-    /**
-     * Shortcut for raising article edit events:)
-     * @param String $paramAction action string
-     * @param int $paramArticleID article ID (default current ID)
-     */
-    private function raiseArticleEvent($paramAction, $paramArticleID = null){
-        if($paramArticleID == null) $paramArticleID = $this->id;
-        if(getUser() == null) $by = "admin";
-        else $by = getUser()->getID();
-        OrongoEventManager::raiseEvent(new OrongoEvent($paramAction, array("article_id" => $paramArticleID, "by" => $by)));
-    }
-    
-    /**
-     * Shortcut for raising article edit events:)
-     * @param String $paramAction action string
-     * @param int $paramArticleID article ID (default current ID)
-     */
-    private static function raiseArticleEventStatic($paramAction, $paramArticleID){
-        if(getUser() == null) $by = "admin";
-        else $by = getUser()->getID();
-        OrongoEventManager::raiseEvent(new OrongoEvent($paramAction, array("article_id" => $paramArticleID, "by" => $by)));
-    }
-    
+   
     /**
      * @return array Article Information in Array
      */
@@ -263,7 +244,8 @@ class Article implements IHTMLConvertable {
             "authorID" => $author_id,
             "date" => getDatabase()->sqleval("CURDATE()")
         ));
-        self::raiseArticleEventStatic('article_created', $newID);
+        $by = getUser() == null ? -1 : getUser()->getID();
+        raiseEvent('article_created', array("article_id" => $newID, "by" => $by));
         return new Article($newID);
     }
     

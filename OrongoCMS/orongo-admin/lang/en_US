@@ -69,6 +69,10 @@ DELETE_ARTICLE:Delete Article
 DELETE_PAGE:Delete Page
 DELETE_USER:Delete User
 DELETE_COMMENT:Delete Comment
+VIEWING_ARTICLE:Viewing Article
+VIEWING_PAGE:Viewing Page
+VIEWING_USER:Viewing User
+VIEWING_COMMENT:Viewing Comment
 
 ID:ID
 ACTIONS:Actions
@@ -85,6 +89,7 @@ NO:No
 
 EDIT:Edit
 DELETE:Delete
+SAVE:Save
 
 TITLE:Title
 DATE:Date
@@ -154,3 +159,11 @@ PLUGIN_DEINSTALLED:Plugin deinstalled
 PLUGIN_NOT_FOUND:Plugin not found
 PLUGIN_NOT_INSTALLED:Plugin is not installed
 PLUGIN_ALREADY_INSTALLED:Plugin has already been installed
+
+UPDATE_CHECKER:Update Checker
+NO_UPDATE:Your OrongoCMS installation is up to date! No update available.
+UPDATE_AVAILABLE:An update is available!
+CRITICAL_UPDATE:This is a critical update, we recommend you to update as fast as possible.
+HOW_TO_UPDATE:How-to update
+READY_TO_UPDATE_TO:Your OrongoCMS installation is ready to update to %s
+VISIT_FOR_UPDATE_INFORMATION:Visit %s in order to get information how-to update.

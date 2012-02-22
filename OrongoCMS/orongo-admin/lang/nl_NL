@@ -69,6 +69,10 @@ DELETE_ARTICLE:Verwijder Artikel
 DELETE_PAGE:Verwijder Pagina
 DELETE_USER:Verwijder Gebruiker
 DELETE_COMMENT:Verwijder Reactie
+VIEWING_ARTICLE:Artikel Bekijken
+VIEWING_PAGE:Pagina Bekijken
+VIEWING_USER:Gebruiker Bekijken
+VIEWING_COMMENT:Reactie Bekijken
 
 ID:ID
 ACTIONS:Acties
@@ -85,6 +89,7 @@ NO:Nee
 
 EDIT:Wijzigen
 DELETE:Verwijderen
+SAVE:Opslaan
 
 TITLE:Titel
 DATE:Datum
@@ -154,3 +159,11 @@ PLUGIN_DEINSTALLED:Plugin gedeïnstalleerd
 PLUGIN_NOT_FOUND:Plugin niet gevonden
 PLUGIN_NOT_INSTALLED:Plugin is niet geïnstalleerd
 PLUGIN_ALREADY_INSTALLED:Plugin is al geïnstalleerd
+
+UPDATE_CHECKER:Update Checker
+NO_UPDATE:Je OrongoCMS installatie is up-to-date! Er is geen installatie beschikbaar.
+UPDATE_AVAILABLE:Er is een update beschikbaar!
+CRITICAL_UPDATE:Dit is een kritische update, we adviseren om zo snel mogelijk te updaten.
+HOW_TO_UPDATE:Hoe te updaten
+READY_TO_UPDATE_TO:Je OrongoCMS installatie kan naar %s geupdatet worden.
+VISIT_FOR_UPDATE_INFORMATION:Ga naar %s om de update stappen te volgen.

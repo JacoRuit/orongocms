@@ -46,7 +46,7 @@ switch($object){
         $form->addInput("Article Title", "title", "text", $article->getTitle(), true);
         $form->addInput("Article Content", "content", "ckeditor", $article->getContent(), true);
         $form->addInput("Tags", "tags", "text", $article->getTagsString());
-        $form->addButton("Edit", true);
+        $form->addButton("Save", true);
         $create->addObject($form);
         $create->render();
         break;
@@ -80,7 +80,7 @@ switch($object){
             if($user->getRank() == RANK_WRITER) $form->addSelect("new_rank", array(l("Writer") => 2, l("User") => 1, l("Admin") => 3));
             if($user->getRank() == RANK_USER) $form->addSelect("new_rank", array(l("User") => 1, l("Writer") => 2, l("Admin") => 3));
         }
-        $form->addButton("Edit", true);
+        $form->addButton("Save", true);
         $create->addObject($form);
         $create->render();
         break;
@@ -101,7 +101,7 @@ switch($object){
         $form = new AdminFrontendForm(100, l("Edit Page") . " (" . $page->getID() . ")", "POST", orongoURL("actions/action_Edit.php?page." . $page->getID()), false);
         $form->addInput("Page Title", "title", "text", $page->getTitle(), true);
         $form->addInput("Page Content", "content", "ckeditor", $page->getContent(), true);
-        $form->addButton("Edit", true);
+        $form->addButton("Save", true);
         $create->addObject($form);
         $create->render();
         break;

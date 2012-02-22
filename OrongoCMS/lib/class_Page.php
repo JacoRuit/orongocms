@@ -54,6 +54,8 @@ class Page {
             "title" => $paramTitle
         ), "`id`=%i", $this->id);
         $this->title = $paramTitle;
+        $by = getUser() == null ? -1 : getUser()->getID();
+        raiseEvent('page_edit', array("page_id" => $this->id, "by" => $by));
     }
     
     #   contents
@@ -71,6 +73,8 @@ class Page {
         getDatabase()->update("pages", array(
             "content" => $paramContent
         ), "`id`=%i", $this->id);
+        $by = getUser() == null ? -1 : getUser()->getID();
+        raiseEvent('page_edit', array("page_id" => $this->id, "by" => $by));
     }
     
     /**
@@ -78,6 +82,8 @@ class Page {
      */
     public function delete(){
         getDatabase()->delete("pages", "id=%i", $this->id);
+        $by = getUser() == null ? -1 : getUser()->getID();
+        raiseEvent('page_deleted', array("page_id" => $this->id, "by" => $by));
     }
     
     /**
@@ -110,6 +116,8 @@ class Page {
             "id" => $newID,
             "title" => $paramName
         ));
+        $by = getUser() == null ? -1 : getUser()->getID();
+        raiseEvent('page_created', array("page_id" => $newID, "by" => $by));
         return new Page($newID);
     }
     

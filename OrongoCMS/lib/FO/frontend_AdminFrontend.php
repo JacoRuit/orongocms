@@ -388,11 +388,17 @@ class AdminFrontendForm extends AdminFrontendObject{
                 $footer .= '</select>';
             }
             foreach($this->buttons as $button){
-                if($button['url'] != null) $footer .= '<a href="' . $button['url'] . '">';
-                $footer .= "<input type=\"submit\" value=\"" . $button['text'] . "\" ";
-                if($button['blue']) $footer .= 'class="alt_btn" >';
-                else $footer .= ">";
-                if($button['url'] != null) $footer .= '</a>';
+                if($button['url'] != null){ 
+                    $footer .= '<a href="' . $button['url'] . '">';
+                    $footer .= "<input type=\"button\" value=\"" . $button['text'] . "\" ";
+                    if($button['blue']) $footer .= 'class="alt_btn" >';
+                    else $footer .= ">";
+                    $footer .= '</a>';
+                }else{
+                    $footer .= "<input type=\"submit\" value=\"" . $button['text'] . "\" ";
+                    if($button['blue']) $footer .= 'class="alt_btn" >';
+                    else $footer .= ">";
+                }
             }
             
             $footer .= "</div></form>";

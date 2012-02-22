@@ -97,7 +97,7 @@ class OrongoEventManager {
             'article_deleted',
             'page_deleted',
             'user_deleted',
-           'comment_deleted',
+            'comment_deleted',
             'article_edit',
             'page_edit',
             'user_edit'

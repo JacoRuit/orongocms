@@ -59,7 +59,7 @@ class Cache {
      * @param boolean $paramPrivate Boolean indicating if the value you are trying to access was stored private
      */
     public static function isStored($paramKey, $paramPrivate = true){
-        if($paramShared){
+        if($paramPrivate){
             $backtrace = debug_backtrace();
             if(!is_array($backtrace)) throw new Exception ("Couldn't get array from debug_backtrace function.");
             if(!isset($backtrace[0]['file'])) throw new IllegalMemoryAccessException ("Debug backtrace provided false information.");
