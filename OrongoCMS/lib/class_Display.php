@@ -15,6 +15,7 @@ class Display {
     private $js;
     private $generalhtml;
     private $imports;
+    private $pluginhtml;
     
     private static $jQueryIgnoreQuotes = array('document', 'window');
     
@@ -37,9 +38,12 @@ class Display {
         $this->js = "";
         $this->generalhtml = "";
         $this->imports = array();
+        $this->pluginhtml = array();
+        $this->pluginhtml['before_article'] = "";
+        $this->pluginhtml['before_page'] = "";
+        $this->pluginhtml['after_page'] = "";
+        $this->pluginhtml['after_article'] = "";
         $this->import(orongoURL("js/widget.prettyAlert.js"));
-        //
-        //$this->addHTML('<script type="text/javascript" src="' . orongoURL("js/widget.prettyAlert.js") . '"></script>');
     }
     
     /**
@@ -108,7 +112,6 @@ class Display {
         $jsBuilder = $paramJS;
         if(!empty($paramEvent)){
             $exploded = explode(".", $paramEvent);
-            //TODO empty check => illegal argument exc
             $event = end($exploded);
             $eventele = str_replace("." . $event, "", $paramEvent);
             $jsBuilder = "$(";
@@ -133,7 +136,10 @@ class Display {
                 $this->head .= $paramHTML;
                 break;
             default:
-                $this->generalhtml .= $paramHTML;
+                if(!isset($this->pluginhtml[$paramField]))
+                    $this->generalhtml .= $paramHTML;
+                else 
+                    $this->pluginhtml[$paramField] .= $paramHTML;
                 break;
         }
     }
@@ -263,6 +269,9 @@ class Display {
         }
         $this->addToTemplateVariable("head", $this->head);
         $this->addToTemplateVariable("body", $this->generalhtml);
+        foreach($this->pluginhtml as $field=>$html){
+            $this->setTemplateVariable($field, $html);
+        }
         $this->addToTemplateVariable("body", '<script type="text/javascript">' . $this->js . '</script>');
         foreach($this->tpls as $tpl){
             if(empty($tpl)) continue;

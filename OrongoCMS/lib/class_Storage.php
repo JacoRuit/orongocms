@@ -25,7 +25,6 @@ class Storage {
                 try{
                     $stSyntax = $paramVar->toStorageSyntax();
                 }catch(Exception $e){
-                    //TODO throw error
                     throw $e;
                     return false;
                 }
@@ -36,7 +35,6 @@ class Storage {
                 }
                 catch(Exception $e){
                     throw $e;
-                    //TODO throw error
                     return false;
                 }
                 $isObj = true;

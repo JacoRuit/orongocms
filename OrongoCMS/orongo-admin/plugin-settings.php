@@ -73,7 +73,14 @@ $settingForm = new AdminFrontendForm(100, l("Plugin Settings") . " (" . $pluginN
 foreach($pSettings as $settingName => $value){
     if(!isset($info['plugin']['settings'][$settingName])) continue;
     $setting = $info['plugin']['settings'][$settingName];
-    $settingForm->addInput($settingName . ": " . $setting['description'], $settingName, "text", $value, false, false, false);
+    if($setting['type'] == 'boolean'){
+        $selected = $value ? l("Yes") : l("No");
+        $settingForm->addRadios($setting['description'], $settingName, array(
+            l("Yes") => "true",
+            l("No") => "false"
+        ), $selected, false);
+    }else
+        $settingForm->addInput($setting['description'], $settingName, "text", $value, false, false, false);
 }
 
 $settingForm->addButton("Save", true);

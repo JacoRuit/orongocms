@@ -306,6 +306,7 @@ class AdminFrontendForm extends AdminFrontendObject{
      */
     public function addInput($paramLabel, $paramName, $paramType, $paramValue = "", $paramRequired = false, $paramReadOnly = false, $paramTranslate = true){
         $label = $paramTranslate ? l($paramLabel) : $paramLabel;
+        if($paramType == "radio") throw new Exception("Please don't use this function! Use addRadios pl0x.");
         $input = array(
            "type" => $paramType,  
            "label" => $label,
@@ -335,6 +336,27 @@ class AdminFrontendForm extends AdminFrontendObject{
     }
     
     /**
+     * Adds radio button 
+     * @param String $paramLabel label for the radios
+     * @param $paramName name of the radios (name attr)
+     * @param $paramRadios the radio buttons
+     * @param $paramSelected the selected radio [default none]
+     * @param boolean $paramTranslate indicating if label should be translated (default true)
+     */
+    public function addRadios($paramLabel, $paramName, $paramRadios, $paramSelected = null, $paramTranslate = true){
+        $label = $paramTranslate ? l($paramLabel) : $paramLabel;
+        if(!is_array($paramRadios)) throw new IllegalArgumentException("Invalid argument, array expected");
+        $input = array(
+           "type" => "radio",  
+           "label" => $label,
+           "name" => $paramName,
+           "selected" => $paramSelected,
+           "radios" => $paramRadios
+        );
+        $this->inputs[count($this->inputs)] = $input;
+        $this->updateHTML();
+    }
+    /**
      * Adds a select dropdown box
      * @param String $paramName name of the select (name attr)
      * @param array $paramThings Things to add (KEY = option name, STR=option value) 
@@ -362,6 +384,12 @@ class AdminFrontendForm extends AdminFrontendObject{
                 $ckfinder->SetupCKEditorObject($ckeditor);
                 $ckeditor->returnOutput = true;
                 $content .= $ckeditor->editor($input['name'], $input['value']);
+            }else if($input['type'] == "radio"){
+                foreach($input["radios"] as $radio => $value){
+                    $content .= '<input type="radio" name="' . $input['name'] . '" value="' . $value . '" ';
+                    if($radio == $input['selected']) $content .= ' checked';
+                    $content .= '> ' . $radio;
+                }
             }else if($input['type'] == "textarea"){
                 $content .= "<textarea rows=\"20\" name=\"" . $input['name'] ."\" ";
                 if($input['readonly']) $content.= 'disabled="disabled" ';

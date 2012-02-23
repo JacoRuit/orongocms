@@ -43,7 +43,16 @@ function startOrongo(){
 
     setDatabase(new Database(CONFIG));
    
-
+    try{
+        setLanguage(new Language(ADMIN . '/lang/' . Settings::getLanguageName()));
+    }catch(Exception $e){
+        $msgbox = new MessageBox();
+        $msgbox->bindException($e);
+        die($msgbox->getImports() . $msgbox->toHTML());
+    }
+    
+    $style = null;
+    
     try{
         $style = Settings::getStyle();
     }catch(Exception $e){
@@ -67,6 +76,7 @@ function startOrongo(){
         getDisplay()->addObject($msgbox);
     }
     
+    //getLanguage()->setTempLanguage(ADMIN . '/lang/en_US');
 
     OrongoDefaultEventHandlers::init();
 }

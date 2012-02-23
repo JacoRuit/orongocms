@@ -15,6 +15,9 @@ function setUser($paramUser){
     if(($paramUser instanceof User) == false && $paramUser != null) throw new IllegalArgumentException("Invalid argument, user object expected!");
     global $_orongo_user;
     $GLOBALS['_orongo_user'] = &$paramUser;
+    /**
+     * @return User
+     */
     function getUser(){ return $GLOBALS['_orongo_user']; }
 }
 ?>
