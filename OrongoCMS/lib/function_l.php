@@ -5,22 +5,13 @@
  */
 
 /**
- * get language
- * @param String $paramSentence sentence to convert
+ * get language text
+ * @param String $paramText text to convert
  * @param array/string $paramArgs  sprintf args
  */
-function l($paramSentence, $paramArgs = null){
-    if(!is_string($paramSentence)) throw new IllegalArgumentException("Invalid argument, string expected!");
-    $LANG = Settings::getLangArray();
-    $paramSentence = strtoupper(str_replace(" ", "_", $paramSentence));
-    if(!array_key_exists($paramSentence, $LANG)) return "?" . $paramSentence . "?";
-    if($paramArgs == null) return $LANG[$paramSentence];
-    if(is_array($paramArgs)){
-        $return = vsprintf($LANG[$paramSentence], $paramArgs);
-        if(!$return) return $paramSentence;
-        return $return;
-    }
-    else return sprintf($LANG[$paramSentence], $paramArgs);
+function l($paramText, $paramArgs = null){
+    if(!function_exists('getLanguage')) return "!!LANGUAGE_NOT_LOADED!!";
+    return getLanguage()->getText($paramText, $paramArgs);
 }
 
 ?>

@@ -15,10 +15,10 @@
 function load($paramLibFolder){
     define('REVISION', 78);
     //REGISTER NEW FUNCTIONS, INTERFACES, (ABSTRACT) CLASSES, EXCEPTIONS HERE! :D
-    $orongo_functions = array('orongo_query', 'handleSessions', 'l' , 'setCurrentPage', 'setDatabase', 'setDisplay', 'setMenu', 'setPlugins', 'setStyle', 'setUser');
+    $orongo_functions = array('orongo_query', 'handleSessions', 'l' , 'setCurrentPage', 'setDatabase', 'setDisplay', 'setLanguage', 'setMenu', 'setPlugins', 'setStyle', 'setUser');
     $orongo_interfaces = array('IHTMLConvertable', 'IJSConvertable', 'IOrongoPlugin', 'IOrongoStyle', 'IOrongoTerminalPlugin', 'IStorable');
     $orongo_abstracts = array('OrongoDisplayableObject', 'OrongoPluggableObject', 'OrongoFrontendObject');
-    $orongo_classes = array('AjaxAction' ,'CommentPoster', 'CommentLoader', 'Article', 'Cache', 'Comment', 'Database', 'Display', 'Image','Issue', 'IssueTracker', 'Mail', 'MailFactory', 'Menu', 'MessageBox','OrongoDefaultEventHandlers', 'OrongoEvent', 'OrongoEventManager', 'OrongoNotifier', 'OrongoNotification', 'OrongoQuery', 'OrongoQueryHandler', 'OrongoTerminal', 'OrongoUpdateChecker', 'Page', 'Plugin', 'Security', 'Session', 'Settings', 'Storage', 'Style', 'User');
+    $orongo_classes = array('AjaxAction' ,'CommentPoster', 'CommentLoader', 'Article', 'Cache', 'Comment', 'Database', 'Display', 'Image','Issue', 'IssueTracker', 'Language', 'Mail', 'MailFactory', 'Menu', 'MessageBox','OrongoDefaultEventHandlers', 'OrongoEvent', 'OrongoEventManager', 'OrongoNotifier', 'OrongoNotification', 'OrongoQuery', 'OrongoQueryHandler', 'OrongoTerminal', 'OrongoUpdateChecker', 'Page', 'Plugin', 'Security', 'Session', 'Settings', 'Storage', 'Style', 'User');
     $orongo_exceptions = array('ClassLoadException', 'IllegalArgumentException', 'IllegalMemoryAccessException', 'OrongoScriptParseException', 'QueryException');
     $orongo_function_packages = array('Utils');
     $orongo_frontend_objects = array('AdminFrontend', 'ArchiveFrontend', 'PageFrontend', 'IndexFrontend', 'ArticleFrontend');

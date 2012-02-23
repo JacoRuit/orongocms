@@ -27,9 +27,9 @@
     <h1>{$article->getTitle()}</h1>  
     <p>Written by <a href="{$website_url}archive.php?user={$article->getAuthorName()}">{$article->getAuthorName()}</a> on {$article->getDate()}</p>
 </div>
-
+{$before_article}
 {$article->getContent()}
-
+{$after_article}
 <br /><br /><br />
 <div class="comments">
     <h3>Comments</h3>

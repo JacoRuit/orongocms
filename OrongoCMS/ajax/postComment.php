@@ -8,7 +8,6 @@
 require '../startOrongo.php';
 startOrongo();
 
-//TODO IP check or some kinda spam prevention thing
 define("NO_ARTICLE", 1);
 
 define("NO_CONTENT", 11);

@@ -191,7 +191,9 @@ class Style {
                         $this->mainClass->run();
                     }
                 }catch(Exception $e){
-                    //TODO throw error in db
+                    $msg = new MessageBox("An error occured while running the style.");
+                    $msg->bindException($e);
+                    getDisplay()->addObject($msg);                    
                 }
             }
         }

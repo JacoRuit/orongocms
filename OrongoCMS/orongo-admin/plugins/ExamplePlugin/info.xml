@@ -18,7 +18,7 @@
                 <default>Example</default>
             </example_setting_1>
             <example_setting_2>
-                <description>Example Setting 2 description</description>
+                <description>Say Hi?</description>
                 <type>boolean</type>
                 <default>true</default>
             </example_setting_2>
