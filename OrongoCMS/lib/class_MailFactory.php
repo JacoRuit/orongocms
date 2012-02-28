@@ -8,16 +8,14 @@ class MailFactory {
    
     /**
      * Generates an activation email
-     * @param String $paramEmailTo Email of the user
      * @param String $paramUserName Name of the user 
      * @param String $paramActivationURL Activation URL 
      * @return array Generated Email
      */
-    public static function generateActivationEmail($paramEmailTo, $paramUserName, $paramActivationURL){
+    public static function generateActivationEmail( $paramUserName, $paramActivationURL){
         $websiteName = Settings::getWebsiteName();
     
         $msgArray = array();
-        $msgArray['to'] = $paramEmailTo;
         $msgArray['subject'] = $websiteName . ' - Activate your account';
         $msgArray['message'] = 
 $paramUserName . ',

@@ -2,11 +2,6 @@
 /**
  * @author Jaco Ruit
  */
-
-//Debug line
-//TODO remove on release
-$time_start = microtime(true);
-
 require 'startOrongo.php';
 startOrongo();
 
@@ -47,11 +42,5 @@ try{
 $archive = new ArchiveFrontend();
 $archive->main(array("time" => time(), "articles" => $articles));
 $archive->render();
-
-//Debug lines
-// TODO remove on release
-$time_end = microtime(true);
-$time = $time_end - $time_start;
-echo "<br /><br />Execution time: " . $time;
 
 ?>

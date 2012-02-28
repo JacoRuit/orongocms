@@ -38,6 +38,9 @@ if(isset($_GET['msg']) && isset($_GET['obj'])){
         case 4:
             $manage->addMessage(l("Plugin deinstalled"), "success");
             break;
+        case 5:
+            $manage->addMessage(l("Plugin settings saved"), "success");
+            break;
     }
 }
 

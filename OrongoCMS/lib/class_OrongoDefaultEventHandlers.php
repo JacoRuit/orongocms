@@ -26,60 +26,93 @@ class OrongoDefaultEventHandlers {
         ), new OrongoDefaultEventHandlers());
     }
     
-    public function onArticleEdit(){
+    public function onArticleEdit($args){
         $admins = orongo_query("action=fetch&object=user&max=100000&where=user.rank:admin");
         foreach($admins as $user){
             if(($user instanceof User) == false) continue;
-            $user->notify(l("Article has been edited!"), l("Was edit by"));
+            $user->notify(l("Article edited"), l("Article was edited by", User::getUserName($args['by'])));
         }
     }
     
-    public function onArticleDeleted(){
-        
-    }
-    
-    public function onArticleCreated(){
-        
-    }
-    
-    public function onPageEdit(){
-        
-    }
-    
-    public function onPageDeleted(){
-        
-    }
-    
-    public function onPageCreated(){
-        
-    }
-    
-    public function onUserEdit(){
+    public function onArticleDeleted($args){
         $admins = orongo_query("action=fetch&object=user&max=100000&where=user.rank:admin");
         foreach($admins as $user){
             if(($user instanceof User) == false) continue;
-            $user->notify(l("User has been edited!"), l("Was edit by"));
+            $user->notify(l("Article deleted"), l("Article was deleted by", User::getUserName($args['by'])));
         }
     }
     
-    public function onUserDeleted(){
+    public function onArticleCreated($args){
         $admins = orongo_query("action=fetch&object=user&max=100000&where=user.rank:admin");
         foreach($admins as $user){
             if(($user instanceof User) == false) continue;
-            $user->notify(l("User has been deleted"), l("Was edit by"));
+            $user->notify(l("Article created"), l("Article was created by", User::getUserName($args['by'])));
         }
     }
     
-    public function onUserCreated(){
-        
+    public function onPageEdit($args){
+        $admins = orongo_query("action=fetch&object=user&max=100000&where=user.rank:admin");
+        foreach($admins as $user){
+            if(($user instanceof User) == false) continue;
+            $user->notify(l("Page edited"), l("Page was edited by", User::getUserName($args['by'])));
+        }
     }
     
-    public function onCommentDeleted(){
-        
+    public function onPageDeleted($args){
+        $admins = orongo_query("action=fetch&object=user&max=100000&where=user.rank:admin");
+        foreach($admins as $user){
+            if(($user instanceof User) == false) continue;
+            $user->notify(l("Page deleted"), l("Page was deleted by", User::getUserName($args['by'])));
+        }
     }
     
-    public function onCommentCreated(){
-        
+    public function onPageCreated($args){
+        $admins = orongo_query("action=fetch&object=user&max=100000&where=user.rank:admin");
+        foreach($admins as $user){
+            if(($user instanceof User) == false) continue;
+            $user->notify(l("Page created"), l("Page was created by", User::getUserName($args['by'])));
+        }
+    }
+    
+    public function onUserEdit($args){
+        $admins = orongo_query("action=fetch&object=user&max=100000&where=user.rank:admin");
+        foreach($admins as $user){
+            if(($user instanceof User) == false) continue;
+            $user->notify(l("User edited"), l("User was edited by", User::getUserName($args['by'])));
+        }
+    }
+    
+    public function onUserDeleted($args){
+        $admins = orongo_query("action=fetch&object=user&max=100000&where=user.rank:admin");
+        foreach($admins as $user){
+            if(($user instanceof User) == false) continue;
+            $user->notify(l("User deleted"), l("User was deleted by", User::getUserName($args['by'])));
+        }
+    }
+    
+    public function onUserCreated($args){
+        $newUser = new User($args['user_id']);
+        $admins = orongo_query("action=fetch&object=user&max=100000&where=user.rank:admin");
+        foreach($admins as $user){
+            if(($user instanceof User) == false) continue;
+            $user->notify(l("User created"), l("Just registered", $newUser->getName()));
+        }
+    }
+    
+    public function onCommentDeleted($args){
+        $admins = orongo_query("action=fetch&object=user&max=100000&where=user.rank:admin");
+        foreach($admins as $user){
+            if(($user instanceof User) == false) continue;
+            $user->notify(l("Comment deleted"), l("Comment was deleted by", User::getUserName($args['by'])));
+        }
+    }
+    
+    public function onCommentCreated($args){
+        $admins = orongo_query("action=fetch&object=user&max=100000&where=user.rank:admin");
+        foreach($admins as $user){
+            if(($user instanceof User) == false) continue;
+            $user->notify(l("Comment posted"), l("Comment was posted by", User::getUserName($args['by'])));
+        }
     }
 }
 

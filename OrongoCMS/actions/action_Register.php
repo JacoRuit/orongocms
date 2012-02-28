@@ -36,8 +36,8 @@ if(isset($_POST['username']) && isset($_POST['email']) && isset($_POST['password
             exit;
         }
         $activationLink = User::generateActivationURL($user->getID());
-        $mail = MailFactory::generateActivationEmail($user->getEmail(), $user->getName() , $activationLink);
-        $sendEmail = Mail::sendEmail($mail, true);
+        $mail = MailFactory::generateActivationEmail($user->getName() , $activationLink);
+        $sendEmail = mail($user->getEmail(), $mail['subject'], $mail['headers']);
         if(!$sendEmail){
             header("Location: " . orongoURL("orongo-login.php?msg=3"));
             exit;

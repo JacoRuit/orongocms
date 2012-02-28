@@ -252,7 +252,7 @@ class User {
         ));
         if($newID != self::getLastUserID()) throw new Exception("Account not created!");
         $by = getUser() == null ? -1 : getUser()->getID();
-        raiseEvent('user_created', array("user_id" => $this->id, "by" => $by));
+        raiseEvent('user_created', array("user_id" => $newID, "by" => $by));
         return new User($newID);
     }
     

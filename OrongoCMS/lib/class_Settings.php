@@ -16,15 +16,26 @@ class Settings {
         $row = getDatabase()->queryFirstRow("SELECT `value` FROM `settings` WHERE `setting` = 'website_url'");
         $url = $row['value'];
         #http:// prefix
-       // if(strpos($url, "http://")==false){
-       //     $url = 'http://' . $url;
-       // }
+        if(!is_numeric(strpos($url, "http://"))){
+            $url = 'http://' . $url;
+        }
         #/ suffix
         if(substr($url, -1) != '/'){
             $url .= '/';
         }
         Cache::store('website_url', $url);
         return $url;
+    }
+    
+    /**
+     * Sets the website URL
+     * @param $paramURL String new website URL
+     */
+    public static function setWebsiteURL($paramURL){
+        getDatabase()->update("settings",array(
+            "value" => $paramURL
+        ), "setting = 'website_url'");
+        Cache::store('website_url', $paramURL);
     }
     
     /**
@@ -37,6 +48,17 @@ class Settings {
         $name = $row['value'];
         Cache::store('website_name', $name);
         return $name;
+    }
+    
+    /**
+     * Sets the website name
+     * @param $paramName String new website name 
+     */
+    public static function setWebsiteName($paramName){
+        getDatabase()->update("settings",array(
+            "value" => $paramName
+        ), "setting = 'website_name'");
+        Cache::store('website_name', $paramName);
     }
     
     /**
@@ -105,8 +127,20 @@ class Settings {
     public static function showArchive(){
         if(Cache::isStored('show_archive')) return Cache::get('show_archive');
         $row = getDatabase()->queryFirstRow("SELECT `value` FROM `settings` WHERE `setting` = 'show_archive'");
-        Cache::store('show_archive', $row['value']);
-        return $row['value'];
+        $show = $row['value'] == "false" ? false : true;
+        Cache::store('show_archive', $show);
+        return $show;
+    }
+    
+    /**
+     * Sets the show archive bool
+     * @param $paramBool indicating if archive should be shown in Menu 
+     */
+    public static function setShowArchive($paramBool){
+        getDatabase()->update("settings",array(
+            "value" => $paramBool
+        ), "setting = 'show_archive'");
+        Cache::store('show_archive', $paramBool);
     }
 }
 

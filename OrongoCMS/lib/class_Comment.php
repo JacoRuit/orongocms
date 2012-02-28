@@ -139,7 +139,7 @@ class Comment implements IHTMLConvertable {
            "timestamp" => time()
         ));
         $by = getUser() == null ? -1 : getUser()->getID();
-        raiseEvent('comment_created', array("comment_id" => $this->id, "by" => $by));
+        raiseEvent('comment_created', array("comment_id" => $newID, "by" => $by));
         return new Comment($newID);
     }
     

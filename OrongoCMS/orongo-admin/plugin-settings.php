@@ -18,6 +18,7 @@ if(!isset($_GET['xml_path'])){
     exit;
 }
 
+
 $xmlPath = ADMIN  . '/plugins' . urldecode($_GET['xml_path']);
 
 $settings = new AdminFrontend();
@@ -32,9 +33,7 @@ if(!file_exists($xmlPath)){
 $installed = false;
 foreach(getPlugins() as $plugin){
     if(($plugin instanceof OrongoPluggableObject) == false) continue;
-    if($plugin->getInfoPath() == $xmlPath){
-        $installed = true;
-    }
+    if($plugin->getInfoPath() == $xmlPath) $installed = true;    
 }
 
 if(!$installed){
@@ -64,11 +63,12 @@ if($authKey == null){
   exit;
 }
 $settings->setTitle(l("Plugin Settings") . " (" . $pluginName . ") ", false);
+
 //That's how you hack an auth key :P
 $pSettings = Plugin::getSettings($authKey);
 
 
-$settingForm = new AdminFrontendForm(100, l("Plugin Settings") . " (" . $pluginName . ") ", "POST","", false);
+$settingForm = new AdminFrontendForm(100, l("Plugin Settings") . " (" . $pluginName . ") ", "POST",orongoURL("actions/action_SavePluginSettings.php?xml_path=" . $_GET['xml_path']), false);
 
 foreach($pSettings as $settingName => $value){
     if(!isset($info['plugin']['settings'][$settingName])) continue;
