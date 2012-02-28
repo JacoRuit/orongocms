@@ -159,7 +159,9 @@ PLUGIN_DEINSTALLED:Plugin deinstalled
 PLUGIN_NOT_FOUND:Plugin not found
 PLUGIN_NOT_INSTALLED:Plugin is not installed
 PLUGIN_ALREADY_INSTALLED:Plugin has already been installed
-
+PLUGIN_SETTINGS_SAVED:Plugin settings saved
+PLUGIN_SETTINGS:Plugin Settings
+SETTINGS_SAVED:Settings saved!
 UPDATE_CHECKER:Update Checker
 NO_UPDATE:Your OrongoCMS installation is up to date! No update available.
 UPDATE_AVAILABLE:An update is available!
@@ -167,3 +169,32 @@ CRITICAL_UPDATE:This is a critical update, we recommend you to update as fast as
 HOW_TO_UPDATE:How-to update
 READY_TO_UPDATE_TO:Your OrongoCMS installation is ready to update to %s
 VISIT_FOR_UPDATE_INFORMATION:Visit %s in order to get information how-to update.
+
+ARTICLE_CREATED:Article created
+ARTICLE_DELETED:Article deleted
+ARTICLE_EDITED:Article edited
+PAGE_CREATED:Page created
+PAGE_DELETED:Page deleted
+PAGE_EDITED:Page edited
+USER_CREATED:User created
+USER_DELETED:User deleted
+USER_EDITED:User edited
+COMMENT_POSTED:Comment posted
+COMMENT_DELETED:Comment deleted
+COMMENT_WAS_POSTED_BY:Comment was posted by %s
+COMMENT_WAS_DELETED_BY:Comment was deleted by %s
+JUST_REGISTERED:%s just registered!
+USER_WAS_DELETED_BY:User was deleted by %s
+USER_WAS_EDITED_BY:User was edited by %s
+PAGE_WAS_CREATED_BY:Page was created by %s
+PAGE_WAS_EDITED_BY:Page was edited by %s
+PAGE_WAS_DELETED_BY:Page was deleted by %s
+ARTICLE_WAS_CREATED_BY:Article was created by %s
+ARTICLE_WAS_DELETED_BY:Article was deleted by %s
+ARTICLE_WAS_EDITED_BY:Article was edited by %s
+
+ORONGO_SETTINGS:Orongo Settings
+WEBSITE_NAME:Website Name
+WEBSITE_URL:Website URL
+ADMIN_EMAIL:Admin email address
+SHOW_ARCHIVE:Show archive in menu?

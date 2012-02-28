@@ -159,7 +159,9 @@ PLUGIN_DEINSTALLED:Plugin gedeïnstalleerd
 PLUGIN_NOT_FOUND:Plugin niet gevonden
 PLUGIN_NOT_INSTALLED:Plugin is niet geïnstalleerd
 PLUGIN_ALREADY_INSTALLED:Plugin is al geïnstalleerd
-
+PLUGIN_SETTINGS_SAVED:Plugin instellingen opgeslagen
+PLUGIN_SETTINGS:Plugin Instellingen
+SETTINGS_SAVED:Instellingen opgeslagen!
 UPDATE_CHECKER:Update Checker
 NO_UPDATE:Je OrongoCMS installatie is up-to-date! Er is geen installatie beschikbaar.
 UPDATE_AVAILABLE:Er is een update beschikbaar!
@@ -167,3 +169,32 @@ CRITICAL_UPDATE:Dit is een kritische update, we adviseren om zo snel mogelijk te
 HOW_TO_UPDATE:Hoe te updaten
 READY_TO_UPDATE_TO:Je OrongoCMS installatie kan naar %s geupdatet worden.
 VISIT_FOR_UPDATE_INFORMATION:Ga naar %s om de update stappen te volgen.
+
+ARTICLE_CREATED:Artikel aangemaakt
+ARTICLE_DELETED:Artikel verwijderd
+ARTICLE_EDITED:Artikel gewijzigd
+PAGE_CREATED:Pagina aangemaakt
+PAGE_DELETED:Pagina verwijderd
+PAGE_EDITED:Pagina gewijzigd
+USER_CREATED:Gebruiker aangemaakt
+USER_DELETED:Gebruiker verwijderd
+USER_EDITED:Gebruiker gewijzigd
+COMMENT_POSTED:Reactie geplaatst
+COMMENT_DELETED:Reactie verwijderd
+COMMENT_WAS_POSTED_BY:Reactie was geplaatst door %s
+COMMENT_WAS_DELETED_BY:Reactie was verwijderd door %s
+JUST_REGISTERED:%s heeft zich net geregistreerd! 
+USER_WAS_DELETED_BY:Gebruiker was verwijderd door %s
+USER_WAS_EDITED_BY:Gebruiker was gewijzigd door %s
+PAGE_WAS_CREATED_BY:Pagina was aangemaakt door %s
+PAGE_WAS_EDITED_BY:Pagina was gewijzigd door %s
+PAGE_WAS_DELETED_BY:Pagina was verwijderd door %s
+ARTICLE_WAS_CREATED_BY:Artikel was aangemaakt door %s
+ARTICLE_WAS_DELETED_BY:Artikel was verwijderd door %s
+ARTICLE_WAS_EDITED_BY:Artikel was gewijzigd door %s
+
+ORONGO_SETTINGS:Orongo Instellingen
+WEBSITE_NAME:Website Naam
+WEBSITE_URL:Website URL
+ADMIN_EMAIL:Administrator e-mail adres
+SHOW_ARCHIVE:Archief in menu laten zien?

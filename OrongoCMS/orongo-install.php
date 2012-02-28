@@ -1,4 +1,5 @@
 <?php
+session_start();
 
 class ConfigFile{
     
@@ -32,10 +33,45 @@ class ConfigFile{
     }
 }
 
-if(file_exists("config.php")){
-    
-}
+if(!isset($_GET['step'])) $step = 1;
+else $step = $_GET['step'];
 
-$con = new ConfigFile();
+
+// Style for the installer :)
+$style = 
+"
+#box{
+    border-color:
+";
+
+// JS for the installer 
+$js = 
+"
+$(document).ready(function(){
+	$('#box').css({top:'50%',left:'50%',margin:'-'+($('#box').height() / 2)+'px 0 0 -'+($('#box').width() / 2)+'px'});
+});
+";
+
+
+switch($step){
+    case 1:
+        ?>
+<html>
+    <head>
+        <title>OrongoInstaller Step 1</title>
+        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+        <style type="text/css"><?php echo $style; ?></style>
+        <script type="text/javascript"><?php echo $js; ?></script>
+    </head>
+    <body>
+        
+    </body>
+</html>
+        <?php
+        break;
+    default: 
+        die("Invalid step number :(");
+        break;
+}
 
 ?>

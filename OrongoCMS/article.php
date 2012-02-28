@@ -3,10 +3,6 @@
  * @author Jaco Ruit
  */
 
-//Debug line
-//TODO remove on release
-$time_start = microtime(true);
-
 require 'startOrongo.php';
 startOrongo();
 
@@ -33,10 +29,5 @@ $articleFO = new ArticleFrontend();
 $articleFO->main(array("time" => time(), "article" => &$article));
 $articleFO->render();
 
-//Debug lines
-// TODO remove on release
-$time_end = microtime(true);
-$time = $time_end - $time_start;
-echo "<br /><br />Execution time: " . $time;
 
 ?>

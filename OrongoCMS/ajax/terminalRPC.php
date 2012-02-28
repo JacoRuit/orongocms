@@ -9,7 +9,8 @@
 define('ORONGOTERMINAL_VERSION', "0.2.1");
 define('JQUERYTERMINAL_VERSION', "0.4.6");
 
-require('globals.php');
+require('../startOrongo.php');
+startOrongo();
 require('json-rpc.php');
 
 
