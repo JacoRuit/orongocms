@@ -3,7 +3,7 @@
  * @author Jaco Ruit
  */
 
-require '../startOrongo.php';
+require 'startOrongo.php';
 startOrongo();
 
 if(isset($_GET['code']) && !isset($_SESSION['orongo-id']) && !(isset($_SESSION['orongo-session-id']))){

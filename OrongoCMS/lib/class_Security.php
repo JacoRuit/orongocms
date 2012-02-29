@@ -14,11 +14,12 @@ class Security {
      */
     public static function hash($paramString){
         global $_CONFIG;
-        if(CRYPT_SHA512 != 1){
+        /**if(CRYPT_SHA512 != 1){
             throw new Exception('SHA-512 Hashing not supported!');
         }else{
             return crypt($_CONFIG['security']['salt_2']. $paramString . $_CONFIG['security']['salt_3'],'$6$rounds=5000$' . $_CONFIG['security']['salt_1'] . '$');
-        }
+        }**/
+        return sha1($_CONFIG['security']['salt_2']. $paramString . $_CONFIG['security']['salt_3'] . $_CONFIG['security']['salt_1']);
     }
     
     /**

@@ -329,7 +329,7 @@ class User {
      * @return boolean indicating if the activation code is good
      */
     public static function isGoodActivationCode($paramCode){
-        getDatabase()->query("SELECT `id` FROM `user_activations` WHERE `code` = %s", $paramCode);
+        getDatabase()->query("SELECT `userID` FROM `user_activations` WHERE `code` = %s", $paramCode);
         $c = getDatabase()->count();
         return $c == 1;
     }
