@@ -272,15 +272,10 @@ class Style {
         $results = getDatabase()->query("SELECT `setting_value`, `setting`, `setting_type` FROM `style_data` WHERE `style_main_class` = %s", $backtrace[1]['class']);
         $settings = array();
         foreach($results as $row){
-            if($row['setting_type'] == 'boolean'){
-                if($row['setting_value'] == 'true'){
-                    $settings[$row['setting']] = true;
-                }else{
-                    $settings[$row['setting']] = false;
-                }
-            }else{
-                $settings[$row['setting']] = $row['setting_value'];
-            }
+            if($row['setting_type'] == 'boolean')
+                $settings[$row['setting']] = $row['setting_value'] == 'true' ? true : false;
+            else
+                $settings[$row['setting']] = $row['setting_value'];    
         }
         return $settings;
     }

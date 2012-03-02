@@ -76,7 +76,7 @@ if(is_array($info['style']['settings']) && getStyle()->isUsingPHP()){
         if(!isset($info['style']['settings'][$setting['setting']])) continue;
         $settingInfo = $info['style']['settings'][$setting['setting']];
         if($settingInfo['type'] == 'boolean'){
-        $selected = $setting['setting_value'] ? l("Yes") : l("No");
+        $selected = $setting['setting_value'] == 'false' ? l("No") : l("Yes");
         $styleForm->addRadios($settingInfo['description'], $setting['setting'], array(
             l("Yes") => "true",
             l("No") => "false"
