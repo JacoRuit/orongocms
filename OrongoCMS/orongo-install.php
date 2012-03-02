@@ -133,7 +133,7 @@ switch($step){
                 <img src="orongo-admin/theme/logo.png" alt="OrongoCMS" />
             </div>
             <p>Thank you for choosing OrongoCMS!</p>
-            <p>You are going to install RC1 of OrongoCMS (r89) using a beta version of the installer.</p>
+            <p>You are going to install RC1 of OrongoCMS (r91) using a beta version of the installer.</p>
             <br />
             <p>In order to install OrongoCMS, please follow the steps.</p>
             <br />
@@ -151,6 +151,7 @@ switch($step){
     case 2:
         if(isset($_SESSION['mysql_creds'])) unset($_SESSION['mysql_creds']);
         $extra = file_exists("config.php") ? "" : "<p>Please create config.php</p>";
+        $extra .= file_exists(".htaccess") ? "" : "<br/><p>Please create .htaccess</p>";
         ?>
 <html>
     <head>
@@ -461,7 +462,7 @@ CREATE TABLE IF NOT EXISTS `user_activations` (
        $conf->writeConfigArray($config);
        $conf->save();
        $path = dirname(__FILE__) . "/";
-       $htacces=
+       $htaccess=
 "
 ErrorDocument 400 " . $path . "error.php?error_code=400
 ErrorDocument 401 " . $path . "error.php?error_code=401
