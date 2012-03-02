@@ -16,6 +16,7 @@ SOFTWARE:Software
 PLUGIN:Plugin
 PLUGINS:Plugins
 
+ERROR:Error
 HOME:Home
 ARCHIVE:Archive
 VERSION:Version
@@ -194,6 +195,7 @@ ARTICLE_WAS_CREATED_BY:Article was created by %s
 ARTICLE_WAS_DELETED_BY:Article was deleted by %s
 ARTICLE_WAS_EDITED_BY:Article was edited by %s
 
+STYLE_SETTINGS:Style Settings
 ORONGO_SETTINGS:Orongo Settings
 WEBSITE_NAME:Website Name
 WEBSITE_URL:Website URL

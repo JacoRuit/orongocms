@@ -16,6 +16,7 @@ SOFTWARE:Software
 PLUGIN:Plugin
 PLUGINS:Plugins
 
+ERROR:Fout
 HOME:Home
 ARCHIVE:Archief
 VERSION:Versie
@@ -194,6 +195,7 @@ ARTICLE_WAS_CREATED_BY:Artikel was aangemaakt door %s
 ARTICLE_WAS_DELETED_BY:Artikel was verwijderd door %s
 ARTICLE_WAS_EDITED_BY:Artikel was gewijzigd door %s
 
+STYLE_SETTINGS:Style Instellingen
 ORONGO_SETTINGS:Orongo Instellingen
 WEBSITE_NAME:Website Naam
 WEBSITE_URL:Website URL

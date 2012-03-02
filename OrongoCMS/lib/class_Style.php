@@ -7,7 +7,8 @@
  */
 class Style {
     
-
+    private static $publicSettings;
+    private static $constructed = false;
     private $styleFolder;
     private $styleName;
     private $styleCopyright;
@@ -27,51 +28,36 @@ class Style {
      * @author Jaco Ruit
      */
     public function __construct($paramStyleFolder){
+        self::$constructed = true;
         $this->styleFolder = $paramStyleFolder;
         $filePath = ROOT. '/themes/'. $this->styleFolder . '/info.xml';
         if(file_exists($filePath) == false) throw new Exception("Unable to load the style. <br /> The info.xml file of the style doesn't exist!");
         $xml = @simplexml_load_file($filePath);
-        $this->stylePath = 'themes/'. $this->styleFolder . "/";
+        $this->stylePath = ROOT  . '/themes/'. $this->styleFolder . "/";
         $json = @json_encode($xml);
         $info = @json_decode($json, true);
         $this->styleName = $info['style']['name'];
         $this->styleCopyright = $info['style']['copyright'];
         $this->authorName = $info['style']['author']['name'];
         $this->authorWebsite = $info['style']['author']['website'];
-        if($info['style']['use_php'] == 'true'){
-            $this->usePHP = true;
-        }else{
-            $this->usePHP = false;
-        }
-        if($this->usePHP){
-            $this->phpFile = $info['style']['php_file'];
-            
-        }else{
-            $this->phpFile = null;
-        }
+        $this->usePHP = $info['style']['use_php'] == 'true' ? true : false;
+        $this->phpFile = $this->usePHP ? $info['style']['php_file'] : null;
         if($this->usePHP){
             try{
                 $pathString = ROOT. '/themes/' . $this->getStyleFolder() . '/' . $this->getPHPFile();
                 if(!file_exists($pathString)) throw new ClassLoadException();
                 require ROOT . '/themes/' . $this->getStyleFolder() . '/' . $this->getPHPFile();
+                if(!class_exists($info['style']['main_class'])) throw new ClassLoadException($info['style']['main_class'] . " class doesn't exist!");
                 $this->mainClass = new $info['style']['main_class'];
-                if(($this->mainClass instanceof IOrongoStyle) == false) throw Exception();
+                if(($this->mainClass instanceof IOrongoStyle) == false) throw new Exception();
             }catch(Exception $e){
                 throw new ClassLoadException("Unable to load the style. <br /> Please check the info.xml of the activated style for errors.");
             }
         }else{
             $this->mainClass = null;
         }
-        if($info['style']['own_article_html'] == 'true'){
-            $this->doHTMLArticle = true;
-        }else{
-            $this->doHTMLArticle = false;
-        }
-        if($info['style']['own_comment_html'] == 'true'){
-            $this->doHTMLComment = true;
-        }else{
-            $this->doHTMLComment = false;
-        }
+        $this->doHTMLArticle = $info['style']['own_article_html'] == "true" ? true : false;
+        $this->doHTMLComment = $info['style']['own_comment_html'] == "true" ? true : false;
     }
     
     #   styleFolder
@@ -234,13 +220,11 @@ class Style {
     
     /**
      * Installs database for the style
-     * @param String $paramPrefix Prefix for the folder, sub-folders use this (starts from themes/)
-     * @param String $paramStyleFolder folder where style is located
+     * @param String $paramInfoXML path where info.xml of style is located
      */
-    public static function install($paramStyleFolder){
-        $filePath = ROOT . '/themes/'. $paramStyleFolder . '/info.xml';
-        if(file_exists($filePath) == false) throw new Exception("The style's info.xml doesn't exist!");
-        $xml = @simplexml_load_file($filePath);
+    public static function install($paramInfoXML){
+        if(file_exists($paramInfoXML) == false) throw new Exception("The style's info.xml doesn't exist!");
+        $xml = @simplexml_load_file($paramInfoXML);
         $json = @json_encode($xml);
         $info = @json_decode($json, true);
         $setting = '';
@@ -254,7 +238,6 @@ class Style {
                     self::installSetting($info['style']['main_class'] , $setting, $typeSetting);
                 }else if($key == 'default'){
                     $default = str_replace('{$website_url}', Settings::getWebsiteURL(), $value);
-                    //$q2 = "UPDATE `styles` SET `setting_value` = '" . $default . "' WHERE `style_main_class` = '" . $info['style']['main_class'] . "' AND `setting` = '" . $setting . "'";
                     getDatabase()->update("style_data", array(
                        "setting_value" => $default 
                     ), "`style_main_class`=%s AND `setting`=%s", $info['style']['main_class'], $setting);
@@ -286,7 +269,6 @@ class Style {
         $backtrace = debug_backtrace();
         if(!is_array($backtrace)) throw new Exception ("Couldn't get array from debug_backtrace function.");
         if(!isset($backtrace[1]['class'])) throw new IllegalMemoryAccessException("You can only call this function inside a class.");
-        //$q = "SELECT `setting_value`, `setting`, `setting_type` FROM `styles` WHERE `style_main_class` = '" . $backtrace[1]['class'] . "'";
         $results = getDatabase()->query("SELECT `setting_value`, `setting`, `setting_type` FROM `style_data` WHERE `style_main_class` = %s", $backtrace[1]['class']);
         $settings = array();
         foreach($results as $row){
@@ -316,7 +298,6 @@ class Style {
         $paramValue =  mysql_escape_string($paramValue);
         getDatabase()->query("SELECT `setting_value` FROM `style_data` WHERE `style_main_class` = %s AND `setting` = %s", $backtrace[1]['class'], $paramSetting);
         if(getDatabase()->count()  < 1 && $backtrace[1]['class'] != __CLASS__) throw new IllegalMemoryAccessException("This settings doesn't exist or you are accessing the setting illegal.");
-        //$q2 = "UPDATE `styles` SET `setting_value` = '" . $paramValue . "' WHERE `style_main_class` = '" . $backtrace[1]['class'] . "' AND `setting` = '" . $paramSetting . "'";
         getDatabase()->update("style_data", array(
            "setting_value" => $paramValue 
         ), "`style_main_class`=%s AND `setting`=%s", $backtrace[1]['class'], $paramSetting);

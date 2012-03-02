@@ -11,16 +11,18 @@ setCurrentPage('article');
 $article = null;
 
 if(!isset($_GET['id'])){
-    header("Location: 404.php");
+    header('Location: ' . orongoURL("error.php?error_code=404"));
     exit;
 }else{
     try{
         $article = new Article($_GET['id']);
     }catch(Exception $e){
         if($e->getCode() == ARTICLE_NOT_EXIST){
-            header("Location: 404.php");
+            header('Location: ' . orongoURL("error.php?error_code=404"));
+            exit;
         }else{
-            header("Location: 503.php");
+            header('Location: ' . orongoURL("error.php?error_code=500"));
+            exit;
         }
     }
 }

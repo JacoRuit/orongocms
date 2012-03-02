@@ -22,7 +22,7 @@ function startOrongo(){
     define('USER_NOT_EXIST', 4100);
     define('COMMENT_NOT_EXIST', 5100);
     
-    if(file_exists("orongo-install.php")) die("If you didn't install OrongoCMS yet, proceed to the <a href='orongo-install.php'>installer</a><br/>If you installed it, please delete orongo-install.php");
+    //if(file_exists("orongo-install.php")) die("If you didn't install OrongoCMS yet, proceed to the <a href='orongo-install.php'>installer</a><br/>If you installed it, please delete orongo-install.php");
     if(!file_exists(CONFIG)) die("config.php (" . CONFIG . ") was missing!");
     
     require_once(CONFIG);

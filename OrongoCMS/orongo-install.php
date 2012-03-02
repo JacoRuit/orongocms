@@ -39,7 +39,7 @@ class ConfigFile{
     
     public function save(){
         $b = @file_put_contents("config.php", $this->data);
-        if(!$b) throw new Exception("Error while writing config.php");
+        if(!$b) throw new Exception("Error while writing config.php, check if you CHMODDED it to 777");
         
     }
 }
@@ -170,6 +170,7 @@ switch($step){
             <p>Please <strong>CHMOD</strong> orongo-media/images to <strong>777</strong></p>
             <p>Please <strong>CHMOD</strong> orongo-media/thumbs to <strong>777</strong></p>
             <p>Please <strong>CHMOD</strong> config.php to <strong>777</strong></p>
+            <p>Please <strong>CHMOD</strong> .htaccess to <strong>777</strong></p>
             <?php echo $extra; ?>
             <div id="previous"><a href="orongo-install.php?step=1">Previous</a></div>
             <div id="next"><a href="orongo-install.php?step=3">Next</a></div>
@@ -305,7 +306,7 @@ switch($step){
            exit;
        }
        $meekro = "lib/meekrodb.2.0.class.php";
-       if(!file_exists($meekro)) die("MeekroDB (" . $meekro . ") was missing in the lib folder :(");
+       if(!file_exists($meekro)) die("MeekroDB (" . $meekro . ") was missing from the lib folder :(");
        require $meekro;
        $queries = array();
        $queries[0] = "
@@ -459,6 +460,18 @@ CREATE TABLE IF NOT EXISTS `user_activations` (
        $config['security']['salt_3'] = generateSalt();
        $conf->writeConfigArray($config);
        $conf->save();
+       $path = dirname(__FILE__) . "/";
+       $htacces=
+"
+ErrorDocument 400 " . $path . "error.php?error_code=400
+ErrorDocument 401 " . $path . "error.php?error_code=401
+ErrorDocument 403 " . $path . "error.php?error_code=403
+ErrorDocument 404 " . $path . "error.php?error_code=404
+ErrorDocument 500 " . $path . "error.php?error_code=500
+ErrorDocument 503 " . $path . "error.php?error_code=503
+";
+       $b = @file_put_contents(".htaccess", $htaccess);
+       if(!$b) die("Check if you CHMODDED .htaccess to 777. Can't edit it.");
        $adminPW = generateSalt();
        $hash = sha1($config['security']['salt_2']. $adminPW . $config['security']['salt_3'] . $config['security']['salt_1']);
        $db->insert("users", array(
@@ -469,6 +482,25 @@ CREATE TABLE IF NOT EXISTS `user_activations` (
             "rank" => 3,
             "activated" => 1
        ));
+       $styleSettings = array(
+           "logo_url" => $_POST['website_url'] . "/themes/monk/images/logo.png",
+           "footer_1_title" => "Footer 1",
+           "footer_2_title" => "Footer 2",
+           "footer_3_title" => "Footer 3",
+           "footer_4_title" => "Footer 4",
+           "footer_1_text" => "You can change this in your admin panel!",
+           "footer_2_text" => "You can change this in your admin panel!",
+           "footer_3_text" => "You can change this in your admin panel!",
+           "footer_4_text" => "You can change this in your admin panel!"
+       );
+       foreach($styleSettings as $setting=>$value){
+           $db->insert("style_data", array(
+               "style_main_class" => "MonkStyle",
+               "setting" => $setting,
+               "setting_type" => "string",
+               "setting_value" => $value
+           ));
+       }
        ?>
 <html>
     <head>
@@ -486,6 +518,7 @@ CREATE TABLE IF NOT EXISTS `user_activations` (
             <p>Your password is <strong style="font-size:30px;"><?php echo $adminPW; ?></strong></p>
             <p>Save this password carefully, you may change it later in the admin panel</p>
             <p>Please delete orongo-install.php & <strong>CHMOD</strong> config.php to <strong>644</strong></p>
+            <p>Please <strong>CHMOD</strong> .htaccess to <strong>644</strong></p>
             <br/>
             <p>You may proceed to the <a href="orongo-admin/">login</a></p>
             <p>Please help the development of OrongoCMS by <a href="orongo-admin/post-issue.php" target="_blank">posting bugs</a></p>

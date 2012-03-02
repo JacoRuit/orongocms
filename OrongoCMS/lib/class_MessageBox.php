@@ -70,7 +70,7 @@ class MessageBox extends OrongoDisplayableObject {
      */
     public function getImports(){
         $websiteURL = Settings::getWebsiteURL();
-        $generatedHTML = "<script src=\"http://code.jquery.com/jquery-latest.js\" type=\"text/javascript\"></script><script src=\"https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js\" type=\"text/javascript\"></script><link rel=\"stylesheet\" href=\"" . $websiteURL . "orongo-admin/style/smoothness/jquery-ui-1.8.16.custom.css\" type=\"text/css\"/>";
+        $generatedHTML = "<script src=\"http://code.jquery.com/jquery-latest.js\" type=\"text/javascript\"></script><script src=\"https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js\" type=\"text/javascript\"></script><link rel=\"stylesheet\" href=\"" . $websiteURL . "orongo-admin/theme/smoothness/jquery-ui-1.8.16.custom.css\" type=\"text/css\"/>";
         return $generatedHTML;
     }
     

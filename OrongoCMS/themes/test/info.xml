@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--http://www.makimyers.co.uk/monk-free-html-template/-->
+
+<root>
+    <style>
+        <name>Test</name>
+        <!-- Please don't change this piece: '© Copyright 2011 Monk by Maki Myers'  -->
+        <copyright>© Copyright 2011 Monk by Maki Myers - Orongo'd by Jaco Ruit</copyright>
+        <use_php>true</use_php>
+        <php_file>test</php_file>
+        <main_class>test</main_class>
+        <own_article_html>false</own_article_html>
+        <own_comment_html>false</own_comment_html>
+        <author>
+            <name>Maki Myers and Jaco Ruit</name>
+            <website>http://www.makimyers.co.uk/</website>
+        </author>
+        <settings>
+            <bla>
+                <description>Haai</description>
+                <default>false</default>
+                <type>boolean</type>
+            </bla>
+        </settings>
+    </style>
+</root>
