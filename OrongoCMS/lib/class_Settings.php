@@ -73,13 +73,12 @@ class Settings {
     
     /**
      * Sets the style 
-     * @param String $paramPrefix prefix for folder (starting from themes/)
      * @param String $paramStyle  path of the style folder
      */
     public static function setStyle($paramStyle){
         try{
             getDatabase()->query('TRUNCATE TABLE `style_data`');
-            Style::install($paramStyle);
+            Style::install(ROOT . "/themes/" . $paramStyle . "/info.xml");
         }catch(Exception $e){ throw $e; }
         getDatabase()->update("settings", array(
             "value" => $paramStyle

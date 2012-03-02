@@ -275,6 +275,10 @@ class Display {
         $this->addToTemplateVariable("body", '<script type="text/javascript">' . $this->js . '</script>');
         foreach($this->tpls as $tpl){
             if(empty($tpl)) continue;
+            if(function_exists("getCurrentPage") && !stristr(getCurrentPage(), "admin") && !file_exists(raintpl::$tpl_dir . $tpl . ".html")){
+                $msgbox = new MessageBox("Style was missing a file: " . $tpl . ".html");
+                die($msgbox->getImports() . $msgbox->toHTML());
+            }
             $this->raintpl->draw($tpl);
         }
         $this->rendered = true;

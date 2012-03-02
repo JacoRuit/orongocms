@@ -15,6 +15,9 @@ function setStyle($paramStyle){
     if(($paramStyle instanceof Style) == false) throw new IllegalArgumentException("Invalid argument, style object expected!");
     global $_orongo_style;
     $GLOBALS['_orongo_style'] = &$paramStyle;
+    /**
+     * @return Style
+     */
     function getStyle(){ return $GLOBALS['_orongo_style']; };
 }
 ?>

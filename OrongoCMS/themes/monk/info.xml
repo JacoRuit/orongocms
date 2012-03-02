@@ -22,11 +22,6 @@
                 <type>string</type>
                 <default>{$website_url}themes/monk/images/logo.png</default>
             </logo_url>
-            <show_archive_in_menu>
-                <description>Do you want to show the archive menu item?</description>
-                <type>boolean</type>
-                <default>true</default>
-            </show_archive_in_menu>
             <footer_1_title>
                 <description>The 1st footer title</description>
                 <type>string</type>
