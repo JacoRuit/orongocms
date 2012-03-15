@@ -7,9 +7,10 @@
  */
 abstract class OrongoPackage {
     
-    abstract function __construct();
+    abstract function __construct($runtime);
     
     abstract function getFunctions();
+    
 }
 
 ?>

@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Output OrongoScript Package
  *
@@ -7,12 +6,42 @@
  */
 class OrongoScriptOutput extends OrongoPackage {
     
-    public function __construct() {
+    public function __construct($runtime) {
         
     }
     public function getFunctions() {
-        require_once("functions/func_Echo.php");
-        return array(new FuncEcho());
+        return array(new FuncPrint());
+    }
+}
+
+
+
+/**
+ * Print OrongoScript function
+ *
+ * @author Jaco Ruit
+ */
+class FuncPrint extends OrongoFunction {
+    
+
+    public function __invoke($args) {
+        $str = "";
+        foreach($args as $arg){
+            if(is_object($arg)){
+                $str .= "Object";
+                continue;
+            }
+            $str .= $arg;
+        }
+        echo $str;
+    }
+
+    public function getShortname() {
+        return "Print";
+    }
+    
+    public function getSpace(){
+        return "Output";
     }
 }
 
