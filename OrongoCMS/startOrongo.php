@@ -8,7 +8,7 @@
 function startOrongo(){
 
     session_start();
-
+ 
     define("ROOT", dirname(__FILE__));
     define("LIB", ROOT . "/lib");
     define("ADMIN", ROOT . "/orongo-admin");
@@ -22,6 +22,8 @@ function startOrongo(){
     define('USER_NOT_EXIST', 4100);
     define('COMMENT_NOT_EXIST', 5100);
     
+  
+    //TODO uncomment on release
     //if(file_exists("orongo-install.php")) die("If you didn't install OrongoCMS yet, proceed to the <a href='orongo-install.php'>installer</a><br/>If you installed it, please delete orongo-install.php");
     if(!file_exists(CONFIG)) die("config.php (" . CONFIG . ") was missing!");
     
@@ -30,7 +32,7 @@ function startOrongo(){
     require LIB . '/function_load.php';
     
     try{ load(LIB); }catch(Exception $e){ die($e->getMessage()); }
-
+    
     setDatabase(new Database(CONFIG));
    
     try{
@@ -69,6 +71,10 @@ function startOrongo(){
     //getLanguage()->setTempLanguage(ADMIN . '/lang/en_US');
 
     OrongoDefaultEventHandlers::init();
+    
+    $p = new OrongoScriptParser(file_get_contents(LIB . "/OrongoScript/Tests/test.osc"));
+    $p->startParser();
+    
 }
 
 

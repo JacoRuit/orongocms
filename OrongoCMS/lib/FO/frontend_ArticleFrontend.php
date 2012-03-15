@@ -32,7 +32,7 @@ class ArticleFrontend extends OrongoFrontendObject {
             try{
                 $this->commentHTML = getStyle()->getCommentsHTML($comments);
             }catch(Exception $e){
-                $msgbox = new MessageBox("The style didn't generate the HTML code for the comments, therefore the default generator was used. <br /><br />To hide this message open <br />" . $style->getStylePath() . "info.xml<br /> and set <strong>own_article_html</strong> to <strong>false</strong>.");
+                $msgbox = new MessageBox("The style didn't generate the HTML code for the comments, therefore the default generator was used. <br /><br />To hide this message open <br />" . getStyle()->getStylePath() . "info.xml<br /> and set <strong>own_comment_html</strong> to <strong>false</strong>.");
                 $msgbox->bindException($e);
                 getDisplay()->addObject($msgbox);
                 foreach($comments as $comment){

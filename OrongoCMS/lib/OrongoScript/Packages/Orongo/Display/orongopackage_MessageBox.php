@@ -7,18 +7,20 @@
  */
 class OrongoScriptMessageBox extends OrongoPackage {
     
-    public function __construct() {
+    public function __construct($runtime) {
         
     }
     public function getFunctions() {
         return array(new FuncShowMessageBox(), new FuncMakeMessageBox());
     }
+    
+    
 }
 
 # ---FUNCTIONS---
 
 /**
- * show_msgbox OrongoScript function
+ * Show OrongoScript function
  *
  * @author Jaco Ruit
  */
@@ -31,13 +33,17 @@ class FuncShowMessageBox extends OrongoFunction {
     }
 
     public function getShortname() {
-        return "show_msgbox";
+        return "Show";
+    }
+    
+    public function getSpace(){
+        return "MessageBox";
     }
 }
 
 
 /**
- * make_msgbox OrongoScript function
+ * Make OrongoScript function
  *
  * @author Jaco Ruit
  */
@@ -53,7 +59,11 @@ class FuncMakeMessageBox extends OrongoFunction {
     }
 
     public function getShortname() {
-        return "make_msgbox";
+        return "Make";
+    }
+    
+    public function getSpace(){
+        return "MessageBox";
     }
 }
 
