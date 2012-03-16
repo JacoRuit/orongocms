@@ -21,6 +21,8 @@ class OrongoScriptParser {
     
     private static $expressions = array('==', '!=');
     
+    private $onlyFunctionSpaces = false;
+    
     /**
      * @var OrongoScriptRuntime
      */
@@ -43,27 +45,27 @@ class OrongoScriptParser {
      * Parses the script
      * @param OrongoScriptRuntime runtime optional
      * @param array $paramTempVars Temporary vars for the runtime (optional)
+     * @param bool $paramClone clone the runtime? (optional)
+     * @param bool $paramFunctionSpaceMode may spaces only contain functions?
      * @return var the returned var from script
      */
-    public function startParser($paramRuntime = null, $paramTempVars = null){
+    public function startParser($paramRuntime = null, $paramGlobalVars = null, $paramTempVars = null, $paramClone = false, $paramFunctionSpaceMode = false){
         $this->line = 0;
-        if($paramRuntime instanceof OrongoScriptRuntime)
-            $this->runtime = $paramRuntime;
+        $this->onlyFunctionSpaces = $paramFunctionSpaceMode;
+        if($paramRuntime instanceof OrongoScriptRuntime){
+            if($paramClone) $this->runtime = &$paramRuntime;
+            else $this->runtime = $paramRuntime;
+        }
         else $this->runtime = new OrongoScriptRuntime();
         if(is_array($paramTempVars))
             foreach($paramTempVars as $tempName => $tempVar){
                 $this->runtime->letTempVar($tempName, $tempVar);
             }  
+        if(is_array($paramGlobalVars))
+            foreach($paramGlobalVars as $gName => $gVar){
+                $this->runtime->letGlobalVar($gName, $gVar);
+            }
         $lines = explode(";", $this->orongoScript);
-        if(!defined('hacked')){
-            $this->runtime->registerFunction(array(
-                'name' => 'hack',
-                'param_count' => 0,
-                'logic' => 'let h = make_msgbox(bla); do show_msgbox(h));        ',
-                'params' => '1'
-            ));
-            define('hacked',true);
-        }
         $this->lines = $lines;
         $this->ifs = array();
         foreach($this->lines as &$line){
@@ -85,9 +87,9 @@ class OrongoScriptParser {
             $this->nextLine();
             $c++;
         }
-        
-        
     }
+    
+ 
     
     /**
      * @return int line number
@@ -120,7 +122,6 @@ class OrongoScriptParser {
      * Move to next line
      */
     private function nextLine(){
-        //if($this->line == count($this->lines)) return false;
         $this->lineparsed = false;
         $this->line++;
         return true;
@@ -137,13 +138,16 @@ class OrongoScriptParser {
         if($this->definingFunction != null && $line != "end function" )
             $this->definingFunction["logic"] .= $line . ";";
         
-        else if($this->runtime->getCurrentSpace() == null && !$this->lineStartsWith("import") && !$this->lineStartsWith("space"))
+        else if($this->runtime->getCurrentSpace() == null && 
+                !$this->lineStartsWith("import") && 
+                !$this->lineStartsWith("space") &&
+                !$this->lineStartsWith("use"))
             throw new OrongoScriptParseException("Can not execute: ". $line . " while not in space!");
         
         #SPACE
         else if($this->lineStartsWith("space")){
-            if(!empty($this->ifs) || $this->definingFunction != null)
-                throw OrongoScriptParseException("Can't create a new space if you are still in a function/if.");
+            if($this->runtime->getCurrentSpace() != null)
+                throw new OrongoScriptParseException("Can't create a new space if you are still in a space!");
             $spaceName = trim(preg_replace("/space/", "", $line, 1));
             $this->runtime->registerSpace($spaceName);
             $this->runtime->setCurrentSpace($spaceName);
@@ -151,12 +155,16 @@ class OrongoScriptParser {
         
         else if($line == "end space"){
             if(!empty($this->ifs) || $this->definingFunction != null)
-                throw OrongoScriptParseException("Can't end the space if you are still in a function/if.");
+                throw new OrongoScriptParseException("Can't end the space if you are still in a function/if.");
+            if($this->runtime->getCurrentSpace() == null)
+                throw new OrongoScriptParseException("Can't end the space if you are not in a space!");
             $this->runtime->setCurrentSpace(null);
         }
         
         #IF
         else if($this->lineStartsWith("if")){
+            if($this->definingFunction == null && $this->onlyFunctionSpaces)
+                throw new OrongoScriptParseException("Can't perform: " . $line . "  outside function when using the space as a function space.");
             if(count($this->ifs) > 0){
                 $curIf =  end($this->ifs);
                 if($curIf['i']){
@@ -169,7 +177,6 @@ class OrongoScriptParser {
                     return;
                 }
             }
-            $line = $this->lines[$this->getCurrentLine()];
             $f = preg_replace("/if/", "", $line, 1);
             $f = trim($f);
             if($f[0] != "(" || $f[strlen($f) -1] != ")") throw new OrongoScriptParseException("Invalid if statement");
@@ -207,7 +214,6 @@ class OrongoScriptParser {
                     return;
                 }
             }
-            $line = $this->lines[$this->getCurrentLine()];
             $imp = trim(preg_replace("/import/", "", $line, 1));
             $this->runtime->import($imp);
         }
@@ -221,7 +227,6 @@ class OrongoScriptParser {
                     return;
                 }
             }
-            $line = $this->lines[$this->getCurrentLine()];
             $line = trim(preg_replace("/let/", "", $line,1));
             if(!stristr($line, "=")) throw new OrongoScriptParseException("Invalid let at line " . $this->getCurrentLine(true));
             $toLet = explode("=", $line);
@@ -233,6 +238,8 @@ class OrongoScriptParser {
         
         #DO
         else if($this->lineStartsWith("do")){
+            if($this->definingFunction == null && $this->onlyFunctionSpaces)
+                throw new OrongoScriptParseException("Can't perform: " . $line . "  outside function when using the space as a function space.");
             if(count($this->ifs) > 0){
                 $curIf=  end($this->ifs);
                 if($curIf['i']){
@@ -255,7 +262,7 @@ class OrongoScriptParser {
                     return;
                 }
             }
-            $line = trim(preg_replace("/function/", "",$this->lines[$this->getCurrentLine()], 1));
+            $line = trim(preg_replace("/function/", "",$line, 1));
             if(substr_count($line, ")") != 1 || substr_count($line, "(") != 1 || strpos(")", $line) < strpos("(", $line))
                     throw new OrongoScriptParseException("Invalid function declaration.");
             $l = explode("(", $line);
@@ -278,16 +285,29 @@ class OrongoScriptParser {
             $this->runtime->registerFunction($this->definingFunction);   
             $this->definingFunction = null;
         }
+        
+        #USE
+        else if($this->lineStartsWith("use")){
+            $path = trim(preg_replace("/use/", "", $line , 1));
+            $path = $this->parseVar($path)->get();
+            if(!file_exists($path)) throw new OrongoScriptParseException("Couldn't use:  " . $path ." (file doesn't exists)");
+            $p = new OrongoScriptParser(file_get_contents($path));
+            $p->startParser($this->getRuntime(), null, null, true, true);
+        }
        
         #RETURN
         else if($this->lineStartsWith("return")){
-            $line = trim(preg_replace("/return/", "",$this->lines[$this->getCurrentLine()], 1));
+            if($this->definingFunction == null && $this->onlyFunctionSpaces)
+                throw new OrongoScriptParseException("Can't perform: " . $line . "  outside function when using the space as a function space.");
+            $line = trim(preg_replace("/return/", "",$line, 1));
             return array(
                 'action' => 'terminated',
                 'value' => $this->parseVar($line)->get()
             );
         }
         else if($line == "return"){
+            if($this->definingFunction == null && $this->onlyFunctionSpaces)
+                throw new OrongoScriptParseException("Can't perform: " . $line . "  outside function when using the space as a function space.");
             return array(
                 'action' => 'terminated',
                 'value' => 1

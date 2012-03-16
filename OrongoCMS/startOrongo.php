@@ -22,6 +22,7 @@ function startOrongo(){
     define('USER_NOT_EXIST', 4100);
     define('COMMENT_NOT_EXIST', 5100);
     
+    error_reporting(E_ALL);
   
     //TODO uncomment on release
     //if(file_exists("orongo-install.php")) die("If you didn't install OrongoCMS yet, proceed to the <a href='orongo-install.php'>installer</a><br/>If you installed it, please delete orongo-install.php");
@@ -71,10 +72,7 @@ function startOrongo(){
     //getLanguage()->setTempLanguage(ADMIN . '/lang/en_US');
 
     OrongoDefaultEventHandlers::init();
-    
-    $p = new OrongoScriptParser(file_get_contents(LIB . "/OrongoScript/Tests/test.osc"));
-    $p->startParser();
-    
+
 }
 
 

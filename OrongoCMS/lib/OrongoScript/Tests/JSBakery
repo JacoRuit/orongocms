@@ -1,8 +1,7 @@
-import Orongo.IO.Output;
-
 space JSBakery;
     
     function BakeAlert(text);
-        Ouput.Print("<script>
+        do Output.Print("<script></script>");
+    end function;
     
 end space;

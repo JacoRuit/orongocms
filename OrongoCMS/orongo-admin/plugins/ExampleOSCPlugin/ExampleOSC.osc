@@ -1,0 +1,26 @@
+import Orongo.IO.Output;
+import Orongo.Display.MessageBox;
+import Orongo.Core.String;
+import Orongo.Display.Template;
+
+
+space ExampleOSC;
+
+    function FastMessageBox(text, title);
+        let msgbox = MessageBox.Make(text, title);
+        do MessageBox.Show(msgbox);
+    end function;
+
+    function GetMessage();
+        return "Hello World!";
+    end function;
+    
+
+    let message = GetMessage();
+    let messageOfToday = String.Concat("Message of today: %s", message);
+    let welcomeText = String.Concat("Hi %s", "Jaco");
+    do FastMessageBox(welcomeText, "OrongoScript rocks!");
+    let HTML = String.Concat("<div>%s</div>", messageOfToday);
+    do Template.AddHTML(HTML, "before_article");
+
+end space;

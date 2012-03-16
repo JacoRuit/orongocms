@@ -1,0 +1,10 @@
+space HTMLDiv;
+
+    let a = "hoi";
+
+    function Make();
+        return "test";
+    end function;
+    
+
+end space;
