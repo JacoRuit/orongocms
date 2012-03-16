@@ -1,6 +1,10 @@
 import Orongo.IO.Output;
 import Orongo.Display.MessageBox;
 import Orongo.Core.String;
+import Orongo.HTML.Div;
+import Orongo.System.Time;
+
+use "/home/jaco/Documenten/public_html/OrongoCMS/lib/OrongoScript/Tests/JSBakery";
 
 space Test;
 
@@ -12,7 +16,13 @@ space Test;
     function GetMessage();
         return "Hello World!";
     end function;
+    
+    let time = Time.GetUnixTime();
+    do Output.Print(time);
 
+    let b = HTMLDiv.Make();
+    do Output.Print(b);
+    do JSBakery.BakeAlert("hey");
     let message = GetMessage();
     let messageOfToday = String.Concat("Message of today: %s", message);
     let welcomeText = String.Concat("Hi %s", "Jaco");

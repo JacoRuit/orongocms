@@ -13,13 +13,30 @@ class OrongoScriptRuntime {
     private $tempVars;
     private $spaces;
     private $currentSpace;
+    private $globalVars;
     
     public function __construct(){
         $this->variables = array();
         $this->customFunctions = array();
         $this->functions = array();
         $this->tempVars = array();
+        $this->globalVars = array();
         $this->spaces = array();
+    }
+    
+    /**
+     * Sets a variable only for this runtime only,
+     * if the vars will be copied, this var will be ignored.
+     * Excluded from the variables array.
+     * This var is global cant be redefined
+     * @param var $paramName variable name
+     * @param var $paramVar variable 
+     */
+    public function letGlobalVar($paramName, $paramVar){
+        $tolet = "";
+        if($paramVar instanceof OrongoVariable) $tolet = $paramVar;
+        else $tolet = new OrongoVariable($paramVar);
+        $this->globalVars[$paramName] = $tolet;
     }
     
     /**
@@ -33,34 +50,45 @@ class OrongoScriptRuntime {
         $tolet = "";
         if($paramVar instanceof OrongoVariable) $tolet = $paramVar;
         else $tolet = new OrongoVariable($paramVar);
-        $this->tempVars[$paramName] = $tolet;
+        $this->tempVars[$this->currentSpace][$paramName] = $tolet;
     }
     
+        
     /**
      * @param var $paramName variable name
      * @param var $paramVar variable
      */
     public function letVar($paramName, $paramVar){
+        if(array_key_exists($paramName, $this->globalVars))
+                throw new OrongoScriptParseException("Can not redefine global variables!");
         $tolet = "";
         if($paramVar instanceof OrongoVariable) $tolet = $paramVar;
         else $tolet = new OrongoVariable($paramVar);
-        $this->variables[$paramName] = $tolet;
+        $this->variables[$this->currentSpace][$paramName] = $tolet;
     }
     
     /**
      * @param var $paramName variable name
      * @return var Stored Var
      */
-    public function getVar($paramName){
-        if(!array_key_exists($paramName, $this->variables) && !array_key_exists($paramName, $this->tempVars))
-               throw new OrongoScriptParseException("Unknown variable: " . $paramName);
-        if(array_key_exists($paramName, $this->tempVars)){
-            if($this->tempVars[$paramName] instanceof OrongoVariable == false) return new OrongoVariable(null);
-            return $this->tempVars[$paramName];
+    public function getVar($paramName){ 
+        if(array_key_exists($paramName, $this->globalVars)){
+            if($this->globalVars[$paramName] instanceof OrongoVariable == false) return new OrongoVariable(null);
+            return $this->globalVars[$paramName];
         }
-        if($this->variables[$paramName] instanceof OrongoVariable == false) return new OrongoVariable(null);
-        return $this->variables[$paramName];
+        else if(array_key_exists($paramName, $this->tempVars[$this->currentSpace])){
+            if($this->tempVars[$this->currentSpace][$paramName] instanceof OrongoVariable == false) return new OrongoVariable(null);
+            return $this->tempVars[$this->currentSpace][$paramName];
+        }       
+        else if(array_key_exists($paramName, $this->variables[$this->currentSpace])){
+            if($this->variables[$this->currentSpace][$paramName] instanceof OrongoVariable == false) return new OrongoVariable(null);
+            return $this->variables[$this->currentSpace][$paramName];
+        }
+        else
+           throw new OrongoScriptParseException("Unknown variable: " . $paramName);       
     }
+    
+
     
     /**
      * @return array all stored vars 
@@ -68,6 +96,8 @@ class OrongoScriptRuntime {
     public function getVars(){
         return $this->variables;
     }
+    
+
     
     /**
      * @param String $paramSpace Space name 
@@ -77,6 +107,8 @@ class OrongoScriptRuntime {
         $this->spaces[count($this->spaces)] = $paramSpace;
         $this->functions[$paramSpace] = array();
         $this->customFunctions[$paramSpace] = array();
+        $this->variables[$paramSpace] = array();
+        $this->tempVars[$paramSpace] = array();
     }
     
     /**
@@ -122,44 +154,54 @@ class OrongoScriptRuntime {
             if($i != count($package) - 1)
                 $path .= "/";
         }
-        //if(!is_dir($path)) throw new OrongoScriptParseException("Invalid package: " . $paramPackage . $path);
         $file = explode(".", $paramPackage);
         $file = end($file);
-        if($file != "*") $path .= "/orongopackage_" . $file . ".php";
-        else $path .= "/" . $file;
-        $path = dirname(__FILE__) . '/' . $path;
-        if(!file_exists($path)) throw new OrongoScriptParseException("Invalid import, package not found!");
-        require_once($path);
-        $class = false;
-        //Snippet provided here: http://stackoverflow.com/questions/928928/determining-what-classes-are-defined-in-a-php-class-file
-        $php_file = file_get_contents($path);
-        $tokens = token_get_all($php_file);
-        $class_token = false;
-        foreach ($tokens as $token) {
-            if (is_array($token)) {   
-                if ($token[0] == T_CLASS) { 
-                    $class_token = true;
-                } else if ($class_token && $token[0] == T_STRING) {
-                     $class = $token[1];
-                     $class_token = false;
-                }
-            }
-            if($class != false) break;
+        $phpPath = dirname(__FILE__) . '/' .$path . "/orongopackage_" . $file . ".php";
+        $oPath = dirname(__FILE__) . '/' .$path . "/" . $file . ".osc";
+        $oScript = false;
+        $path = $phpPath;
+        if(!file_exists($path)){
+            if(!file_exists($oPath))
+                throw new OrongoScriptParseException("Invalid import, package not found!"); 
+            $path = $oPath;
+            $oScript = true;
         }
-        try{
-            
-            $p = new $class($this);
-            if(($p instanceof OrongoPackage) == false) return;
-            $funcs = $p->getFunctions();
-            foreach($funcs as $newFunc){
-                if(($newFunc instanceof OrongoFunction) == false) continue;
-                try{ $this->registerSpace($newFunc->getSpace()); }catch(Exception $e){}
-                if($this->isFunction($newFunc->getSpace(), $newFunc->getShortname())) continue;              
-                $this->functions[$newFunc->getSpace()][$newFunc->getShortname()] = $newFunc;
+        if(!$oScript){
+            require_once($path);
+            $class = false;
+            //Snippet provided here: http://stackoverflow.com/questions/928928/determining-what-classes-are-defined-in-a-php-class-file
+            $php_file = file_get_contents($path);
+            $tokens = token_get_all($php_file);
+            $class_token = false;
+            foreach ($tokens as $token) {
+                if (is_array($token)) {   
+                    if ($token[0] == T_CLASS) { 
+                        $class_token = true;
+                    } else if ($class_token && $token[0] == T_STRING) {
+                        $class = $token[1];
+                        $class_token = false;
+                    }
+                }
+                if($class != false) break;
             }
-            return;
-        }catch(Exception $e){
-            throw new OrongoScriptParseException("Couldn't import: " . $path);
+            try{
+
+                $p = new $class($this);
+                if(($p instanceof OrongoPackage) == false) return;
+                $funcs = $p->getFunctions();
+                foreach($funcs as $newFunc){
+                    if(($newFunc instanceof OrongoFunction) == false) continue;
+                    try{ $this->registerSpace($newFunc->getSpace()); }catch(Exception $e){}
+                    if($this->isFunction($newFunc->getSpace(), $newFunc->getShortname())) continue;              
+                    $this->functions[$newFunc->getSpace()][$newFunc->getShortname()] = $newFunc;
+                }
+                return;
+            }catch(Exception $e){
+                throw new OrongoScriptParseException("Couldn't import: " . $path);
+            }
+        }else{
+            $p = new OrongoScriptParser(file_get_contents($path));
+            $p->startParser($this, null, null, true, true);
         }
     }
     
@@ -168,7 +210,9 @@ class OrongoScriptRuntime {
      * @param String $paramName var name
      */
     public function isVar($paramName){
-        return array_key_exists($paramName, $this->variables) || array_key_exists($paramName, $this->tempVars);
+        return array_key_exists($paramName, $this->globalVars) ||
+               array_key_exists($paramName, $this->variables[$this->currentSpace]) ||
+               array_key_exists($paramName, $this->tempVars[$this->currentSpace]);
     }
     
     /**
@@ -213,7 +257,7 @@ class OrongoScriptRuntime {
                     $i++;
                 }
             }
-            $return = $p->startParser($this, $arguments);
+            $return = $p->startParser($this, null, $arguments);
             $this->variables = $p->getRuntime()->getVars();
             return new OrongoVariable($return);
         }

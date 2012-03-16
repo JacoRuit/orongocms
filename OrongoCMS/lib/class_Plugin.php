@@ -22,8 +22,10 @@ class Plugin {
         $info = @json_decode($json, true);
         $setting = '';
         $typeSetting= '';
-        if(!file_exists(dirname($paramInfoXML) . '/' . $info['plugin']['php_file'] . '.php'))
+        if(trim(strtoupper($info['plugin']['language']) == "PHP") && !file_exists(dirname($paramInfoXML) . '/' . $info['plugin']['php_file'] . '.php'))
                  throw new Exception("Couldn't find the PHP file (info.xml: " . $paramInfoXML . ")");
+        else if(trim(strtoupper($info['plugin']['language']) == "OSC" && !file_exists(dirname($paramInfoXML) . '/' . $info['plugin']['osc_file'] . '.osc')))
+                 throw new Exception("Couldn't find the OSC file (info.xml: " . $paramInfoXML . ")" );
         if(!isset($info['plugin']['access_key'])) throw new Exception("The plugin's access key wasn't found");
         $accessKey = $info['plugin']['access_key'];
         getDatabase()->delete("plugin_data", "access_key =  %s", $accessKey);
@@ -127,6 +129,8 @@ class Plugin {
         $xml = @simplexml_load_file($paramInfoXML);
         $json = @json_encode($xml);
         $info = @json_decode($json, true);
+        if(trim(strtoupper($info['plugin']['language'])) == "OSC")
+            throw new Exception("Can't get the main class from an OSC plugin!");
         return $info['plugin']['main_class'];
     }
     
@@ -177,11 +181,30 @@ class Plugin {
         $xml = @simplexml_load_file($paramInfoXML);
         $json = @json_encode($xml);
         $info = @json_decode($json, true);
+        if(trim(strtoupper($info['plugin']['language'])) == "OSC")
+             throw new Exception("Can't get the file from an OSC plugin using this method!");
         $path = dirname($paramInfoXML) . '/' . $info['plugin']['php_file'] . '.php';
         if(file_exists($path)) return $path;
         else if (file_exists('../' . $path)) return '../' . $path;
         else if (file_exists(str_replace("orongo-admin/", "", $path))) return str_replace("orongo-admin/", "", $path);
         else throw new Exception("Couldn't find the PHP file (info.xml: " . $paramInfoXML . ")");
+    }
+    
+    /**
+     * @param String $paramInfoXML path of info.xml
+     * @return String OSC path of plugin
+     */
+    public static function getOSCFile($paramInfoXML){
+        $xml = @simplexml_load_file($paramInfoXML);
+        $json = @json_encode($xml);
+        $info = @json_decode($json, true);
+        if(trim(strtoupper($info['plugin']['language'])) == "PHP")
+            throw new Exception("Can't get the file from a PHP plugin using this method!");
+        $path = dirname($paramInfoXML) . '/' . $info['plugin']['osc_file'] . '.osc';
+        if(file_exists($path)) return $path;
+        else if (file_exists('../' . $path)) return '../' . $path;
+        else if (file_exists(str_replace("orongo-admin/", "", $path))) return str_replace("orongo-admin/", "", $path);
+        else throw new Exception("Couldn't find the OSC file (info.xml: " . $paramInfoXML . ")");
     }
     
     /**
@@ -215,34 +238,67 @@ class Plugin {
                 if(!file_exists('../' . $infoXML)) continue;
                 $infoXML = '../' . $infoXML;
             }
-            try{
-               $phpFile = self::getPHPFile($infoXML);
-            }catch(Exception $e){ 
-                $msgbox = new MessageBox();
-                $msgbox->bindException($e);
-                die($msgbox->getImports() . $msgbox->toHTML());
-            }
-            require_once($phpFile);
-            try{
-               $className = self::getMainClass($infoXML);
-               $accessKey = self::getAccessKey($infoXML);
-               $authKey = md5(rand() . microtime() . rand());
-               self::$authKeys[$authKey] = $accessKey;
-               $plugin = new $className(array("time" => time(), "auth_key" => $authKey));
-               if(($plugin instanceof OrongoPluggableObject) == false){
-                   throw new ClassLoadException("Invalid plugin object!");
-               }
-               $plugin->setXMLFile($infoXML);
-               if(in_array($plugin->getName(), $loadedPluginNames))
-                       throw new ClassLoadException("There is already a plugin loaded with this name: " . $plugin->getName());
-               $plugins[$count] = $plugin; 
-               $count++;
-            }catch(IllegalMemoryAccessException $ie){
-                throw new ClassLoadException("Plugin tried to access illegal memory. Unable to load plugin: <br /> " . $phpFile);
-                continue;
-            }catch(Exception $e){
-                throw new ClassLoadException("Unable to load plugin: <br /> " . $phpFile . "<br/><br /><strong>Exception</strong><br />" . $e->getMessage());
-                continue;
+            $xml = @simplexml_load_file($infoXML);
+            $json = @json_encode($xml);
+            $info = @json_decode($json, true);
+            if(in_array($info['plugin']['name'], $loadedPluginNames))
+                    throw new ClassLoadException("There is already a plugin loaded with this name: " . $info['plugin']['name']);
+            switch(trim(strtoupper($info['plugin']['language']))){
+                case "PHP":
+                    try{
+                        $phpFile = self::getPHPFile($infoXML);
+                    }catch(Exception $e){ 
+                        $msgbox = new MessageBox();
+                        $msgbox->bindException($e);
+                        die($msgbox->getImports() . $msgbox->toHTML());
+                    }
+                    require_once($phpFile);
+                    try{
+                        $className = $info['plugin']['main_class'];
+                        $accessKey = $info['plugin']['access_key'];
+                        $authKey = md5(rand() . microtime() . rand());
+                        self::$authKeys[$authKey] = $accessKey;
+                        $plugin = new $className(array("time" => time(), "auth_key" => $authKey));
+                        if(($plugin instanceof OrongoPluggableObject) == false){
+                            throw new ClassLoadException("Invalid plugin object!");
+                        }
+                        $plugin->setXMLFile($infoXML);
+                        $plugins[$count] = $plugin; 
+                        $count++;
+                    }catch(IllegalMemoryAccessException $ie){
+                        throw new ClassLoadException("Plugin tried to access illegal memory. Unable to load plugin (php): <br /> " . $phpFile);
+                        continue;
+                    }catch(Exception $e){
+                        throw new ClassLoadException("Unable to load plugin (php): <br /> " . $phpFile . "<br/><br /><strong>Exception</strong><br />" . $e->getMessage());
+                        continue;
+                    }
+                    break;
+                case "OSC":
+                    try{
+                        $oscFile = self::getOSCFile($infoXML);
+                    }catch(Exception $e){ 
+                        $msgbox = new MessageBox();
+                        $msgbox->bindException($e);
+                        die($msgbox->getImports() . $msgbox->toHTML());
+                    }
+                    try{
+                        $accessKey = $info['plugin']['access_key'];
+                        $authKey = md5(rand() . microtime() . rand());
+                        self::$authKeys[$authKey] = $accessKey;
+                        $pluginBridge = new OrongoScriptPluginBridge(array("osc_file" => $oscFile, "time" => time(), "auth_key" => $authKey));
+                        $pluginBridge->setXMLFile($infoXML);
+                        $plugins[$count] = $plugin;
+                        $count++;
+                    }catch(OrongoScriptParseException $pe){
+                        throw new ClassLoadException("Unable to load plugin (osc): <br /> " . $oscFile . "<br/><br/><strong>OrongoScriptParseException</strong><br />". $pe->getMessage());
+                    }catch(Exception $e){
+                        throw new ClassLoadException("Unable to load plugin (osc): <br /> " . $oscFile . "<br/><br /><strong>Exception</strong><br />" . $e->getMessage());
+                        continue;
+                    }
+                    break;
+                default:
+                    throw new ClassLoadException("Invalid plugin language: " . $info['plugin']['language'] . "!");
+                    break;
             }
         }
         return $plugins;

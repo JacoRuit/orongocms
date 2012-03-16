@@ -2,10 +2,9 @@
 
 <root>
     <plugin>
-        <name>Example Plugin</name>
-        <language>PHP</language>
-        <php_file>ExamplePHP</php_file>
-        <main_class>ExampleClass</main_class>
+        <name>Example OSC Plugin</name>
+        <language>OSC</language>
+        <osc_file>ExampleOSC</osc_file>
         <description>Hello world!</description>
         <access_key>2348axl20</access_key>
         <author>
