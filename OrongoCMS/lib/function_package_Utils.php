@@ -16,14 +16,6 @@ function orongoURL($paramFile){
     return $url;
 }
 
-/**
- * Shoftcut for raising events 
- * @param String $paramAction Any action
- * @param array $paramEventArgs Event arguments
- */
-function raiseEvent($paramAction, $paramEventArgs){
-    OrongoEventManager::raiseEvent(new OrongoEvent($paramAction, $paramEventArgs));
-}
 
 
 ?>

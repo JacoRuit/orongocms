@@ -11,7 +11,12 @@ class Page {
     private $title;
     private $content;
     
-    #   constructors
+    
+    #   events
+    public static $EditEvent;
+    public static $DeleteEvent;
+    public static $CreateEvent;
+    
     /**
      * Construct Page Object
      * 
@@ -55,7 +60,7 @@ class Page {
         ), "`id`=%i", $this->id);
         $this->title = $paramTitle;
         $by = getUser() == null ? -1 : getUser()->getID();
-        raiseEvent('page_edit', array("page_id" => $this->id, "by" => $by));
+        self::$EditEvent->invoke(array(array("page_id" => $this->id, "by" => $by)));
     }
     
     #   contents
@@ -74,7 +79,7 @@ class Page {
             "content" => $paramContent
         ), "`id`=%i", $this->id);
         $by = getUser() == null ? -1 : getUser()->getID();
-        raiseEvent('page_edit', array("page_id" => $this->id, "by" => $by));
+        self::$EditEvent->invoke(array(array("page_id" => $this->id, "by" => $by)));
     }
     
     /**
@@ -83,7 +88,7 @@ class Page {
     public function delete(){
         getDatabase()->delete("pages", "id=%i", $this->id);
         $by = getUser() == null ? -1 : getUser()->getID();
-        raiseEvent('page_deleted', array("page_id" => $this->id, "by" => $by));
+        self::$DeleteEvent->invoke(array(array("page_id" => $this->id, "by" => $by)));
     }
     
     /**
@@ -117,7 +122,7 @@ class Page {
             "title" => $paramName
         ));
         $by = getUser() == null ? -1 : getUser()->getID();
-        raiseEvent('page_created', array("page_id" => $newID, "by" => $by));
+        self::$CreateEvent->invoke(array(array("page_id" => $newID, "by" => $by)));
         return new Page($newID);
     }
     
@@ -129,6 +134,15 @@ class Page {
     public static function getPageID($paramTitle){
         $row = getDatabase()->queryFirstRow("SELECT `id` FROM `pages` WHERE `title` LIKE %s", $paramTitle);
         return $row['id'];
+    }
+    
+    /**
+     * Inits all the events 
+     */
+    public static function init(){
+        self::$CreateEvent = new OrongoEvent(function($eventArgs){});
+        self::$DeleteEvent = new OrongoEvent(function($eventArgs){});
+        self::$EditEvent = new OrongoEvent(function($eventArgs){});
     }
 }
 
