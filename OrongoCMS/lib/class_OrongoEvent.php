@@ -28,10 +28,10 @@ class OrongoEvent {
     }
     
     /**
-     * Adds the anonymous function to the event
+     * Subscribes the anonymous function to the event
      * @param Closure $paramFunction the anonymous function to add
      */
-    public function add($paramFunction){
+    public function subscribe($paramFunction){
         if(($paramFunction instanceof Closure) == false)
             throw new IllegalArgumentException("Invalid argument, Closure (anonymous function) expected!");
         $rf = new ReflectionFunction($paramFunction); 
@@ -41,7 +41,7 @@ class OrongoEvent {
     }
     
     /**
-     * Invokes all the functions which were added to the event
+     * Invokes all the functions which were subscribed to the event
      * @param array $paramArgs the args for the function (optional)
      */
     public function __invoke($paramArgs = null){
