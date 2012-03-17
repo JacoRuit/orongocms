@@ -24,21 +24,21 @@ class OrongoDefaultEventHandlers {
             "comment_created" => "onCommentCreated",
             "comment_deleted" => "onCommentDeleted",
         ), new OrongoDefaultEventHandlers());**/
-        Article::$CreateEvent->add(function($args){
+        Article::$CreateEvent->subscribe(function($args){
             $admins = orongo_query("action=fetch&object=user&max=100000&where=user.rank:admin");
             foreach($admins as $user){
                 if(($user instanceof User) == false) continue;
                 $user->notify(l("Article created"), l("Article was created by", User::getUserName($args['by'])));
             }
         });
-        Article::$EditEvent->add(function($args){
+        Article::$EditEvent->subscribe(function($args){
             $admins = orongo_query("action=fetch&object=user&max=100000&where=user.rank:admin");
             foreach($admins as $user){
                 if(($user instanceof User) == false) continue;
                 $user->notify(l("Article edited"), l("Article was edited by", User::getUserName($args['by'])));
             }
         });
-        Article::$DeleteEvent->add(function($args){
+        Article::$DeleteEvent->subscribe(function($args){
             $admins = orongo_query("action=fetch&object=user&max=100000&where=user.rank:admin");
             foreach($admins as $user){
                 if(($user instanceof User) == false) continue;
@@ -46,21 +46,21 @@ class OrongoDefaultEventHandlers {
             }
         });
         
-        Page::$CreateEvent->add(function($args){
+        Page::$CreateEvent->subscribe(function($args){
             $admins = orongo_query("action=fetch&object=user&max=100000&where=user.rank:admin");
             foreach($admins as $user){
                 if(($user instanceof User) == false) continue;
                 $user->notify(l("Page created"), l("Page was created by", User::getUserName($args['by'])));
             }
         });
-        Page::$EditEvent->add(function($args){
+        Page::$EditEvent->subscribe(function($args){
             $admins = orongo_query("action=fetch&object=user&max=100000&where=user.rank:admin");
             foreach($admins as $user){
                 if(($user instanceof User) == false) continue;
                 $user->notify(l("Page edited"), l("Page was edited by", User::getUserName($args['by'])));
             }
         });
-        Page::$DeleteEvent->add(function($args){
+        Page::$DeleteEvent->subscribe(function($args){
             $admins = orongo_query("action=fetch&object=user&max=100000&where=user.rank:admin");
             foreach($admins as $user){
                 if(($user instanceof User) == false) continue;
@@ -68,7 +68,7 @@ class OrongoDefaultEventHandlers {
             }
         });
         
-        User::$CreateEvent->add(function($args){
+        User::$CreateEvent->subscribe(function($args){
             $newUser = new User($args['user_id']);
             $admins = orongo_query("action=fetch&object=user&max=100000&where=user.rank:admin");
             foreach($admins as $user){
@@ -76,14 +76,14 @@ class OrongoDefaultEventHandlers {
                 $user->notify(l("User created"), l("Just registered", $newUser->getName()));
             }
         });
-        User::$EditEvent->add(function($args){
+        User::$EditEvent->subscribe(function($args){
             $admins = orongo_query("action=fetch&object=user&max=100000&where=user.rank:admin");
             foreach($admins as $user){
                 if(($user instanceof User) == false) continue;
                 $user->notify(l("User edited"), l("User was edited by", User::getUserName($args['by'])));
             }
         });
-        User::$DeleteEvent->add(function($args){
+        User::$DeleteEvent->subscribe(function($args){
             $admins = orongo_query("action=fetch&object=user&max=100000&where=user.rank:admin");
             foreach($admins as $user){
                 if(($user instanceof User) == false) continue;
@@ -91,14 +91,14 @@ class OrongoDefaultEventHandlers {
             }
         });
         
-        Comment::$CreateEvent->add(function($args){
+        Comment::$CreateEvent->subscribe(function($args){
             $admins = orongo_query("action=fetch&object=user&max=100000&where=user.rank:admin");
             foreach($admins as $user){
                 if(($user instanceof User) == false) continue;
                 $user->notify(l("Comment posted"), l("Comment was posted by", User::getUserName($args['by'])));
             }
         });
-        Comment::$DeleteEvent->add(function($args){
+        Comment::$DeleteEvent->subscribe(function($args){
             $admins = orongo_query("action=fetch&object=user&max=100000&where=user.rank:admin");
             foreach($admins as $user){
                 if(($user instanceof User) == false) continue;
