@@ -18,7 +18,7 @@ function load($paramLibFolder){
     $orongo_functions = array('orongo_query', 'handleSessions', 'l' , 'setCurrentPage', 'setDatabase', 'setDisplay', 'setLanguage', 'setMenu', 'setPlugins', 'setStyle', 'setUser');
     $orongo_interfaces = array('IHTMLConvertable', 'IJSConvertable', 'IOrongoPlugin', 'IOrongoStyle', 'IOrongoTerminalPlugin', 'IStorable');
     $orongo_abstracts = array('OrongoDisplayableObject', 'OrongoPluggableObject', 'OrongoFrontendObject');
-    $orongo_classes = array('AjaxAction' ,'CommentPoster', 'CommentLoader', 'Article', 'Cache', 'Comment', 'Database', 'Display','Issue', 'IssueTracker', 'Language', 'MailFactory', 'Menu', 'MessageBox','OrongoDefaultEventHandlers', 'OrongoEvent', 'OrongoEventManager', 'OrongoNotifier', 'OrongoNotification', 'OrongoQuery', 'OrongoQueryHandler', 'OrongoTerminal', 'OrongoUpdateChecker', 'Page', 'Plugin', 'Security', 'Session', 'Settings', 'Storage', 'Style', 'User');
+    $orongo_classes = array('AjaxAction' ,'CommentPoster', 'CommentLoader', 'Article', 'Cache', 'Comment', 'Database', 'Display','Issue', 'IssueTracker', 'Language', 'MailFactory', 'Menu', 'MessageBox','OrongoDefaultEventHandlers', 'OrongoEvent', 'OrongoNotifier', 'OrongoNotification', 'OrongoQuery', 'OrongoQueryHandler', 'OrongoTerminal', 'OrongoUpdateChecker', 'Page', 'Plugin', 'Security', 'Session', 'Settings', 'Storage', 'Style', 'User');
     $orongo_exceptions = array('ClassLoadException', 'IllegalArgumentException', 'IllegalMemoryAccessException', 'OrongoScriptParseException', 'QueryException');
     $orongo_function_packages = array('Utils');
     $orongo_frontend_objects = array('AdminFrontend', 'ArchiveFrontend', 'ErrorFrontend', 'PageFrontend', 'IndexFrontend', 'ArticleFrontend');
@@ -89,7 +89,10 @@ function load($paramLibFolder){
             require $path;
         }
     }
-    OrongoEventManager::init();
+    Article::init();
+    User::init();
+    Page::init();
+    Comment::init();
 
 }
 

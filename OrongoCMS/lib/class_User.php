@@ -16,9 +16,12 @@ class User {
     private $name;
     private $activateStatus;
 
+    #   events
+    public static $EditEvent;
+    public static $DeleteEvent;
+    public static $CreateEvent;
     
     
-    #   constructors
     /**
      * Create User Object
      * 
@@ -93,7 +96,7 @@ class User {
         ), "id = %i", $this->id);
         $this->rank = $paramRank;
         $by = getUser() == null ? -1 : getUser()->getID();
-        raiseEvent('user_edit', array("user_id" => $this->id, "by" => $by));
+        self::$EditEvent->invoke(array(array("user_id" => $this->id, "by" => $by)));
     }
     
     
@@ -116,7 +119,7 @@ class User {
         ), "`id`=%i", $this->id);
         $this->email = $paramEmail;
         $by = getUser() == null ? -1 : getUser()->getID();
-        raiseEvent('user_edit', array("user_id" => $this->id, "by" => $by));
+        self::$EditEvent->invoke(array(array("user_id" => $this->id, "by" => $by)));
     }
     
     
@@ -138,7 +141,7 @@ class User {
         ), "`id`=%i", $this->id);
         $this->name = $paramName;
         $by = getUser() == null ? -1 : getUser()->getID();
-        raiseEvent('user_edit', array("user_id" => $this->id, "by" => $by));
+        self::$EditEvent->invoke(array(array("user_id" => $this->id, "by" => $by)));
     }
     
     #   activateStatus
@@ -155,7 +158,7 @@ class User {
     public function delete(){
         getDatabase()->delete("users", "id=%i", $this->id);
         $by = getUser() == null ? -1 : getUser()->getID();
-        raiseEvent('user_deleted', array("user_id" => $this->id, "by" => $by));
+        self::$DeleteEvent->invoke(array(array("user_id" => $this->id, "by" => $by)));
     }
     
     /**
@@ -252,7 +255,7 @@ class User {
         ));
         if($newID != self::getLastUserID()) throw new Exception("Account not created!");
         $by = getUser() == null ? -1 : getUser()->getID();
-        raiseEvent('user_created', array("user_id" => $newID, "by" => $by));
+        self::$CreateEvent->invoke(array(array("user_id" => $newID, "by" => $by)));
         return new User($newID);
     }
     
@@ -383,6 +386,15 @@ class User {
         getDatabase()->query("SELECT `name` FROM `users` WHERE `activated` = '1' AND `id` = %i", $paramID);
         $count = getDatabase()->count();
         return $count > 0;
+    }
+    
+    /**
+     * Inits all the events 
+     */
+    public static function init(){
+        self::$CreateEvent = new OrongoEvent(function($eventArgs){});
+        self::$DeleteEvent = new OrongoEvent(function($eventArgs){});
+        self::$EditEvent = new OrongoEvent(function($eventArgs){});
     }
 }
 

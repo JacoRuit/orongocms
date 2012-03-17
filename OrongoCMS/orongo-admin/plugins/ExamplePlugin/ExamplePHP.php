@@ -16,7 +16,7 @@ class ExampleClass extends OrongoPluggableObject{
         require 'TerminalPlugin.php';
         Plugin::hookTerminalPlugin(new TerminalPlugin());
         $stored = Plugin::getSettings($args['auth_key']);
-        OrongoEventManager::addEventHandler('article_edit', $this, 'onArticleEdit');
+
         //Access the settings in the array.
         if(isset($stored['example_setting_2'] ) && $stored['example_setting_2']){
             $this->injectHTML = true;
@@ -47,11 +47,7 @@ class ExampleClass extends OrongoPluggableObject{
     public function onInstall(){
         
     }
-    
-    public function onArticleEdit($eventArgs){
-        $msgBox = new MessageBox($eventArgs['by']);
-        getDisplay()->addObject($msgBox);
-    }
+
     
 }
 

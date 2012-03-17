@@ -14,6 +14,10 @@ class Comment implements IHTMLConvertable {
     private $authorID;
     private $timestamp;
 
+    #   events
+    public static $DeleteEvent;
+    public static $CreateEvent;
+    
     
     /**
      * Construct Comment Object
@@ -98,7 +102,7 @@ class Comment implements IHTMLConvertable {
     public function delete(){
         getDatabase()->delete("comments","id=%i", $this->id);
         $by = getUser() == null ? -1 : getUser()->getID();
-        raiseEvent('comment_deleted', array("comment_id" => $this->id, "by" => $by));
+        self::$DeleteEvent->invoke(array(array("comment_id" => $this->id, "by" => $by)));
     }
     
     /**
@@ -139,7 +143,7 @@ class Comment implements IHTMLConvertable {
            "timestamp" => time()
         ));
         $by = getUser() == null ? -1 : getUser()->getID();
-        raiseEvent('comment_created', array("comment_id" => $newID, "by" => $by));
+        self::$CreateEvent->invoke(array(array("comment_id" => $newID, "by" => $by)));
         return new Comment($newID);
     }
     
@@ -152,6 +156,14 @@ class Comment implements IHTMLConvertable {
         return getDatabase()->count();
     }
     
+    /**
+     * Inits all the events 
+     */
+    public static function init(){
+        self::$CreateEvent = new OrongoEvent(function($eventArgs){});
+        self::$DeleteEvent = new OrongoEvent(function($eventArgs){});
+
+    }
 
 }
 

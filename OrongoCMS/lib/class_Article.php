@@ -15,6 +15,12 @@ class Article implements IHTMLConvertable {
     private $date;
     private $tags;
 
+    #   events
+    public static $EditEvent;
+    public static $DeleteEvent;
+    public static $CreateEvent;
+    
+    
     /**
      * Construct Article Object
      * 
@@ -39,7 +45,6 @@ class Article implements IHTMLConvertable {
         try{
             $this->author = new User($this->authorID);
         }catch(Exception $e){ $this->author = null; }
-        
     }
     
 
@@ -70,7 +75,7 @@ class Article implements IHTMLConvertable {
         ), "`id` = %i", $this->id);
         $this->title = $paramTitle;
         $by = getUser() == null ? -1 : getUser()->getID();
-        raiseEvent('article_edit', array("article_id" => $this->id, "by" => $by));
+        self::$EditEvent->invoke(array(array("article_id" => $this->id, "by" => $by)));
     }
     
     #tags
@@ -99,7 +104,7 @@ class Article implements IHTMLConvertable {
             "tags" => $tagsForDB
         ), "`id` = %i", $this->id);
         $by = getUser() == null ? -1 : getUser()->getID();
-        raiseEvent('article_edit', array("article_id" => $this->id, "by" => $by));
+        self::$EditEvent->invoke(array(array("article_id" => $this->id, "by" => $by)));
     }
     
     
@@ -118,7 +123,7 @@ class Article implements IHTMLConvertable {
         getDatabase()->update("articles", array("content" => $paramContent), "id=%i", $this->id);
         $this->content = $paramContent;
         $by = getUser() == null ? -1 : getUser()->getID();
-        raiseEvent('article_edit', array("article_id" => $this->id, "by" => $by));
+        self::$EditEvent->invoke(array(array("article_id" => $this->id, "by" => $by)));
     }
     
     
@@ -159,7 +164,7 @@ class Article implements IHTMLConvertable {
     public function delete(){
         getDatabase()->delete("articles", "id=%i", $this->id);
         $by = getUser() == null ? -1 : getUser()->getID();
-        raiseEvent('article_deleted', array("article_id" => $this->id, "by" => $by));
+        self::$DeleteEvent->invoke(array(array("article_id" => $this->id, "by" => $by)));
     }
     
    
@@ -245,7 +250,7 @@ class Article implements IHTMLConvertable {
             "date" => getDatabase()->sqleval("CURDATE()")
         ));
         $by = getUser() == null ? -1 : getUser()->getID();
-        raiseEvent('article_created', array("article_id" => $newID, "by" => $by));
+        self::$CreateEvent->invoke(array(array("article_id" => $newID, "by" => $by)));
         return new Article($newID);
     }
     
@@ -266,6 +271,15 @@ class Article implements IHTMLConvertable {
     public static function getArticleCount(){
         getDatabase()->query("SELECT `id` FROM `articles`");
         return getDatabase()->count();
+    }
+    
+    /**
+     * Inits all the events 
+     */
+    public static function init(){
+        self::$CreateEvent = new OrongoEvent(function($eventArgs){});
+        self::$DeleteEvent = new OrongoEvent(function($eventArgs){});
+        self::$EditEvent = new OrongoEvent(function($eventArgs){});
     }
 }
 
