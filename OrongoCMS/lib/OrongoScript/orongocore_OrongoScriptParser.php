@@ -23,12 +23,16 @@ class OrongoScriptParser {
     
     private $onlyFunctionSpaces = false;
     
+    private static $registeredLineHandlers = array();
+    
     /**
      * @var OrongoScriptRuntime
      */
     private $runtime;
 
     private $ifs;
+    
+    private $foreachs;
     
     /**
      * Starts the parser
@@ -59,14 +63,24 @@ class OrongoScriptParser {
         else $this->runtime = new OrongoScriptRuntime();
         if(is_array($paramTempVars))
             foreach($paramTempVars as $tempName => $tempVar){
-                $this->runtime->letTempVar($tempName, $tempVar);
+                if(is_array($tempVar))
+                    foreach($tempVar as $tempField => $tempV){
+                        $this->runtime->letTempVar($tempName, $tempV, $tempField);
+                    }
+                else
+                    $this->runtime->letTempVar($tempName, $tempVar);
             }  
         if(is_array($paramGlobalVars))
             foreach($paramGlobalVars as $gName => $gVar){
-                $this->runtime->letGlobalVar($gName, $gVar);
+                if(is_array($gVar))
+                    foreach($gVar as $gField => $gV)
+                        $this->runtime->letGlobalVar($gName, $gV, $gField);
+                else
+                    $this->runtime->letGlobalVar($gName, $gVar);
             }
         $lines = explode(";", $this->orongoScript);
         $this->lines = $lines;
+        $this->foreachs = array();
         $this->ifs = array();
         foreach($this->lines as &$line){
             $line = trim($line);
@@ -135,8 +149,12 @@ class OrongoScriptParser {
         if($this->lineparsed) return;
         $line =  trim($this->lines[$this->getCurrentLine()]);
         
-        if($this->definingFunction != null && $line != "end function" )
+        if(!empty($this->foreachs) && $line != "end foreach")
+            $this->foreachs[count($this->foreachs) - 1]['logic'] .= $line . ";";
+        
+        else if($this->definingFunction != null && $line != "end function" )
             $this->definingFunction["logic"] .= $line . ";";
+        
         
         else if($this->runtime->getCurrentSpace() == null && 
                 !$this->lineStartsWith("import") && 
@@ -233,7 +251,13 @@ class OrongoScriptParser {
             if(count($toLet) != 2) throw new OrongoScriptParseException("Invalid let at line " . $this->getCurrentLine(true));
             if(empty($toLet[0])) throw new OrongoScriptParseException("Invalid let (empty variable name) at line " . $this->getCurrentLine(true));
             if(empty($toLet[1])) throw new OrongoScriptParseException("Invalid let (empty value) at line " . $this->getCurrentLine(true));
-            $this->runtime->letVar(trim($toLet[0]),$this->parseVar($toLet[1])->get());
+            $toLet[0] = trim($toLet[0]);
+            $toLet[0] = stristr($toLet[0], ":") ? $toLet[0] : $toLet[0] . ":__main__";
+            $field = explode(":", strrev($toLet[0]), 2);
+            $name = trim(strrev($field[1]));
+            $field = trim(strrev($field[0]));
+            $this->runtime->letVar($name, $this->parseVar($toLet[1])->get(), $field);
+            
         }
         
         #DO
@@ -314,8 +338,51 @@ class OrongoScriptParser {
             );
         }
         
-        #NOT RECOGNIZED
-        else throw new OrongoScriptParseException("Invalid characters at line " . $this->getCurrentLine(true));
+        
+        #FOREACH
+        else if($this->lineStartsWith("foreach")){
+            $line = trim(preg_replace("/foreach/", "", $line, 1));
+            if(!stristr($line , ")") || !stristr($line, "("))
+                    throw new OrongoScriptParseException("Invalid foreach loop: " . $line);
+            if($line[0] != "(" || $line[strlen($line) - 1] != ")") 
+                throw new OrongoScriptParseException("Invalid foreach loop: " . $line);
+            $line[strlen($line) - 1] = ""; 
+            $line[0] = "";
+            if(!stristr($line, "as")) throw new OrongoScriptParseException("Invalid foreach loop: " . $line);
+            $exp = explode("as", $line, 2);
+            $var = trim($exp[0]);
+            $asVar = trim($exp[1]);
+            $var = $this->runtime->getRawVar($var);
+            $this->foreachs[end($this->foreachs)] = array(
+                'var' => $var,
+                'asVar' => $asVar,
+                'logic' => ""
+            );
+        }
+        else if($line == "end foreach"){
+            $currentForeach = end($this->foreachs);
+            foreach($currentForeach['var'] as $as){
+                $p = new OrongoScriptParser($currentForeach['logic']);
+                $p->startParser($this->runtime, null, array ( $currentForeach['asVar'] => $as->get() ) );
+                $this->runtime->setVars($p->getRuntime()->getVars());
+            }
+            unset($this->foreachs[count($this->foreachs) - 1]);
+        }
+        
+        
+        #NOT RECOGNIZED & REG. HANDLERS
+        else{
+            $done = false;
+            foreach(self::$registeredLineHandlers as $statement =>  $pM){
+                if($this->lineStartsWith($statement)){
+                    call_user_method_array($pM[0], $pM[1], array($line, &$this));
+                    $done = true;
+                    break;
+                }
+            }
+            if(!$done)
+                throw new OrongoScriptParseException("Invalid characters at line: " . $line);
+        }
  
     }
     
@@ -333,7 +400,6 @@ class OrongoScriptParser {
     public function getRuntime(){
         return $this->runtime;
     }
-    
     
     /**
      * Parses a function
@@ -370,7 +436,11 @@ class OrongoScriptParser {
         $stringRev = strrev($string);
         if(stristr($string, '"') && substr_count($string, '"') >= 2 && strpos($string, '"') == 0 && strpos($stringRev, '"') == 0)
             return new OrongoVariable(preg_replace('/"/', "",strrev(preg_replace('/"/',"", $stringRev, 1))));
-        if($this->runtime->isVar($string)) return $this->runtime->getVar($string);
+        $tString = stristr($string, ":") ? $string : $string . ":__main__";
+        $field = explode(":", strrev($tString), 2);
+        $name = trim(strrev($field[1]));
+        $field = trim(strrev($field[0]));
+        if($this->runtime->isVar($name, $field)) return $this->runtime->getVar($name, $field);
         if(stristr($string, ")") && stristr($string, ")")){
            try{
                $f = $this->parseFunction($string);
@@ -378,6 +448,7 @@ class OrongoScriptParser {
            }catch(Exception $e){ if($e->getCode() >= 0) throw $e; } 
         }
         if(is_numeric($string)) return new OrongoVariable(intval($string));
+        
         throw new OrongoScriptParseException("Can not parse variable. Invalid string: '" . $string . "'");
     }
     
@@ -421,6 +492,18 @@ class OrongoScriptParser {
         throw new OrongoScriptParseException("Invalid if statement!");
     }
     
+    
+    /**
+     * Adds a line handler  
+     * @param String $paramStatement where the line has to start with
+     * @param String $paramMethodName the name of the method to call
+     * @param object/string $paramObject object containing method name or name of class if you're adding static method      
+     */
+    public static function registerLineHandler($paramStatement, $paramMethodName, $paramObject){
+        if(array_key_exists($paramStatement, self::$registeredLineHandler))
+                throw new Exception("There is already a line handler registered for this statement!");
+        self::$registeredLineHandlers[$paramStatement] = array($paramMethodName, $paramObject);
+    }
  
 }
 

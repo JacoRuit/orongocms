@@ -1,6 +1,6 @@
 import Orongo.IO.Output;
 import Orongo.Display.MessageBox;
-import Orongo.Core.String;
+import Orongo.Vars.String;
 import Orongo.Display.Template;
 
 
@@ -16,11 +16,19 @@ space ExampleOSC;
     end function;
     
 
+
     let message = GetMessage();
     let messageOfToday = String.Concat("Message of today: %s", message);
     let welcomeText = String.Concat("Hi %s", "Jaco");
     do FastMessageBox(welcomeText, "OrongoScript rocks!");
     let HTML = String.Concat("<div>%s</div>", messageOfToday);
     do Template.AddHTML(HTML, "before_article");
-
+    let B:A = "apje";
+    let B = "d";
+    foreach(B as lol);
+        do Output.Print(lol);
+    end foreach;
+    
+  
+    
 end space;
