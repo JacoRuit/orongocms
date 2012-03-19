@@ -10,7 +10,7 @@ class OrongoScriptOutput extends OrongoPackage {
         
     }
     public function getFunctions() {
-        return array(new FuncPrint());
+        return array(new FuncPrint(), new FuncDie());
     }
 }
 
@@ -44,5 +44,35 @@ class FuncPrint extends OrongoFunction {
         return "Output";
     }
 }
+
+/**
+ * Die OrongoScript function
+ *
+ * @author Jaco Ruit
+ */
+class FuncDie extends OrongoFunction {
+    
+
+    public function __invoke($args) {
+        $str = "";
+        foreach($args as $arg){
+            if(is_object($arg)){
+                $str .= "Object";
+                continue;
+            }
+            $str .= $arg;
+        }
+        die($str);
+    }
+
+    public function getShortname() {
+        return "Die";
+    }
+    
+    public function getSpace(){
+        return "Output";
+    }
+}
+
 
 ?>

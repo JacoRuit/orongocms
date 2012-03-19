@@ -1,16 +1,17 @@
 <?php
 
-
 /**
  * OrongoEvent Class
  *
- * @author Ruit
+ * @author Jaco Ruit
  */
 class OrongoEvent {
     
     private $invoker;
     private $signatureParamCount;
     private $functions;
+    private $methods;
+    private static $OSevents = array(); 
     
     /**
      * Init the event 
@@ -41,6 +42,18 @@ class OrongoEvent {
     }
     
     /**
+     * Subscribes the method to the event
+     * @param String $paramMethodName the name of the method
+     * @param object/String $paramObject object or the string of the class (static methods) 
+     */
+    public function subscribeMethod($paramMethodName, $paramObject){
+        $rf = new ReflectionMethod($paramObject, $paramMethodName);
+        if(count($rf->getParameters()) != $this->signatureParamCount)
+            throw new IllegalArgumentException("The parameter count of the function you tried to add doesn't match the signature param count.");
+        $this->methods[count($this->methods)] = array ( 0 => $paramMethodName , 1 => $paramObject);
+    }
+    
+    /**
      * Invokes all the functions which were subscribed to the event
      * @param array $paramArgs the args for the function (optional)
      */
@@ -60,8 +73,8 @@ class OrongoEvent {
             throw new Exception("Can't invoke an event outside a class!");
         if($this->invoker != $backtrace[1]['class'])
             throw new Exception("Can't invoke the event from a different class than the class where it was initted.");
+        $fixedArgs = array();
         if($paramArgs != null){
-            $fixedArgs = array();
             $c = 0;
             foreach($paramArgs as $arg){
                 if($c >= $this->signatureParamCount) break;
@@ -73,8 +86,12 @@ class OrongoEvent {
             if(($function instanceof Closure) == false) continue;
             call_user_func_array($function, $fixedArgs);
         }
+        foreach($this->methods as $method){
+            call_user_method_array($method[0], $method[1], $fixedArgs);
+        }
     }
     
+  
 }
 
 ?>

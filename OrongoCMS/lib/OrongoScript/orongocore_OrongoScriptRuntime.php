@@ -31,12 +31,14 @@ class OrongoScriptRuntime {
      * This var is global cant be redefined
      * @param var $paramName variable name
      * @param var $paramVar variable 
+     * @param String $paramField field of variable
      */
-    public function letGlobalVar($paramName, $paramVar){
+    public function letGlobalVar($paramName, $paramVar, $paramField = "__main__"){
         $tolet = "";
         if($paramVar instanceof OrongoVariable) $tolet = $paramVar;
         else $tolet = new OrongoVariable($paramVar);
-        $this->globalVars[$paramName] = $tolet;
+        if(!isset($this->globalVars[$paramName])) $this->globalVars[$paramName] = array();
+        $this->globalVars[$paramName][$paramField] = $tolet;
     }
     
     /**
@@ -45,48 +47,72 @@ class OrongoScriptRuntime {
      * Excluded from the variables array.
      * @param var $paramName variable name
      * @param var $paramVar variable 
+     * @param String $paramField field of variable
      */
-     public function letTempVar($paramName, $paramVar){
+     public function letTempVar($paramName, $paramVar, $paramField = "__main__"){
         $tolet = "";
         if($paramVar instanceof OrongoVariable) $tolet = $paramVar;
         else $tolet = new OrongoVariable($paramVar);
-        $this->tempVars[$this->currentSpace][$paramName] = $tolet;
+        if(!isset($this->tempVars[$this->currentSpace][$paramName])) $this->tempVars[$this->currentSpace][$paramName] = array();
+        $this->tempVars[$this->currentSpace][$paramName][$paramField] = $tolet;
     }
     
         
     /**
      * @param var $paramName variable name
      * @param var $paramVar variable
+     * @param String $paramField field of variable
      */
-    public function letVar($paramName, $paramVar){
+    public function letVar($paramName, $paramVar, $paramField = "__main__"){
         if(array_key_exists($paramName, $this->globalVars))
                 throw new OrongoScriptParseException("Can not redefine global variables!");
         $tolet = "";
         if($paramVar instanceof OrongoVariable) $tolet = $paramVar;
         else $tolet = new OrongoVariable($paramVar);
-        $this->variables[$this->currentSpace][$paramName] = $tolet;
+        if(!isset($this->variables[$this->currentSpace][$paramName])) $this->variables[$this->currentSpace][$paramName] = array();
+        $this->variables[$this->currentSpace][$paramName][$paramField] = $tolet;
     }
     
     /**
      * @param var $paramName variable name
+     * @param String $paramField field of variable
      * @return var Stored Var
      */
-    public function getVar($paramName){ 
-        if(array_key_exists($paramName, $this->globalVars)){
-            if($this->globalVars[$paramName] instanceof OrongoVariable == false) return new OrongoVariable(null);
-            return $this->globalVars[$paramName];
+    public function getVar($paramName, $paramField = "__main__"){ 
+        if(array_key_exists($paramName, $this->globalVars) &&
+           array_key_exists($paramField, $this->globalVars[$paramName])){
+            if($this->globalVars[$paramName][$paramField] instanceof OrongoVariable == false) return new OrongoVariable(null);
+            return $this->globalVars[$paramName][$paramField];
         }
-        else if(array_key_exists($paramName, $this->tempVars[$this->currentSpace])){
-            if($this->tempVars[$this->currentSpace][$paramName] instanceof OrongoVariable == false) return new OrongoVariable(null);
-            return $this->tempVars[$this->currentSpace][$paramName];
+        else if(array_key_exists($paramName, $this->tempVars[$this->currentSpace]) && 
+                array_key_exists($paramField, $this->tempVars[$this->currentSpace][$paramName])){
+            if($this->tempVars[$this->currentSpace][$paramName][$paramField] instanceof OrongoVariable == false) return new OrongoVariable(null);
+            return $this->tempVars[$this->currentSpace][$paramName][$paramField];
         }       
-        else if(array_key_exists($paramName, $this->variables[$this->currentSpace])){
-            if($this->variables[$this->currentSpace][$paramName] instanceof OrongoVariable == false) return new OrongoVariable(null);
-            return $this->variables[$this->currentSpace][$paramName];
+        else if(array_key_exists($paramName, $this->variables[$this->currentSpace]) &&
+                array_key_exists($paramField, $this->variables[$this->currentSpace][$paramName])){
+            if($this->variables[$this->currentSpace][$paramName][$paramField] instanceof OrongoVariable == false) return new OrongoVariable(null);
+            return $this->variables[$this->currentSpace][$paramName][$paramField];
         }
+        else
+           throw new OrongoScriptParseException("Unknown variable: " . $paramName . " (" . $paramField . ")");       
+    }
+    
+    /**
+     *@param var $paramName variable name
+     * @return var Stored Var 
+     */
+    public function getRawVar($paramName){ 
+        if(array_key_exists($paramName, $this->globalVars))
+            return $this->globalVars[$paramName];
+        else if(array_key_exists($paramName, $this->tempVars[$this->currentSpace]))
+            return $this->tempVars[$this->currentSpace][$paramName];  
+        else if(array_key_exists($paramName, $this->variables[$this->currentSpace]))
+            return $this->variables[$this->currentSpace][$paramName];
         else
            throw new OrongoScriptParseException("Unknown variable: " . $paramName);       
     }
+    
     
 
     
@@ -97,7 +123,13 @@ class OrongoScriptRuntime {
         return $this->variables;
     }
     
-
+    /**
+     * set vars
+     * @param array $paramVars the stored vars 
+     */
+    public function setVars($paramVars){
+        $this->variables = $paramVars;
+    }
     
     /**
      * @param String $paramSpace Space name 
@@ -208,11 +240,12 @@ class OrongoScriptRuntime {
     /**
      * Checks if an variable was stored with this name
      * @param String $paramName var name
+     * @param String $paramField field of variable
      */
-    public function isVar($paramName){
-        return array_key_exists($paramName, $this->globalVars) ||
-               array_key_exists($paramName, $this->variables[$this->currentSpace]) ||
-               array_key_exists($paramName, $this->tempVars[$this->currentSpace]);
+    public function isVar($paramName, $paramField = "__main__"){
+        return (array_key_exists($paramName, $this->globalVars) && array_key_exists($paramField, $this->globalVars[$paramName]))||
+               (array_key_exists($paramName, $this->variables[$this->currentSpace]) && array_key_exists($paramField, $this->variables[$this->currentSpace][$paramName])) ||
+               (array_key_exists($paramName, $this->tempVars[$this->currentSpace]) && array_key_exists($paramField, $this->tempVars[$this->currentSpace][$paramName]));
     }
     
     /**
