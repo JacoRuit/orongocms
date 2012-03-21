@@ -4,7 +4,7 @@
  *
  * @author Jaco Ruit
  */
-class OrongoScriptCrypto extends OrongoPackage {
+class OrongoScriptMySQL extends OrongoPackage {
     
     public function __construct($runtime) {
         
@@ -25,9 +25,15 @@ class FuncQuery extends OrongoFunction {
     
 
     public function __invoke($args) {
-        getDatabase()->query($args[0], $args[1]);
-        if(count($args) < 1) throw new OrongoScriptParseException("Argument missing for Crypto.MD5()");     
-        return new OrongoVariable(md5($args[0]));
+        if(count($args) < 1) throw new OrongoScriptParseException("Arguments missing for MySQL.Query()");  
+        $query = $args[0];
+        unset($args[0]);
+        $args = count($args) > 1 ? $args : end($args);
+        $rows = getDatabase()->query($query, $args);  
+        foreach($rows as &$row){
+            $row = new OrongoVariable(end($row));
+        }
+        return $rows;
     }
 
     public function getShortname() {

@@ -26,6 +26,8 @@ class OrongoEvent {
         $this->invoker = $backtrace[1]['class'];
         $rf = new ReflectionFunction($paramFunctionSignature); 
         $this->signatureParamCount = count($rf->getParameters());
+        $this->functions = array();
+        $this->methods = array();
     }
     
     /**

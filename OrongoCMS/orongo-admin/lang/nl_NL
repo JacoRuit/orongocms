@@ -28,8 +28,6 @@ LOGOUT:Log uit
 REGISTER:Registreer
 NEW_HERE:Nieuw hier?
 REGISTER_TEXT:Klik %shier%s om te registreren
-FORGOT_PASSWORD:Wachtwoord vergeten?
-FORGOT_PASSWORD_TEXT:Klik %shier%s om een nieuw wachtwoord aan te vragen!
 
 FETCH_ERROR:Er is een fout opgetreden tijdens het ophalen van %s
 ARCHIVE_DATE_ERROR:Foute datum
