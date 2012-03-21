@@ -247,17 +247,18 @@ class OrongoScriptParser {
             }
             $line = trim(preg_replace("/let/", "", $line,1));
             if(!stristr($line, "=")) throw new OrongoScriptParseException("Invalid let at line " . $this->getCurrentLine(true));
-            $toLet = explode("=", $line);
-            if(count($toLet) != 2) throw new OrongoScriptParseException("Invalid let at line " . $this->getCurrentLine(true));
+            $toLet = explode("=", $line, 2);
+            foreach($toLet as &$var){ $var = trim($var); } 
+            if(count($toLet) < 2) throw new OrongoScriptParseException("Invalid let at line " . $this->getCurrentLine(true));
             if(empty($toLet[0])) throw new OrongoScriptParseException("Invalid let (empty variable name) at line " . $this->getCurrentLine(true));
             if(empty($toLet[1])) throw new OrongoScriptParseException("Invalid let (empty value) at line " . $this->getCurrentLine(true));
-            $toLet[0] = trim($toLet[0]);
             $toLet[0] = stristr($toLet[0], ":") ? $toLet[0] : $toLet[0] . ":__main__";
             $field = explode(":", strrev($toLet[0]), 2);
             $name = trim(strrev($field[1]));
             $field = trim(strrev($field[0]));
-            $this->runtime->letVar($name, $this->parseVar($toLet[1])->get(), $field);
-            
+            $var = $this->parseVar($toLet[1]);
+            $var = $var instanceof OrongoVariable ? $var : is_array($var) ? $var : new OrongoVariable(null);
+            $this->runtime->letVar($name, $var, $field);        
         }
         
         #DO
@@ -440,7 +441,7 @@ class OrongoScriptParser {
         $field = explode(":", strrev($tString), 2);
         $name = trim(strrev($field[1]));
         $field = trim(strrev($field[0]));
-        if($this->runtime->isVar($name, $field)) return $this->runtime->getVar($name, $field);
+        if($this->runtime->isVar($name, $field)){ return $this->runtime->getVar($name, $field); }
         if(stristr($string, ")") && stristr($string, ")")){
            try{
                $f = $this->parseFunction($string);
@@ -448,7 +449,8 @@ class OrongoScriptParser {
            }catch(Exception $e){ if($e->getCode() >= 0) throw $e; } 
         }
         if(is_numeric($string)) return new OrongoVariable(intval($string));
-        
+        if($string == "true") return new OrongoVariable(true);
+        if($string == "false") return new OrongoVariable(false);
         throw new OrongoScriptParseException("Can not parse variable. Invalid string: '" . $string . "'");
     }
     

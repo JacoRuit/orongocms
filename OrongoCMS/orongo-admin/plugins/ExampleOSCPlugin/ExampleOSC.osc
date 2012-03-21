@@ -1,8 +1,11 @@
 import Orongo.IO.Output;
 import Orongo.Display.MessageBox;
 import Orongo.Vars.String;
+import Orongo.Vars.VarInfo;
 import Orongo.Display.Template;
-
+import Orongo.Data.MySQL;
+import Orongo.CMS.Articles;
+import Orongo.Plugin.Settings;
 
 space ExampleOSC;
 
@@ -23,12 +26,30 @@ space ExampleOSC;
     do FastMessageBox(welcomeText, "OrongoScript rocks!");
     let HTML = String.Concat("<div>%s</div>", messageOfToday);
     do Template.AddHTML(HTML, "before_article");
-    let B:A = "apje";
-    let B = "d";
-    foreach(B as lol);
-        do Output.Print(lol);
+    
+
+    let articleID = Articles.GetID("OScript tests");
+    do Articles.SetContent(articleID, "O hai");
+    do Articles.SetTitle(articleID, "OScript tests<33");
+   
+    let B = "";
+    let B:A = "test";
+    let bool = VarInfo.IsSet("B:A");
+    do VarInfo.Dump(bool);
+    if(bool == true);
+        do Output.Print("Awesome.. B:A is set :D");
+    end if;
+    
+    let all = Settings.GetAll();
+    foreach(all as setting);
+        do Output.Print(setting);
     end foreach;
     
-  
-    
+    let text = String.Concat("My authkey is: %s", %AuthKey%);
+    do FastMessageBox(text, "OSC");
+
+    let setting = Settings.Get("example_setting_1");
+    let text = String.Concat("Setting example_setting_1 has the value: %s", setting);
+    do Output.Print(text);
+
 end space;

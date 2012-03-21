@@ -68,9 +68,12 @@ class OrongoScriptRuntime {
                 throw new OrongoScriptParseException("Can not redefine global variables!");
         $tolet = "";
         if($paramVar instanceof OrongoVariable) $tolet = $paramVar;
+        else if(is_array($paramVar)) $tolet = $paramVar; 
         else $tolet = new OrongoVariable($paramVar);
         if(!isset($this->variables[$this->currentSpace][$paramName])) $this->variables[$this->currentSpace][$paramName] = array();
-        $this->variables[$this->currentSpace][$paramName][$paramField] = $tolet;
+        if(is_array($tolet))
+            $this->variables[$this->currentSpace][$paramName] = $tolet;
+        else $this->variables[$this->currentSpace][$paramName][$paramField] = $tolet;
     }
     
     /**
@@ -274,7 +277,8 @@ class OrongoScriptRuntime {
             $func = &$this->functions[$paramSpace][$paramName];
             if(($func instanceof OrongoFunction) == false) return new OrongoVariable(null);
             $return = $func($args);
-            if(($return instanceof OrongoVariable) == false) return new OrongoVariable(null);
+            $return = $return == null? new OrongoVariable(null) : $return;
+            if(($return instanceof OrongoVariable) == false && !is_array($return)) return new OrongoVariable(null);
             return $return;
         }else{
             $func = &$this->customFunctions[$paramSpace][$paramName];
@@ -290,7 +294,7 @@ class OrongoScriptRuntime {
                     $i++;
                 }
             }
-            $return = $p->startParser($this, null, $arguments);
+            $return = $p->startParser(clone $this, null, $arguments);
             $this->variables = $p->getRuntime()->getVars();
             return new OrongoVariable($return);
         }
