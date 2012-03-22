@@ -277,7 +277,6 @@ class OrongoScriptRuntime {
             $func = &$this->functions[$paramSpace][$paramName];
             if(($func instanceof OrongoFunction) == false) return new OrongoVariable(null);
             $return = $func($args);
-            $return = $return == null? new OrongoVariable(null) : $return;
             if(($return instanceof OrongoVariable) == false && !is_array($return)) return new OrongoVariable(null);
             return $return;
         }else{

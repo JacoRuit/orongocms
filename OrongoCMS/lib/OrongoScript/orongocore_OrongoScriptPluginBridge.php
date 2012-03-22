@@ -15,7 +15,9 @@ class OrongoScriptPluginBridge extends OrongoPluggableObject{
         $this->parser->startParser(null, array(
             "%File%" => $paramArgs['osc_file'],
             "%AuthKey%" => $paramArgs['auth_key'],
-            "%Time%" => $paramArgs['time']
+            "%Time%" => $paramArgs['time'],
+            "%GET%" => $_GET,
+            "%POST%" => $_POST
         ));
     }
     

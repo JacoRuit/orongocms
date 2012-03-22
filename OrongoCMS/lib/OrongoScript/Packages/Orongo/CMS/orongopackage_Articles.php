@@ -10,7 +10,13 @@ class OrongoScriptArticles extends OrongoPackage {
         
     }
     public function getFunctions() {
-        return array(new FuncArticleGetID(), new FuncArticleSetTitle(), new FuncArticleSetContent());
+        return array(
+            new FuncArticleGetID(), 
+            new FuncArticleSetTitle(), 
+            new FuncArticleSetContent(), 
+            new FuncArticleGetCommentCount(),
+            new FuncArticleGetCommentIDs()
+        );
     }
 }
 
@@ -62,6 +68,28 @@ class FuncArticleSetTitle extends OrongoFunction {
 }
 
 /**
+ * GetTitle OrongoScript function 
+ * 
+ * @author Jaco Ruit
+ */
+class FuncArticleGetTitle extends OrongoFunction {
+    
+    public function __invoke($args) {
+        if(count($args) < 1) throw new OrongoScriptParseException("Argument missing for Articles.GetTitle()"); 
+        $article = new Article($args[0]);   
+        return new OrongoVariable($article->getTitle());
+    }
+
+    public function getShortname() {
+        return "GetTitle";
+    }
+    
+    public function getSpace(){
+        return "Articles";
+    }
+}
+
+/**
  * SetContent OrongoScript function 
  * 
  * @author Jaco Ruit
@@ -76,6 +104,29 @@ class FuncArticleSetContent extends OrongoFunction {
 
     public function getShortname() {
         return "SetContent";
+    }
+    
+    public function getSpace(){
+        return "Articles";
+    }
+}
+
+
+/**
+ * GetContent OrongoScript function 
+ * 
+ * @author Jaco Ruit
+ */
+class FuncArticleGetContent extends OrongoFunction {
+    
+    public function __invoke($args) {
+        if(count($args) < 1) throw new OrongoScriptParseException("Argument missing for Articles.GetContent()"); 
+        $article = new Article($args[0]);   
+        return new OrongoVariable($article->getContent());
+    }
+
+    public function getShortname() {
+        return "GetContent";
     }
     
     public function getSpace(){
@@ -105,6 +156,30 @@ class FuncArticleSetTags extends OrongoFunction {
         return "Articles";
     }
 
+}
+
+/**
+ * GetTags OrongoScript function 
+ * 
+ * @author Jaco Ruit
+ */
+class FuncArticleGetTags extends OrongoFunction {
+    
+    public function __invoke($args) {
+        if(count($args) < 1) throw new OrongoScriptParseException("Argument missing for Articles.GetTags()"); 
+        $article = new Article($args[0]);  
+        $tags = $article->getTags();
+        foreach($tags as &$tag){  $tag = new OrongoVariable($tag); }
+        return $tags;
+    }
+
+    public function getShortname() {
+        return "GetTags";
+    }
+    
+    public function getSpace(){
+        return "Articles";
+    }
 }
 
 /**
@@ -145,6 +220,35 @@ class FuncArticleGetCommentCount extends OrongoFunction {
 
     public function getShortname() {
         return "GetCommentCount";
+    }
+    
+    public function getSpace(){
+        return "Articles";
+    }
+
+}
+
+/**
+ * GetCommentIDs OrongoScript function
+ * 
+ * @author Jaco Ruit
+ */
+class FuncArticleGetCommentIDs extends OrongoFunction {
+    
+    public function __invoke($args) {
+        if(count($args) < 1) throw new OrongoScriptParseException("Arguments missing for Articles.GetCommentCount()");
+        $article = new Article($args[0]);   
+        $comments = $article->getComments();
+        $ids = array();
+        foreach($comments as $comment){
+            if(($comment instanceof Comment) == false) continue;
+            $ids[count($ids)] = new OrongoVariable($comment->getID());
+        }
+        return $ids;
+    }
+
+    public function getShortname() {
+        return "GetCommentIDs";
     }
     
     public function getSpace(){

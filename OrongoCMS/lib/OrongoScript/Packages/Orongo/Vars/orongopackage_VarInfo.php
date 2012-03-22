@@ -11,7 +11,7 @@ class OrongoScriptVarInfo extends OrongoPackage {
         $this->runtime = &$runtime;
     }
     public function getFunctions() {
-        return array(new FuncDump(), new FuncIsSet($this->runtime));
+        return array(new FuncVarInfoDump(), new FuncVarInfoIsSet($this->runtime), new FuncVarInfoIs());
     }
 }
 
@@ -22,7 +22,7 @@ class OrongoScriptVarInfo extends OrongoPackage {
  *
  * @author Jaco Ruit
  */
-class FuncDump extends OrongoFunction {
+class FuncVarInfoDump extends OrongoFunction {
     
 
     public function __invoke($args) {
@@ -45,7 +45,7 @@ class FuncDump extends OrongoFunction {
  * 
  * @author Jaco Ruit 
  */
-class FuncIsSet extends OrongoFunction {
+class FuncVarInfoIsSet extends OrongoFunction {
     
     private $runtime;
     
@@ -68,6 +68,28 @@ class FuncIsSet extends OrongoFunction {
 
     public function getShortname() {
         return "IsSet";
+    }
+    
+    public function getSpace(){
+        return "VarInfo";
+    }
+}
+
+/**
+ * Is OrongoScript function
+ * 
+ * @author Jaco Ruit 
+ */
+class FuncVarInfoIs extends OrongoFunction {
+    
+    
+    public function __invoke($args) {
+        if(count($args) < 2) throw new OrongoScriptParseException("Arguments missing for VarInfo.Is()"); 
+        return new OrongoVariable(($args[0] instanceof $args[1]));
+    }
+
+    public function getShortname() {
+        return "Is";
     }
     
     public function getSpace(){
