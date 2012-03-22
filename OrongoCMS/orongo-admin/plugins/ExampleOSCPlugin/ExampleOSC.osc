@@ -9,6 +9,7 @@ import Orongo.Plugin.Settings;
 import Orongo.Vars.List;
 import Orongo.CMS.Session;
 import Orongo.Display.Notification;
+
 space ExampleOSC;
 
     function FastMessageBox(text, title);
@@ -33,62 +34,24 @@ space ExampleOSC;
 
     let text = String.Concat("My authkey is: %s", %AuthKey%);
     do FastMessageBox(text, "OSC");
-
-
-    let list = List.Create();
-    do List.Set(list, "test", "b");
-    let b = List.Get(list, "test");
     
-    function test();
-        let v  = true;
-        if(v == true);
-        end if;
-    end function;
-    
-    do test();
-    do MessageBox.Show("okee");
-
-    let v = "";
-    let v:a = "";
-    let a = true;
-  
-    foreach(v as str);
-        if(a == true);
-
-            do Output.Print("nice");
-        end if;
-    end foreach;
-
-    do MessageBox.Show("okee");
-
-    let b = "false";
-    if(b == "lolletje");
-        do Output.Print("lol");
-    end if;
-    if(true == true);
-        do Output.Print("ja"); 
-        if(b == "banaam"); 
-            do Output.Print("ok"); 
-        end if; 
-    end if;
-
-    do MessageBox.Show("lol");
-    let var = "";
+    let var = "sdf";
     let var:def = List.Create();
     do List.Set(var:def, "baas", "ja");
+    do List.Set(var:def, "a", "ASDFASDF");
     let var:abc = "haaj";
-    foreach(var as bla);
-        do Output.Print(bla);
-    end foreach;
+
     foreach(var as string);
         let b = VarInfo.Is(string, "OrongoList");
         let arr = string;
-       
+        
         if(b == true);
-            do Output.Print("test");
+            foreach(arr as val);
+                do Output.Print(val);
+            end foreach;
         end if;
         if(b == false);
-            do Output.Print("test");
+            do Output.Print(arr);
         end if;
     end foreach;
 

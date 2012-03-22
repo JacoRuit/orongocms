@@ -167,6 +167,7 @@ class OrongoScriptParser {
             if($line == "end foreach" && $this->foreachs[count($this->foreachs) - 1]['foreachs_passed'] != 0){
                 $this->foreachs[count($this->foreachs) - 1]['logic'] .= "end foreach;";
                 $this->foreachs[count($this->foreachs) - 1]['foreachs_passed']--;
+                return;
             }
             else if($line == "end foreach" && $this->foreachs[count($this->foreachs) - 1]['foreachs_passed'] == 0){}
             else{

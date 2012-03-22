@@ -16,8 +16,8 @@ class OrongoScriptPluginBridge extends OrongoPluggableObject{
             "%File%" => $paramArgs['osc_file'],
             "%AuthKey%" => $paramArgs['auth_key'],
             "%Time%" => $paramArgs['time'],
-            "%GET%" => $_GET,
-            "%POST%" => $_POST
+            "%GET%" => new OrongoList($_GET),
+            "%POST%" => new OrongoList($_POST)
         ));
     }
     
