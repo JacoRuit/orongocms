@@ -22,7 +22,7 @@ function load($paramLibFolder){
     $orongo_exceptions = array('ClassLoadException', 'IllegalArgumentException', 'IllegalMemoryAccessException', 'OrongoScriptParseException', 'QueryException');
     $orongo_function_packages = array('Utils');
     $orongo_frontend_objects = array('AdminFrontend', 'ArchiveFrontend', 'ErrorFrontend', 'PageFrontend', 'IndexFrontend', 'ArticleFrontend');
-    $orongo_script_core = array('OrongoFunction', 'OrongoPackage', 'OrongoScriptPluginBridge', 'OrongoScriptParser', 'OrongoScriptRuntime', 'OrongoVariable');
+    $orongo_script_core = array('OrongoFunction', 'OrongoPackage', 'OrongoScriptPluginBridge', 'OrongoScriptParser', 'OrongoScriptRuntime', 'OrongoVariable', 'OrongoList');
     $raintpl_path = $paramLibFolder . '/rain.tpl.class.php';
     if(!file_exists($raintpl_path)) throw new Exception("Couldn't load RainTPL (" . $raintpl_path . " was missing!)");
     require $raintpl_path;

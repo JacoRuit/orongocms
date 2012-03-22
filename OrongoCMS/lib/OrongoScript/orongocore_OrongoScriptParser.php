@@ -145,14 +145,36 @@ class OrongoScriptParser {
      * Parses current line
      */
     private function parseLine(){
-       
         if($this->lineparsed) return;
         $line =  trim($this->lines[$this->getCurrentLine()]);
-        
-        if(!empty($this->foreachs) && $line != "end foreach")
-            $this->foreachs[count($this->foreachs) - 1]['logic'] .= $line . ";";
-        
-        else if($this->definingFunction != null && $line != "end function" )
+        if(!empty($this->ifs)){
+            if($this->lineStartsWith("if"))
+                $this->ifs[count($this->ifs) - 1]['ifs_passed']++;
+            if($line == "end if" && $this->ifs[count($this->ifs) - 1]['ifs_passed'] != 0){
+                $this->ifs[count($this->ifs) - 1]['logic'] .= "end if;";
+                $this->ifs[count($this->ifs) - 1]['ifs_passed']--;
+                return;
+            }
+            else if($line == "end if" && $this->ifs[count($this->ifs) - 1]['ifs_passed'] == 0){}
+            else{
+                $this->ifs[count($this->ifs) - 1]['logic'] .= $line . ";";
+                return;
+            }
+        }
+        if(!empty($this->foreachs)){
+            if($this->lineStartsWith("foreach"))
+                $this->foreachs[count($this->foreachs) - 1]['foreachs_passed']++;
+            if($line == "end foreach" && $this->foreachs[count($this->foreachs) - 1]['foreachs_passed'] != 0){
+                $this->foreachs[count($this->foreachs) - 1]['logic'] .= "end foreach;";
+                $this->foreachs[count($this->foreachs) - 1]['foreachs_passed']--;
+            }
+            else if($line == "end foreach" && $this->foreachs[count($this->foreachs) - 1]['foreachs_passed'] == 0){}
+            else{
+                $this->foreachs[count($this->foreachs) - 1]['logic'] .= $line . ";";
+                return;
+            }
+        }
+        if($this->definingFunction != null && $line != "end function" )
             $this->definingFunction["logic"] .= $line . ";";
         
         
@@ -183,68 +205,40 @@ class OrongoScriptParser {
         else if($this->lineStartsWith("if")){
             if($this->definingFunction == null && $this->onlyFunctionSpaces)
                 throw new OrongoScriptParseException("Can't perform: " . $line . "  outside function when using the space as a function space.");
-            if(count($this->ifs) > 0){
-                $curIf =  end($this->ifs);
-                if($curIf['i']){
-                    $new = array(
-                        "y" => true,
-                        "i" => true
-                    );
-                    $this->ifs[count($this->ifs)] = $new;
-                    $this->lineparsed = true; 
-                    return;
-                }
-            }
             $f = preg_replace("/if/", "", $line, 1);
             $f = trim($f);
             if($f[0] != "(" || $f[strlen($f) -1] != ")") throw new OrongoScriptParseException("Invalid if statement");
             $f[0] = "";
             $f[strlen($f) - 1] = "";
             $bool = $this->parseIf($f);
-            if($bool){ 
-                $new = array(
-                  "y" => true,
-                  "i" => false
-                );
-                $this->ifs[count($this->ifs)] = $new;
-            }
-            else{ 
-                $new = array(
-                    "y" => true,
-                    "i" => true
-                );
-                $this->ifs[count($this->ifs)] = $new;
-            }
+            $this->ifs[count($this->ifs)] = array(
+                'logic' => '',
+                'execute' => $bool,
+                'ifs_passed' => 0,
+                'new'=>true
+             );
         }
         
         else if($line == "end if"){
+            if(empty($this->ifs))
+                throw new OrongoScriptParseException("Can not exit an if you're not in an if.");
             $currentIfNo = count($this->ifs) - 1;
-            if($currentIfNo < 0) throw new OrongoScriptParseException("Can not exit if function if you're not in an if function.");
+            $curIf = $this->ifs[$currentIfNo];  
+            if($curIf['execute']){
+                $p = new OrongoScriptParser($curIf['logic']);
+                $p->startParser($this->runtime,null,null,true);
+            }
             unset($this->ifs[$currentIfNo]);
         }
         
         #IMPORT
         else if($this->lineStartsWith("import")){
-            if(count($this->ifs) > 0){
-                $curIf=  end($this->ifs);
-                if($curIf['i']){
-                    $this->lineparsed = true; 
-                    return;
-                }
-            }
             $imp = trim(preg_replace("/import/", "", $line, 1));
             $this->runtime->import($imp);
         }
         
         #LET
         else if($this->lineStartsWith("let")){
-            if(count($this->ifs) > 0){
-                $curIf=  end($this->ifs);
-                if($curIf['i']){
-                    $this->lineparsed = true; 
-                    return;
-                }
-            }
             $line = trim(preg_replace("/let/", "", $line,1));
             if(!stristr($line, "=")) throw new OrongoScriptParseException("Invalid let at line " . $this->getCurrentLine(true));
             $toLet = explode("=", $line, 2);
@@ -264,15 +258,7 @@ class OrongoScriptParser {
         #DO
         else if($this->lineStartsWith("do")){
             if($this->definingFunction == null && $this->onlyFunctionSpaces)
-                throw new OrongoScriptParseException("Can't perform: " . $line . "  outside function when using the space as a function space.");
-            if(count($this->ifs) > 0){
-                $curIf=  end($this->ifs);
-                if($curIf['i']){
-                    $this->lineparsed = true; 
-                    return;
-                }
-            }
-            
+                throw new OrongoScriptParseException("Can't perform: " . $line . "  outside function when using the space as a function space.");          
             $line[0] = ""; $line[1] = "";
             $func = $this->parseFunction(trim($line));
             $this->runtime->execFunction($func['space'], $func['function_name'], $func['args']);
@@ -280,13 +266,6 @@ class OrongoScriptParser {
         
         #FUNCTION
         else if($this->lineStartsWith("function")){
-            if(count($this->ifs) > 0){
-                $curIf=  end($this->ifs);
-                if($curIf['i']){
-                    $this->lineparsed = true; 
-                    return;
-                }
-            }
             $line = trim(preg_replace("/function/", "",$line, 1));
             if(substr_count($line, ")") != 1 || substr_count($line, "(") != 1 || strpos(")", $line) < strpos("(", $line))
                     throw new OrongoScriptParseException("Invalid function declaration.");
@@ -352,22 +331,41 @@ class OrongoScriptParser {
             if(!stristr($line, "as")) throw new OrongoScriptParseException("Invalid foreach loop: " . $line);
             $exp = explode("as", $line, 2);
             $var = trim($exp[0]);
+            $list = false;
+            if(stristr($var, ":")){
+                $list = true;
+                $var = $this->parseVar($var)->get();
+            } 
+            if($list && ($var instanceof OrongoList) == false)
+                throw new OrongoScriptParseException("List expected in foreach loop: " . $line);
+            if(!$list){
+                $varTemp = $this->runtime->getRawVar($var);
+                if($varTemp['__main__'] instanceof OrongoList){
+                   $var = $varTemp['__main__'];
+                   $list = true;
+                }else
+                    $var = $varTemp;
+            }
             $asVar = trim($exp[1]);
-            $var = $this->runtime->getRawVar($var);
+            $var = $list ? $var->getArray() : $var;
             $this->foreachs[end($this->foreachs)] = array(
                 'var' => $var,
                 'asVar' => $asVar,
-                'logic' => ""
+                'logic' => "",
+                'foreachs_passed' => 0,
+                'new' => true
             );
         }
         else if($line == "end foreach"){
+            if(empty($this->foreachs))
+                throw new OrongoScriptParseException("Can not end a foreach loop when you're not in a loop.");
             $currentForeach = end($this->foreachs);
+            unset($this->foreachs[count($this->foreachs) - 1]);
             foreach($currentForeach['var'] as $as){
                 $p = new OrongoScriptParser($currentForeach['logic']);
-                $p->startParser($this->runtime, null, array ( $currentForeach['asVar'] => $as->get() ) );
+                $p->startParser($this->runtime, null, array ( $currentForeach['asVar'] => $as->get() ), true );
                 $this->runtime->setVars($p->getRuntime()->getVars());
-            }
-            unset($this->foreachs[count($this->foreachs) - 1]);
+            }         
         }
         
         
@@ -384,6 +382,7 @@ class OrongoScriptParser {
             if(!$done)
                 throw new OrongoScriptParseException("Invalid characters at line: " . $line);
         }
+              
  
     }
     
@@ -473,18 +472,16 @@ class OrongoScriptParser {
         }
 
         $toCompare = array( 0 => $this->parseVar($exp[0])->get(), 1 => $this->parseVar($exp[1])->get());
-        
+
         if(count($toCompare) == 2){
             switch($case){
                 case "==":
-                    if($toCompare[0] == $toCompare[1]){
+                    if($toCompare[0] == $toCompare[1])
                         return true;
-                    }
                     return false;
                case "!=":
-                   if($toCompare[0] != $toCompare[1]){
+                   if($toCompare[0] != $toCompare[1])
                        return true;
-                   }
                    return false;
                default:
                    break;
