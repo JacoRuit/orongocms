@@ -4,8 +4,9 @@
  */
 /**
  *Starts Orongo! :) 
+ * @param String $paramCurrentPage the current page
  */
-function startOrongo(){
+function startOrongo($paramCurrentPage = 'anonymous'){
 
     session_start();
  
@@ -43,6 +44,8 @@ function startOrongo(){
         $msgbox->bindException($e);
         die($msgbox->getImports() . $msgbox->toHTML());
     }
+    
+    setCurrentPage($paramCurrentPage);
     
     $style = null;
     

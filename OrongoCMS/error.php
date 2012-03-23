@@ -4,9 +4,7 @@
  */
 
 require 'startOrongo.php';
-startOrongo();
-
-setCurrentPage('error');
+startOrongo('error');
 
 $errorCodes = array(
     400,

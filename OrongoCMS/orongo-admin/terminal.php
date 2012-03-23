@@ -4,9 +4,8 @@
  * @author Jaco Ruit
  */
 require '../startOrongo.php';
-startOrongo();
+startOrongo('admin_terminal');
 
-setCurrentPage('admin_terminal');
 
 Security::promptAuth();
 

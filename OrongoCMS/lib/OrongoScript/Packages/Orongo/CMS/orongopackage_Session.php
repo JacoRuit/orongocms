@@ -16,7 +16,8 @@ class OrongoScriptSession extends OrongoPackage {
             new FuncSessionGetData(),
             new FuncSessionIsLoggedIn(),
             new FuncSessionGetLoggedInUserID(),
-            new FuncSessionGetOrongoSessionID()
+            new FuncSessionGetOrongoSessionID(),
+            new FuncSessionGetCurrentPage()
         );
     }
 }
@@ -149,6 +150,27 @@ class FuncSessionGetOrongoSessionID extends OrongoFunction {
 
     public function getShortname() {
         return "GetOrongoSessionID";
+    }
+    
+    public function getSpace(){
+        return "Session";
+    }
+}
+
+/**
+ * GetCurrentPage OrongoScript function
+ *
+ * @author Jaco Ruit
+ */
+class FuncSessionGetCurrentPage extends OrongoFunction {
+    
+
+    public function __invoke($args) {
+        return new OrongoVariable(getCurrentPage());
+    }
+
+    public function getShortname() {
+        return "GetCurrentPage";
     }
     
     public function getSpace(){

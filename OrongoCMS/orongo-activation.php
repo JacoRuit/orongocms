@@ -4,7 +4,7 @@
  */
 
 require 'startOrongo.php';
-startOrongo();
+startOrongo('orongo-activation');
 
 if(isset($_GET['code']) && !isset($_SESSION['orongo-id']) && !(isset($_SESSION['orongo-session-id']))){
     $code = $_GET['code'];

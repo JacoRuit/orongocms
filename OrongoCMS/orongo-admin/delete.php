@@ -4,10 +4,8 @@
  */
 
 require '../startOrongo.php';
-startOrongo();
+startOrongo('admin_delete');
 
-
-setCurrentPage('admin_delete');
 
 Security::promptAuth();
 

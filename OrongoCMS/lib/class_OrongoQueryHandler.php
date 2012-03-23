@@ -43,7 +43,7 @@ class OrongoQueryHandler {
         
             #       FORMAT: order = {order}  _OR_   order = {order},{orderc}
         if(isset($query['order'])){ 
-            if(strstr($query['order'], ",")){
+            if(stristr($query['order'], ",")){
                 $orders = explode(",", $query['order']);
                 if(count($orders) > 2 || count($orders) < 1) throw new QueryException ("Invalid query string: invalid order.");
                 if(!in_array($orders[0], self::$order[$query['object']])) throw new QueryException ("Invalid query string: invalid order.");

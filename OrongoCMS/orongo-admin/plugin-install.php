@@ -1,10 +1,8 @@
 <?php
 
 require '../startOrongo.php';
-startOrongo();
+startOrongo('admin_plugin-install');
 
-
-setCurrentPage('admin_plugin-install');
 
 Security::promptAuth();
 

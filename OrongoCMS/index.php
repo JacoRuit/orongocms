@@ -4,10 +4,9 @@
  */
 
 require 'startOrongo.php';
-startOrongo();
+startOrongo('index');
 
 
-setCurrentPage('index');
 $index = new IndexFrontend();
 $index->main(array('time' => time()));
 $index->render();

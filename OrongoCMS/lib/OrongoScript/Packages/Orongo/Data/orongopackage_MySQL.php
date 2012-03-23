@@ -10,7 +10,7 @@ class OrongoScriptMySQL extends OrongoPackage {
         
     }
     public function getFunctions() {
-        return array(new FuncQuery());
+        return array(new FuncMySQLQuery());
     }
 }
 
@@ -21,7 +21,7 @@ class OrongoScriptMySQL extends OrongoPackage {
  *
  * @author Jaco Ruit
  */
-class FuncQuery extends OrongoFunction {
+class FuncMySQLQuery extends OrongoFunction {
     
 
     public function __invoke($args) {
@@ -31,9 +31,9 @@ class FuncQuery extends OrongoFunction {
         $args = count($args) > 1 ? $args : end($args);
         $rows = getDatabase()->query($query, $args);  
         foreach($rows as &$row){
-            $row = new OrongoVariable(end($row));
+            if(is_array($row)) $row = new OrongoList($row);
         }
-        return $rows;
+        return new OrongoList($rows);
     }
 
     public function getShortname() {

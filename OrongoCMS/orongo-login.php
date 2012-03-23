@@ -4,7 +4,7 @@
  */
 
 require 'startOrongo.php';
-startOrongo();
+startOrongo('orongo-login');
 
 $msg = null;
 $msgtype = null;

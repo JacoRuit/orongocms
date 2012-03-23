@@ -12,8 +12,13 @@ class OrongoScriptArticles extends OrongoPackage {
     public function getFunctions() {
         return array(
             new FuncArticleGetID(), 
-            new FuncArticleSetTitle(), 
-            new FuncArticleSetContent(), 
+            new FuncArticleSetTitle(),
+            new FuncArticleGetTitle(),
+            new FuncArticleSetContent(),
+            new FuncArticleGetContent(),
+            new FuncArticleSetTags(),
+            new FuncArticleGetTags(),
+            new FuncArticleGetAuthorID(),
             new FuncArticleGetCommentCount(),
             new FuncArticleGetCommentIDs()
         );
@@ -168,9 +173,7 @@ class FuncArticleGetTags extends OrongoFunction {
     public function __invoke($args) {
         if(count($args) < 1) throw new OrongoScriptParseException("Argument missing for Articles.GetTags()"); 
         $article = new Article($args[0]);  
-        $tags = $article->getTags();
-        foreach($tags as &$tag){  $tag = new OrongoVariable($tag); }
-        return $tags;
+        return new OrongoList($article->getTags());
     }
 
     public function getShortname() {
@@ -242,9 +245,9 @@ class FuncArticleGetCommentIDs extends OrongoFunction {
         $ids = array();
         foreach($comments as $comment){
             if(($comment instanceof Comment) == false) continue;
-            $ids[count($ids)] = new OrongoVariable($comment->getID());
+            $ids[count($ids)] = $comment->getID();
         }
-        return $ids;
+        return new OrongoList($ids);
     }
 
     public function getShortname() {

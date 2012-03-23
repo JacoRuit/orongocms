@@ -3,9 +3,7 @@
  * @author Jaco Ruit
  */
 require 'startOrongo.php';
-startOrongo();
-
-setCurrentPage('archive');
+startOrongo('archive');
 
 
 $user = getUser();

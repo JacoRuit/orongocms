@@ -1,10 +1,19 @@
-space HTMLDiv;
+space Div;
 
-    let a = "hoi";
-
-    function Make();
-        return "test";
+    function Make(divContent, divID, divClass);
+        let div = "<div";
+        if(divID != "");
+            let id = String.Concat(" id='%s' ", divID);
+            let div = String.Add(div, id);
+        end if;
+        if(divClass != "");
+            let class = String.Concat(" class='%s' ", divClass);
+            let div = String.Add(div,class);
+        end if;
+        let div = String.Add(div, ">");
+        let div = String.Add(div, divContent);
+        let div = String.Add(div, "</div>");
+        return div;
     end function;
     
-
 end space;

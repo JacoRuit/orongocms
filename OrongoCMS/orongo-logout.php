@@ -3,7 +3,7 @@
  * @author Jaco Ruit
  */
 require 'startOrongo.php';
-startOrongo();
+startOrongo('orongo-logout');
 
 if(isset($_SESSION['orongo-id']) || isset($_SESSION['orongo-session-id'])){
     $sessionID = Security::escapeSQL($_SESSION['orongo-session-id']);

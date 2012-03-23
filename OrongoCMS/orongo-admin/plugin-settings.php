@@ -4,10 +4,7 @@
  */
 define('HACK_PLUGINS', true);
 require '../startOrongo.php';
-startOrongo();
-
-
-setCurrentPage('admin_plugin-settings');
+startOrongo('admin_plugin-settings');
 
 Security::promptAuth();
 
