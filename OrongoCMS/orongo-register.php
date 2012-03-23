@@ -4,7 +4,7 @@
  */
 
 require 'startOrongo.php';
-startOrongo();
+startOrongo('orongo-register');
 getDisplay()->setTemplateDir("orongo-admin/style/"); 
 
 $msg = null;

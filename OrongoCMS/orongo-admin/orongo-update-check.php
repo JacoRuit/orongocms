@@ -4,10 +4,8 @@
  */
 
 require '../startOrongo.php';
-startOrongo();
+startOrongo('admin_orongo-update-check');
 
-
-setCurrentPage('admin_orongo-update-check');
 
 Security::promptAuth();
 

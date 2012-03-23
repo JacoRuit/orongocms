@@ -4,9 +4,8 @@
  */
 
 require 'startOrongo.php';
-startOrongo();
+startOrongo('article');
 
-setCurrentPage('article');
 
 $article = null;
 

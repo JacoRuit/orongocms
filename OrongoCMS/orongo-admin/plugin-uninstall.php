@@ -1,10 +1,7 @@
 <?php
 
 require '../startOrongo.php';
-startOrongo();
-
-
-setCurrentPage('admin_plugin-uninstall');
+startOrongo('admin_plugin-uninstall');
 
 Security::promptAuth();
 

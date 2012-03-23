@@ -3,9 +3,7 @@
  * @author Jaco Ruit
  */
 require 'startOrongo.php';
-startOrongo();
-
-setCurrentPage('page');
+startOrongo('page');
 
 $page = null;
 

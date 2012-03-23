@@ -34,6 +34,7 @@ class OrongoScriptParser {
     
     private $foreachs;
     
+    private static $replacements;
     /**
      * Starts the parser
      * @param String $paramOrongoScript The OrongoScript to parse 
@@ -42,7 +43,10 @@ class OrongoScriptParser {
          if(is_string($paramOrongoScript) == false)
              throw new IllegalArgumentException("Invalid argument, string expected.");
          $this->orongoScript = $paramOrongoScript;
-     
+         $preg = function($text){   
+             return str_replace(",", '^234u7^', str_replace(";", "^234u6^", $text[0]));
+         };
+         $this->orongoScript = preg_replace_callback('/"(.*?)"/', $preg, $this->orongoScript);
     }
     
     /**
@@ -83,7 +87,7 @@ class OrongoScriptParser {
         $this->foreachs = array();
         $this->ifs = array();
         foreach($this->lines as &$line){
-            $line = trim($line);
+            $line = str_replace("^234u6^", ";", trim($line));
         }
         $c = 0;
         foreach($this->lines as $line){
@@ -436,7 +440,7 @@ class OrongoScriptParser {
         $string = trim($paramString);
         $stringRev = strrev($string);
         if(stristr($string, '"') && substr_count($string, '"') >= 2 && strpos($string, '"') == 0 && strpos($stringRev, '"') == 0)
-            return new OrongoVariable(preg_replace('/"/', "",strrev(preg_replace('/"/',"", $stringRev, 1))));
+            return new OrongoVariable(str_replace("^234u7^", ",", preg_replace('/"/', "",strrev(preg_replace('/"/',"", $stringRev, 1)))));
         $tString = stristr($string, ":") ? $string : $string . ":__main__";
         $field = explode(":", strrev($tString), 2);
         $name = trim(strrev($field[1]));
