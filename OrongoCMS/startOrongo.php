@@ -25,8 +25,8 @@ function startOrongo($paramCurrentPage = 'anonymous'){
     
     error_reporting(E_ALL);
   
-    //TODO uncomment on release
-    //if(file_exists("orongo-install.php")) die("If you didn't install OrongoCMS yet, proceed to the <a href='orongo-install.php'>installer</a><br/>If you installed it, please delete orongo-install.php");
+
+    if(file_exists("orongo-install.php")) die("If you didn't install OrongoCMS yet, proceed to the <a href='orongo-install.php'>installer</a><br/>If you installed it, please delete orongo-install.php");
     if(!file_exists(CONFIG)) die("config.php (" . CONFIG . ") was missing!");
     
     require_once(CONFIG);

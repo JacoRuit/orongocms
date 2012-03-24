@@ -13,7 +13,7 @@
  * @param String $paramLibFolder path to lib folder
  */
 function load($paramLibFolder){
-    define('REVISION', 91);
+    define('REVISION', 105);
     define('OSC_VERSION', '1.1b');
     //REGISTER NEW FUNCTIONS, INTERFACES, (ABSTRACT) CLASSES, EXCEPTIONS HERE! :D
     $orongo_functions = array('orongo_query', 'handleSessions', 'l' , 'setCurrentPage', 'setDatabase', 'setDisplay', 'setLanguage', 'setMenu', 'setPlugins', 'setStyle', 'setUser');
