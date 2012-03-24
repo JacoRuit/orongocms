@@ -26,6 +26,5 @@ space ExampleOSC;
     end foreach;
     let div = Div.Make(divContent, "related","");
     do Template.AddHTML(div, "after_article");
-    let b = Session.GetCurrentPage();
-    do Output.Print(b);
+
 end space;

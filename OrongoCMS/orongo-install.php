@@ -64,6 +64,10 @@ body{
  
     filter: progid:DXImageTransform.Microsoft.Gradient(
                 StartColorStr='#C0C0C0', EndColorStr='#000000', GradientType=0);
+                
+    text-align:center;
+    padding: 0px;
+    margin: 100px 0px;
 }
 #box{
     border-color: #E54C0B;
@@ -74,7 +78,6 @@ body{
     -moz-border-radius:25px;
     border-radius:25px;
     width:450px; 
-    position:relative;
     height:570px; 
     top:300px;
     padding-left: 20px;
@@ -82,6 +85,7 @@ body{
     padding-bottom:15px;
     background-color:white;
     text-align:center;
+    margin: 0px auto;
 }
 a{
     color:#E54C0B;
@@ -107,9 +111,7 @@ fieldset{
 // JS for the installer 
 $js = 
 "
-$(document).ready(function(){
-	$('#box').css({top:'50%',left:'50%',margin:'-'+($('#box').height() / 2)+'px 0 0 -'+($('#box').width() / 2)+'px'});
-});
+
 ";
 
 
@@ -133,7 +135,7 @@ switch($step){
                 <img src="orongo-admin/theme/logo.png" alt="OrongoCMS" />
             </div>
             <p>Thank you for choosing OrongoCMS!</p>
-            <p>You are going to install RC1 of OrongoCMS (r91) using a beta version of the installer.</p>
+            <p>You are going to install RC2 of OrongoCMS (r105) with version 1.1b of OrongoScript using a beta version of the installer.</p>
             <br />
             <p>In order to install OrongoCMS, please follow the steps.</p>
             <br />

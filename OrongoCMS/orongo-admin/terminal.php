@@ -18,7 +18,7 @@ Security::promptAuth();
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <script src="<?php echo Settings::getWebsiteURL(); ?>js/jquery.mousewheel-min.js"></script>
         <script src="<?php echo Settings::getWebsiteURL(); ?>js/jquery.terminal-0.4.6.min.js"></script>
-        <link href="<?php echo Settings::getWebsiteURL(); ?>orongo-admin/style/jquery.terminal.css" rel="stylesheet"/>
+        <link href="<?php echo Settings::getWebsiteURL(); ?>orongo-admin/theme/css/jquery.terminal.css" rel="stylesheet"/>
         <script>
             jQuery(document).ready(function($) {
                 $(document.documentElement).terminal("<?php echo Settings::getWebsiteURL(); ?>ajax/terminalRPC.php", { greetings: "Welcome to the OrongoTerminal\n*****************************\n\nTo show commands enter 'cmd'\n\n"});
